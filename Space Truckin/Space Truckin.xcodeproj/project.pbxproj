@@ -1,0 +1,603 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9B8252BAE6D007AF254 /* AppDelegate.swift */; };
+		E34AB9BB252BAE6D007AF254 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9BA252BAE6D007AF254 /* GameScene.sks */; };
+		E34AB9BD252BAE6D007AF254 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9BC252BAE6D007AF254 /* Actions.sks */; };
+		E34AB9BF252BAE6D007AF254 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9BE252BAE6D007AF254 /* GameScene.swift */; };
+		E34AB9C1252BAE6D007AF254 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9C0252BAE6D007AF254 /* GameViewController.swift */; };
+		E34AB9C4252BAE6D007AF254 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9C2252BAE6D007AF254 /* Main.storyboard */; };
+		E34AB9C6252BAE70007AF254 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9C5252BAE70007AF254 /* Assets.xcassets */; };
+		E34AB9C9252BAE70007AF254 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9C7252BAE70007AF254 /* LaunchScreen.storyboard */; };
+		E34AB9D4252BAE71007AF254 /* Space_TruckinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9D3252BAE71007AF254 /* Space_TruckinTests.swift */; };
+		E34AB9DF252BAE71007AF254 /* Space_TruckinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9DE252BAE71007AF254 /* Space_TruckinUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E34AB9D0252BAE71007AF254 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E34AB9AD252BAE6D007AF254 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E34AB9B4252BAE6D007AF254;
+			remoteInfo = "Space Truckin";
+		};
+		E34AB9DB252BAE71007AF254 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E34AB9AD252BAE6D007AF254 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E34AB9B4252BAE6D007AF254;
+			remoteInfo = "Space Truckin";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		E34AB9B5252BAE6D007AF254 /* Space Truckin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Space Truckin.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E34AB9B8252BAE6D007AF254 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E34AB9BA252BAE6D007AF254 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		E34AB9BC252BAE6D007AF254 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
+		E34AB9BE252BAE6D007AF254 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		E34AB9C0252BAE6D007AF254 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		E34AB9C3252BAE6D007AF254 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E34AB9C5252BAE70007AF254 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E34AB9C8252BAE70007AF254 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E34AB9CA252BAE70007AF254 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E34AB9CF252BAE71007AF254 /* Space TruckinTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Space TruckinTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E34AB9D3252BAE71007AF254 /* Space_TruckinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space_TruckinTests.swift; sourceTree = "<group>"; };
+		E34AB9D5252BAE71007AF254 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E34AB9DA252BAE71007AF254 /* Space TruckinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Space TruckinUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E34AB9DE252BAE71007AF254 /* Space_TruckinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space_TruckinUITests.swift; sourceTree = "<group>"; };
+		E34AB9E0252BAE71007AF254 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E34AB9B2252BAE6D007AF254 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34AB9CC252BAE71007AF254 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34AB9D7252BAE71007AF254 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E34AB9AC252BAE6D007AF254 = {
+			isa = PBXGroup;
+			children = (
+				E34AB9B7252BAE6D007AF254 /* Space Truckin */,
+				E34AB9D2252BAE71007AF254 /* Space TruckinTests */,
+				E34AB9DD252BAE71007AF254 /* Space TruckinUITests */,
+				E34AB9B6252BAE6D007AF254 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E34AB9B6252BAE6D007AF254 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E34AB9B5252BAE6D007AF254 /* Space Truckin.app */,
+				E34AB9CF252BAE71007AF254 /* Space TruckinTests.xctest */,
+				E34AB9DA252BAE71007AF254 /* Space TruckinUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E34AB9B7252BAE6D007AF254 /* Space Truckin */ = {
+			isa = PBXGroup;
+			children = (
+				E34AB9B8252BAE6D007AF254 /* AppDelegate.swift */,
+				E34AB9BA252BAE6D007AF254 /* GameScene.sks */,
+				E34AB9BC252BAE6D007AF254 /* Actions.sks */,
+				E34AB9BE252BAE6D007AF254 /* GameScene.swift */,
+				E34AB9C0252BAE6D007AF254 /* GameViewController.swift */,
+				E34AB9C2252BAE6D007AF254 /* Main.storyboard */,
+				E34AB9C5252BAE70007AF254 /* Assets.xcassets */,
+				E34AB9C7252BAE70007AF254 /* LaunchScreen.storyboard */,
+				E34AB9CA252BAE70007AF254 /* Info.plist */,
+			);
+			path = "Space Truckin";
+			sourceTree = "<group>";
+		};
+		E34AB9D2252BAE71007AF254 /* Space TruckinTests */ = {
+			isa = PBXGroup;
+			children = (
+				E34AB9D3252BAE71007AF254 /* Space_TruckinTests.swift */,
+				E34AB9D5252BAE71007AF254 /* Info.plist */,
+			);
+			path = "Space TruckinTests";
+			sourceTree = "<group>";
+		};
+		E34AB9DD252BAE71007AF254 /* Space TruckinUITests */ = {
+			isa = PBXGroup;
+			children = (
+				E34AB9DE252BAE71007AF254 /* Space_TruckinUITests.swift */,
+				E34AB9E0252BAE71007AF254 /* Info.plist */,
+			);
+			path = "Space TruckinUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E34AB9B4252BAE6D007AF254 /* Space Truckin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E34AB9E3252BAE71007AF254 /* Build configuration list for PBXNativeTarget "Space Truckin" */;
+			buildPhases = (
+				E34AB9B1252BAE6D007AF254 /* Sources */,
+				E34AB9B2252BAE6D007AF254 /* Frameworks */,
+				E34AB9B3252BAE6D007AF254 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Space Truckin";
+			productName = "Space Truckin";
+			productReference = E34AB9B5252BAE6D007AF254 /* Space Truckin.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E34AB9CE252BAE71007AF254 /* Space TruckinTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E34AB9E6252BAE71007AF254 /* Build configuration list for PBXNativeTarget "Space TruckinTests" */;
+			buildPhases = (
+				E34AB9CB252BAE71007AF254 /* Sources */,
+				E34AB9CC252BAE71007AF254 /* Frameworks */,
+				E34AB9CD252BAE71007AF254 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E34AB9D1252BAE71007AF254 /* PBXTargetDependency */,
+			);
+			name = "Space TruckinTests";
+			productName = "Space TruckinTests";
+			productReference = E34AB9CF252BAE71007AF254 /* Space TruckinTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E34AB9D9252BAE71007AF254 /* Space TruckinUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E34AB9E9252BAE71007AF254 /* Build configuration list for PBXNativeTarget "Space TruckinUITests" */;
+			buildPhases = (
+				E34AB9D6252BAE71007AF254 /* Sources */,
+				E34AB9D7252BAE71007AF254 /* Frameworks */,
+				E34AB9D8252BAE71007AF254 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E34AB9DC252BAE71007AF254 /* PBXTargetDependency */,
+			);
+			name = "Space TruckinUITests";
+			productName = "Space TruckinUITests";
+			productReference = E34AB9DA252BAE71007AF254 /* Space TruckinUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E34AB9AD252BAE6D007AF254 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1170;
+				LastUpgradeCheck = 1170;
+				ORGANIZATIONNAME = SpaceTruckin;
+				TargetAttributes = {
+					E34AB9B4252BAE6D007AF254 = {
+						CreatedOnToolsVersion = 11.7;
+					};
+					E34AB9CE252BAE71007AF254 = {
+						CreatedOnToolsVersion = 11.7;
+						TestTargetID = E34AB9B4252BAE6D007AF254;
+					};
+					E34AB9D9252BAE71007AF254 = {
+						CreatedOnToolsVersion = 11.7;
+						TestTargetID = E34AB9B4252BAE6D007AF254;
+					};
+				};
+			};
+			buildConfigurationList = E34AB9B0252BAE6D007AF254 /* Build configuration list for PBXProject "Space Truckin" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E34AB9AC252BAE6D007AF254;
+			productRefGroup = E34AB9B6252BAE6D007AF254 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E34AB9B4252BAE6D007AF254 /* Space Truckin */,
+				E34AB9CE252BAE71007AF254 /* Space TruckinTests */,
+				E34AB9D9252BAE71007AF254 /* Space TruckinUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E34AB9B3252BAE6D007AF254 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E34AB9C4252BAE6D007AF254 /* Main.storyboard in Resources */,
+				E34AB9BB252BAE6D007AF254 /* GameScene.sks in Resources */,
+				E34AB9C6252BAE70007AF254 /* Assets.xcassets in Resources */,
+				E34AB9C9252BAE70007AF254 /* LaunchScreen.storyboard in Resources */,
+				E34AB9BD252BAE6D007AF254 /* Actions.sks in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34AB9CD252BAE71007AF254 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34AB9D8252BAE71007AF254 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E34AB9B1252BAE6D007AF254 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E34AB9BF252BAE6D007AF254 /* GameScene.swift in Sources */,
+				E34AB9C1252BAE6D007AF254 /* GameViewController.swift in Sources */,
+				E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34AB9CB252BAE71007AF254 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E34AB9D4252BAE71007AF254 /* Space_TruckinTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34AB9D6252BAE71007AF254 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E34AB9DF252BAE71007AF254 /* Space_TruckinUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E34AB9D1252BAE71007AF254 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E34AB9B4252BAE6D007AF254 /* Space Truckin */;
+			targetProxy = E34AB9D0252BAE71007AF254 /* PBXContainerItemProxy */;
+		};
+		E34AB9DC252BAE71007AF254 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E34AB9B4252BAE6D007AF254 /* Space Truckin */;
+			targetProxy = E34AB9DB252BAE71007AF254 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E34AB9C2252BAE6D007AF254 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E34AB9C3252BAE6D007AF254 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		E34AB9C7252BAE70007AF254 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E34AB9C8252BAE70007AF254 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E34AB9E1252BAE71007AF254 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E34AB9E2252BAE71007AF254 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E34AB9E4252BAE71007AF254 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2G28476RVN;
+				INFOPLIST_FILE = "Space Truckin/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "st275.Space-Truckin";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E34AB9E5252BAE71007AF254 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2G28476RVN;
+				INFOPLIST_FILE = "Space Truckin/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "st275.Space-Truckin";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E34AB9E7252BAE71007AF254 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2G28476RVN;
+				INFOPLIST_FILE = "Space TruckinTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "st275.Space-TruckinTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Space Truckin.app/Space Truckin";
+			};
+			name = Debug;
+		};
+		E34AB9E8252BAE71007AF254 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2G28476RVN;
+				INFOPLIST_FILE = "Space TruckinTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "st275.Space-TruckinTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Space Truckin.app/Space Truckin";
+			};
+			name = Release;
+		};
+		E34AB9EA252BAE71007AF254 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2G28476RVN;
+				INFOPLIST_FILE = "Space TruckinUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "st275.Space-TruckinUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Space Truckin";
+			};
+			name = Debug;
+		};
+		E34AB9EB252BAE71007AF254 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2G28476RVN;
+				INFOPLIST_FILE = "Space TruckinUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "st275.Space-TruckinUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Space Truckin";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E34AB9B0252BAE6D007AF254 /* Build configuration list for PBXProject "Space Truckin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E34AB9E1252BAE71007AF254 /* Debug */,
+				E34AB9E2252BAE71007AF254 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E34AB9E3252BAE71007AF254 /* Build configuration list for PBXNativeTarget "Space Truckin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E34AB9E4252BAE71007AF254 /* Debug */,
+				E34AB9E5252BAE71007AF254 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E34AB9E6252BAE71007AF254 /* Build configuration list for PBXNativeTarget "Space TruckinTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E34AB9E7252BAE71007AF254 /* Debug */,
+				E34AB9E8252BAE71007AF254 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E34AB9E9252BAE71007AF254 /* Build configuration list for PBXNativeTarget "Space TruckinUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E34AB9EA252BAE71007AF254 /* Debug */,
+				E34AB9EB252BAE71007AF254 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E34AB9AD252BAE6D007AF254 /* Project object */;
+}
