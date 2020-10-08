@@ -8,6 +8,13 @@
 import SpriteKit
 import GameplayKit
 
+
+struct truckPiece {
+    var target: CGFloat
+    
+}
+
+
 class TruckScene: SKScene {
     var head: SKSpriteNode!
     
