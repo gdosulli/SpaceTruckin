@@ -20,13 +20,15 @@ class TruckPiece {
     var targetAngle: CGFloat
     
     var speed: CGFloat
+    var rotationalSpeed: CGFloat
     let sprite: SKSpriteNode!
     var highlighted = false
     
     init(sprite s1: SKSpriteNode) {
         sprite = s1
         speed = 100
-        targetAngle = 3.14 / 2
+        rotationalSpeed = 1
+        targetAngle = 0
     
     }
     
@@ -61,8 +63,13 @@ class TruckPiece {
     
     func move(by delta: CGFloat) {
         // set the rotation here
-        
-        // something to do with the tangent (targetAngle.y, targetAngle.x)
+        // Truck could have a rotation speed, and set an animation to rotate it the correct angle
+        // at the correct speed. getting new input would interrupt the old animation
+        print(targetAngle)
+        // targetAngle needs to be changed so that the nose of the truck is the front
+        let roation = SKAction.rotate(toAngle: targetAngle - 3.14/2, duration: TimeInterval(targetAngle/rotationalSpeed), shortestUnitArc: true)
+        sprite.run(roation)
+    
         // do the translation here
         let translateVector = CGPoint(x: cos(targetAngle) * self.speed * delta, y:  sin(targetAngle) * self.speed * delta)
         self.translate(by: translateVector)
