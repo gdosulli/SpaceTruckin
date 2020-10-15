@@ -17,7 +17,6 @@
 		E34AB9D4252BAE71007AF254 /* Space_TruckinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9D3252BAE71007AF254 /* Space_TruckinTests.swift */; };
 		E34AB9DF252BAE71007AF254 /* Space_TruckinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9DE252BAE71007AF254 /* Space_TruckinUITests.swift */; };
 		E34AB9ED252BAF32007AF254 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9EC252BAF32007AF254 /* GameScene.sks */; };
-		E34AB9EF252BAF9A007AF254 /* Truck.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9EE252BAF9A007AF254 /* Truck.swift */; };
 		E34AB9F1252BB9CA007AF254 /* TruckScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9F0252BB9CA007AF254 /* TruckScene.sks */; };
 		E34AB9F3252BB9D7007AF254 /* TruckScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9F2252BB9D7007AF254 /* TruckScene.swift */; };
 		E34AB9F5252BBD3F007AF254 /* sparkEmitter.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9F4252BBD3F007AF254 /* sparkEmitter.sks */; };
@@ -59,7 +58,6 @@
 		E34AB9DE252BAE71007AF254 /* Space_TruckinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space_TruckinUITests.swift; sourceTree = "<group>"; };
 		E34AB9E0252BAE71007AF254 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E34AB9EC252BAF32007AF254 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
-		E34AB9EE252BAF9A007AF254 /* Truck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Truck.swift; sourceTree = "<group>"; };
 		E34AB9F0252BB9CA007AF254 /* TruckScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TruckScene.sks; sourceTree = "<group>"; };
 		E34AB9F2252BB9D7007AF254 /* TruckScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruckScene.swift; sourceTree = "<group>"; };
 		E34AB9F4252BBD3F007AF254 /* sparkEmitter.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = sparkEmitter.sks; sourceTree = "<group>"; };
@@ -124,7 +122,6 @@
 				E34AB9C5252BAE70007AF254 /* Assets.xcassets */,
 				E34AB9C7252BAE70007AF254 /* LaunchScreen.storyboard */,
 				E34AB9CA252BAE70007AF254 /* Info.plist */,
-				E34AB9EE252BAF9A007AF254 /* Truck.swift */,
 				E34AB9F0252BB9CA007AF254 /* TruckScene.sks */,
 				E34AB9F2252BB9D7007AF254 /* TruckScene.swift */,
 				E34AB9F4252BBD3F007AF254 /* sparkEmitter.sks */,
@@ -293,7 +290,6 @@
 				E34AB9C1252BAE6D007AF254 /* GameViewController.swift in Sources */,
 				E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */,
 				E34AB9F3252BB9D7007AF254 /* TruckScene.swift in Sources */,
-				E34AB9EF252BAF9A007AF254 /* Truck.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
