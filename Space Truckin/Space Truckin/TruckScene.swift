@@ -16,12 +16,19 @@ import GameplayKit
 // That might make it snakelike
 
 
+// IDEA FOR MINING: collision with an asteroid in general should do damage to a piece of the truck, but
+// There should be a UI button ("MINE") that, when hit, transforms the head of the truck into a big drill
+// and contact between an asteroid and the drill should damge/destroy the asteroid and give materials to
+// the player.
+
+
 class TruckPiece {
     var targetAngle: CGFloat
     
     var speed: CGFloat
     var rotationalSpeed: CGFloat
     let sprite: SKSpriteNode!
+    let thruster: SKEmitterNode!
     var highlighted = false
     
     init(sprite s1: SKSpriteNode) {
@@ -29,12 +36,18 @@ class TruckPiece {
         speed = 100
         rotationalSpeed = 0.25
         targetAngle = 0
+        thruster = SKEmitterNode(fileNamed: "sparkEmitter")
+        thruster.zPosition = sprite.zPosition - 1
+        thruster.position = sprite.position
     
     }
     
     func translate(by vector: CGPoint) {
         sprite.position.x += vector.x
         sprite.position.y += vector.y
+        
+        thruster.position = sprite.position
+        thruster.zRotation = sprite.zRotation
     }
     
     func changeAngleTo(point pos: CGPoint) {
@@ -74,6 +87,8 @@ class TruckPiece {
         // do the translation here
         let translateVector = CGPoint(x: cos(targetAngle) * self.speed * delta, y:  sin(targetAngle) * self.speed * delta)
         self.translate(by: translateVector)
+        
+
     }
 }
 
@@ -118,6 +133,7 @@ class TruckScene: SKScene {
         print(sprite.position)
         head = TruckPiece(sprite: sprite)
         self.addChild(head.sprite)
+        self.addChild(head.thruster)
 //        chain = TruckChain(head: head)
 //
 //        for piece in chain.getSprites() {
@@ -129,6 +145,7 @@ class TruckScene: SKScene {
     func touchDown(atPoint pos : CGPoint) {
         // calculate target angle
         head.changeAngleTo(point: pos)
+        head.highlighted = true
        
     }
     
@@ -137,7 +154,7 @@ class TruckScene: SKScene {
     }
     
     func touchUp(atPoint pos : CGPoint) {
-        
+        head.highlighted = false
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
