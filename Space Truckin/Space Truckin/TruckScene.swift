@@ -27,7 +27,7 @@ class TruckPiece {
     init(sprite s1: SKSpriteNode) {
         sprite = s1
         speed = 100
-        rotationalSpeed = 1
+        rotationalSpeed = 0.25
         targetAngle = 0
     
     }
@@ -65,10 +65,11 @@ class TruckPiece {
         // set the rotation here
         // Truck could have a rotation speed, and set an animation to rotate it the correct angle
         // at the correct speed. getting new input would interrupt the old animation
-        print(targetAngle)
         // targetAngle needs to be changed so that the nose of the truck is the front
-        let roation = SKAction.rotate(toAngle: targetAngle - 3.14/2, duration: TimeInterval(targetAngle/rotationalSpeed), shortestUnitArc: true)
+        let roation = SKAction.rotate(toAngle: targetAngle - (3.14/2), duration: TimeInterval(rotationalSpeed), shortestUnitArc: true)
         sprite.run(roation)
+        // the problem with this code is that it doesn't bother rotating to an angle below the center line
+        // some flaw in targetAngle?
     
         // do the translation here
         let translateVector = CGPoint(x: cos(targetAngle) * self.speed * delta, y:  sin(targetAngle) * self.speed * delta)
