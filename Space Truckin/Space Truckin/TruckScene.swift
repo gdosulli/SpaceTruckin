@@ -28,17 +28,18 @@ class TruckPiece {
     var speed: CGFloat
     var rotationalSpeed: CGFloat
     let sprite: SKSpriteNode!
-    let thruster: SKEmitterNode!
+    let thruster: SKEmitterNode?
     var highlighted = false
     
     init(sprite s1: SKSpriteNode) {
         sprite = s1
+        //sprite.physicsBody = SKPhysicsBody(rectangleOf: sprite.size)
         speed = 100
         rotationalSpeed = 0.25
-        targetAngle = 0
+        targetAngle = 3.14/2
         thruster = SKEmitterNode(fileNamed: "sparkEmitter")
-        thruster.zPosition = sprite.zPosition - 1
-        thruster.position = sprite.position
+        thruster?.zPosition = sprite.zPosition - 1
+        thruster?.position = sprite.position
     
     }
     
@@ -46,8 +47,8 @@ class TruckPiece {
         sprite.position.x += vector.x
         sprite.position.y += vector.y
         
-        thruster.position = sprite.position
-        thruster.zRotation = sprite.zRotation
+        thruster?.position = sprite.position
+        thruster?.zRotation = sprite.zRotation
     }
     
     func changeAngleTo(point pos: CGPoint) {
@@ -92,53 +93,131 @@ class TruckPiece {
     }
 }
 
-//struct TruckChain {
-//    let head: TruckPiece!
-//    var truckPieces: [TruckPiece]
-//
-//    func movePieces(by delta: CGFloat) {
-//        head.moveToTarget(by: delta)
-//        for piece in truckPieces {
-//            piece.moveToTarget(by: delta)
-//        }
-//    }
-//
-//    func getSprites() -> [SKSpriteNode] {
-//        var sprites = [head.sprite!]
-//        for piece in truckPieces {
-//            sprites.append(piece.sprite!)
-//        }
-//
-//        return sprites
-//    }
-//
-//}
-//extension TruckChain {
-//    init(head h: TruckPiece) {
-//        head = h
-//        truckPieces = []
-//    }
-//}
+struct TruckChain {
+    let head: TruckPiece!
+    var truckPieces: [TruckPiece]
+    var offset: CGFloat
+    var speedDecrement: CGFloat
+    var minimumSpeed: CGFloat
+
+    func movePieces(by delta: CGFloat) {
+        head.move(by: delta)
+        for piece in truckPieces {
+            piece.move(by: delta)
+        }
+    }
+
+    func getSprites() -> [SKSpriteNode] {
+        var sprites = [head.sprite!]
+        for piece in truckPieces {
+            sprites.append(piece.sprite!)
+        }
+
+        return sprites
+    }
+    
+    func getThrusters() -> [SKEmitterNode] {
+        var thrusters : [SKEmitterNode] = []
+        if let t = head.thruster {
+            thrusters.append(t)
+        }
+        for piece in truckPieces {
+            if let t2 = piece.thruster {
+                thrusters.append(t2)
+            }
+        }
+        
+        return thrusters
+    }
+    
+    func updateFollowers() {
+        for i in 0..<truckPieces.count {
+            if i == 0 {
+                truckPieces[i].changeAngleTo(point: head.sprite.position)
+            } else {
+                truckPieces[i].changeAngleTo(point: truckPieces[i-1].sprite.position)
+            }
+        }
+    }
+    
+    mutating func add(piece: TruckPiece) {
+        var lastPiece: TruckPiece
+        var lastPos: CGPoint
+        var lastAngle: CGFloat
+        
+        if truckPieces.count > 0 {
+            lastPiece = truckPieces[truckPieces.count-1]
+        } else {
+            lastPiece = head
+        }
+        
+        lastPos = lastPiece.sprite.position
+        lastAngle = lastPiece.targetAngle
+        
+        
+        // move piece to a point behind the piece in front of it by offset amount
+        let newPos = CGPoint(x: lastPos.x - (cos(lastAngle) * offset), y: lastPos.y - (sin(lastAngle) * offset))
+        
+
+        piece.sprite.zPosition = lastPiece.sprite.zPosition-1
+        piece.sprite.position = newPos
+        piece.changeTargetAngle(to: lastAngle)
+        piece.changeSpeed(to: lastPiece.speed-speedDecrement)
+        if piece.speed < minimumSpeed {
+            piece.changeSpeed(to: minimumSpeed)
+        }
+        
+        let roation = SKAction.rotate(toAngle: piece.targetAngle, duration: TimeInterval(piece.rotationalSpeed), shortestUnitArc: true)
+        piece.sprite.run(roation)
+        
+        truckPieces.append(piece)
+    }
+
+}
+extension TruckChain {
+    init(head h: TruckPiece) {
+        head = h
+        truckPieces = []
+        offset = head.sprite.size.height
+        speedDecrement = 10
+        minimumSpeed = 20
+    }
+}
 
 
-class TruckScene: SKScene {
+class TruckScene: SKScene, SKPhysicsContactDelegate {
     var head: TruckPiece!
-//    var chain: TruckChain!
+    var chain: TruckChain!
     
     var lastTime: TimeInterval?
     
     override func didMove(to view: SKView) {
+        // get rid of gravity
+       self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+       self.physicsWorld.contactDelegate = self
+       
+        
+        
         let sprite = SKSpriteNode(imageNamed: "space_truck_cab")
-        // set pos and stuff
-        print(sprite.position)
         head = TruckPiece(sprite: sprite)
-        self.addChild(head.sprite)
-        self.addChild(head.thruster)
-//        chain = TruckChain(head: head)
-//
-//        for piece in chain.getSprites() {
-//            self.addChild(piece)
-//        }
+        head.sprite.zPosition = 10
+
+        chain = TruckChain(head: head)
+
+        
+        chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+
+        
+        for piece in chain.getSprites() {
+            self.addChild(piece)
+        }
+        
+        for thruster in chain.getThrusters() {
+            self.addChild(thruster)
+        }
     }
     
     
@@ -179,16 +258,16 @@ class TruckScene: SKScene {
         if let t = lastTime {
             let delta = CGFloat(currentTime - t)
             //chain.movePieces(by: delta)
-            head.move(by: delta)
+            chain.movePieces(by: delta)
 
         } else {
             let delta : CGFloat = 0
             //chain.movePieces(by: delta)
-            head.move(by: delta)
+            chain.movePieces(by: delta)
 
 
         }
-        
+        chain.updateFollowers()
         lastTime = currentTime
         
     }
