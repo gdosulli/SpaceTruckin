@@ -22,6 +22,10 @@
 		E34AB9F5252BBD3F007AF254 /* sparkEmitter.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9F4252BBD3F007AF254 /* sparkEmitter.sks */; };
 		E34AB9F7252BBDC9007AF254 /* magicEmitter.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9F6252BBDC9007AF254 /* magicEmitter.sks */; };
 		E34AB9F9252BBE31007AF254 /* smokeEmitter.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9F8252BBE31007AF254 /* smokeEmitter.sks */; };
+		E3FF20F4253B96A0002EC9C0 /* Stars.sks in Resources */ = {isa = PBXBuildFile; fileRef = E3FF20F2253B96A0002EC9C0 /* Stars.sks */; };
+		E3FF20F5253B96A0002EC9C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3FF20F3253B96A0002EC9C0 /* Assets.xcassets */; };
+		E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */; };
+		E3FF20F9253BA26A002EC9C0 /* galaxy.sks in Resources */ = {isa = PBXBuildFile; fileRef = E3FF20F8253BA26A002EC9C0 /* galaxy.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +67,10 @@
 		E34AB9F4252BBD3F007AF254 /* sparkEmitter.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = sparkEmitter.sks; sourceTree = "<group>"; };
 		E34AB9F6252BBDC9007AF254 /* magicEmitter.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = magicEmitter.sks; sourceTree = "<group>"; };
 		E34AB9F8252BBE31007AF254 /* smokeEmitter.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = smokeEmitter.sks; sourceTree = "<group>"; };
+		E3FF20F2253B96A0002EC9C0 /* Stars.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Stars.sks; sourceTree = "<group>"; };
+		E3FF20F3253B96A0002EC9C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxyEmitter.swift; sourceTree = "<group>"; };
+		E3FF20F8253BA26A002EC9C0 /* galaxy.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = galaxy.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +101,8 @@
 		E34AB9AC252BAE6D007AF254 = {
 			isa = PBXGroup;
 			children = (
+				E3FF20F2253B96A0002EC9C0 /* Stars.sks */,
+				E3FF20F3253B96A0002EC9C0 /* Assets.xcassets */,
 				E34AB9B7252BAE6D007AF254 /* Space Truckin */,
 				E34AB9D2252BAE71007AF254 /* Space TruckinTests */,
 				E34AB9DD252BAE71007AF254 /* Space TruckinUITests */,
@@ -127,6 +137,8 @@
 				E34AB9F4252BBD3F007AF254 /* sparkEmitter.sks */,
 				E34AB9F6252BBDC9007AF254 /* magicEmitter.sks */,
 				E34AB9F8252BBE31007AF254 /* smokeEmitter.sks */,
+				E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */,
+				E3FF20F8253BA26A002EC9C0 /* galaxy.sks */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -255,9 +267,12 @@
 			files = (
 				E34AB9F5252BBD3F007AF254 /* sparkEmitter.sks in Resources */,
 				E34AB9F1252BB9CA007AF254 /* TruckScene.sks in Resources */,
+				E3FF20F5253B96A0002EC9C0 /* Assets.xcassets in Resources */,
 				E34AB9F7252BBDC9007AF254 /* magicEmitter.sks in Resources */,
 				E34AB9C4252BAE6D007AF254 /* Main.storyboard in Resources */,
 				E34AB9ED252BAF32007AF254 /* GameScene.sks in Resources */,
+				E3FF20F4253B96A0002EC9C0 /* Stars.sks in Resources */,
+				E3FF20F9253BA26A002EC9C0 /* galaxy.sks in Resources */,
 				E34AB9C6252BAE70007AF254 /* Assets.xcassets in Resources */,
 				E34AB9F9252BBE31007AF254 /* smokeEmitter.sks in Resources */,
 				E34AB9C9252BAE70007AF254 /* LaunchScreen.storyboard in Resources */,
@@ -287,6 +302,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E34AB9BF252BAE6D007AF254 /* GameScene.swift in Sources */,
+				E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */,
 				E34AB9C1252BAE6D007AF254 /* GameViewController.swift in Sources */,
 				E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */,
 				E34AB9F3252BB9D7007AF254 /* TruckScene.swift in Sources */,

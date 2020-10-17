@@ -25,22 +25,33 @@ import GameplayKit
 class TruckPiece {
     var targetAngle: CGFloat
     
+    var baseSpeed: CGFloat
     var speed: CGFloat
     var rotationalSpeed: CGFloat
     let sprite: SKSpriteNode!
     let thruster: SKEmitterNode?
     var highlighted = false
+    var boosted = false
+    var distanceToHead: CGFloat = 0.0
     
     init(sprite s1: SKSpriteNode) {
         sprite = s1
-        //sprite.physicsBody = SKPhysicsBody(rectangleOf: sprite.size)
-        speed = 100
+        baseSpeed = 100
+        speed = baseSpeed
         rotationalSpeed = 0.25
         targetAngle = 3.14/2
         thruster = SKEmitterNode(fileNamed: "sparkEmitter")
         thruster?.zPosition = sprite.zPosition - 1
         thruster?.position = sprite.position
     
+    }
+    
+    func boostSpeed(to newSpeed: CGFloat, for time: TimeInterval) {
+        speed = newSpeed
+        SKAction.run {
+            SKAction.wait(forDuration: time)
+            self.speed = self.baseSpeed
+        }
     }
     
     func translate(by vector: CGPoint) {
@@ -93,12 +104,20 @@ class TruckPiece {
     }
 }
 
+
+// I want truck pieces to have a temporary speed boost that lasts for x seconds before decelerating back to
+// base speed
+
+
 struct TruckChain {
     let head: TruckPiece!
     var truckPieces: [TruckPiece]
     var offset: CGFloat
     var speedDecrement: CGFloat
     var minimumSpeed: CGFloat
+    var greatDistance: Bool = false
+    var warningDistance: CGFloat
+    var boostRadius: CGFloat
 
     func movePieces(by delta: CGFloat) {
         head.move(by: delta)
@@ -138,6 +157,49 @@ struct TruckChain {
                 truckPieces[i].changeAngleTo(point: truckPieces[i-1].sprite.position)
             }
         }
+        
+        //updateHeadDistance()
+        
+    }
+    
+    func updateHeadDistance() {
+        for piece in truckPieces {
+            piece.distanceToHead = piece.sprite.position.distance(point: head.sprite.position)
+            if !piece.boosted && piece.distanceToHead < boostRadius {
+                print("boosted")
+                piece.boostSpeed(to: head.speed-1, for: 10.0)
+            }
+        }
+    }
+    
+    mutating func updateDistance() {
+        if getMaxDistance() > warningDistance {
+            self.greatDistance = true
+        } else {
+            self.greatDistance = false
+        }
+    }
+    
+    
+    func getMaxDistance() -> CGFloat {
+        var maxDistance: CGFloat = 0.0
+        
+        for i in 0..<truckPieces.count {
+            if i == 0 {
+                let distance = head.sprite.position.distance(point: truckPieces[i].sprite.position)
+                if maxDistance < distance {
+                    maxDistance = distance
+                }
+            } else {
+                let distance = truckPieces[i].sprite.position.distance(point: truckPieces[i-1].sprite.position)
+                if maxDistance < distance {
+                    maxDistance = distance
+                }
+            }
+        }
+        
+        return maxDistance
+        
     }
     
     mutating func add(piece: TruckPiece) {
@@ -179,8 +241,10 @@ extension TruckChain {
         head = h
         truckPieces = []
         offset = head.sprite.size.height
-        speedDecrement = 10
-        minimumSpeed = 20
+        speedDecrement = 15
+        minimumSpeed = 10
+        warningDistance = head.sprite.size.width * 3
+        boostRadius = head.sprite.size.width * 1.5
     }
 }
 
@@ -189,14 +253,38 @@ class TruckScene: SKScene, SKPhysicsContactDelegate {
     var head: TruckPiece!
     var chain: TruckChain!
     
+    let cam = SKCameraNode()
+    
+    let scaleBounds = CGPoint(x: 2, y: 5)
+    var camScale: CGFloat = 3
+    
     var lastTime: TimeInterval?
+    
+    var clunky = false
+    
+    var showOffScreenPieces = false
+    
+    var background: SKSpriteNode?
+    var backgroundSpeed = CGPoint(x: -0.001, y: 0.001)
+
     
     override func didMove(to view: SKView) {
         // get rid of gravity
-       self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-       self.physicsWorld.contactDelegate = self
-       
+        self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        self.physicsWorld.contactDelegate = self
+
+        self.camera = cam
         
+        // scrollbar
+        
+        background = SKSpriteNode(imageNamed: "spacebackground")
+        background?.size = CGSize(width: self.frame.size.width * 32, height:  self.frame.size.height * 32)
+        background?.position = CGPoint(x: frame.midX, y: frame.midY)
+        background?.zPosition = -100
+        background?.alpha = 0.6
+        if let bg = background {
+            self.addChild(bg)
+        }
         
         let sprite = SKSpriteNode(imageNamed: "space_truck_cab")
         head = TruckPiece(sprite: sprite)
@@ -208,7 +296,6 @@ class TruckScene: SKScene, SKPhysicsContactDelegate {
         chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
         chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
         chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
-        chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
 
         
         for piece in chain.getSprites() {
@@ -217,6 +304,13 @@ class TruckScene: SKScene, SKPhysicsContactDelegate {
         
         for thruster in chain.getThrusters() {
             self.addChild(thruster)
+        }
+        
+        if clunky {
+            let margin: CGFloat = 50.0
+            for sprite in chain.getSprites() {
+                sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: sprite.size.width - margin, height: sprite.size.height - margin))
+            }
         }
     }
     
@@ -268,7 +362,39 @@ class TruckScene: SKScene, SKPhysicsContactDelegate {
 
         }
         chain.updateFollowers()
+        chain.updateDistance()
+        
+        if chain.greatDistance {
+            self.view?.layer.borderWidth = 10
+            self.view?.layer.borderColor = CGColor(srgbRed: 1, green: 0, blue: 0, alpha: 0.5)
+        } else {
+            self.view?.layer.borderColor = CGColor(srgbRed: 0, green: 0, blue: 0, alpha: 0)
+        }
+        
+        
         lastTime = currentTime
         
+        cam.xScale = camScale
+        cam.yScale = camScale
+        cam.position = head.sprite.position
+    
+        
+    }
+}
+
+// got from stack overflow https://stackoverflow.com/questions/21251706/ios-spritekit-how-to-calculate-the-distance-between-two-nodes
+extension CGPoint {
+
+    /**
+    Calculates a distance to the given point.
+
+    :param: point - the point to calculate a distance to
+
+    :returns: distance between current and the given points
+    */
+    func distance(point: CGPoint) -> CGFloat {
+        let dx = self.x - point.x
+        let dy = self.y - point.y
+        return sqrt(dx * dx + dy * dy);
     }
 }
