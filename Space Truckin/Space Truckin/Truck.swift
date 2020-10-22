@@ -185,4 +185,38 @@ struct TruckChain {
         return maxDistance
         
     }
+
+    mutating func add(piece: TruckPiece) {
+        var lastPiece: TruckPiece
+        var lastPos: CGPoint
+        var lastAngle: CGFloat
+        
+        if truckPieces.count > 0 {
+            lastPiece = truckPieces[truckPieces.count-1]
+        } else {
+            lastPiece = head
+        }
+        
+        lastPos = lastPiece.sprite.position
+        lastAngle = lastPiece.targetAngle
+        
+        
+        // move piece to a point behind the piece in front of it by offset amount
+        let newPos = CGPoint(x: lastPos.x - (cos(lastAngle) * offset), y: lastPos.y - (sin(lastAngle) * offset))
+        
+
+        piece.sprite.zPosition = lastPiece.sprite.zPosition-1
+        piece.sprite.position = newPos
+        piece.changeTargetAngle(to: lastAngle)
+        piece.changeSpeed(to: lastPiece.speed-speedDecrement)
+        if piece.speed < minimumSpeed {
+            piece.changeSpeed(to: minimumSpeed)
+        }
+        
+        let roation = SKAction.rotate(toAngle: piece.targetAngle, duration: TimeInterval(piece.rotationalSpeed), shortestUnitArc: true)
+        piece.sprite.run(roation)
+        
+        truckPieces.append(piece)
+    }
+
 }

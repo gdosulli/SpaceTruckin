@@ -24,7 +24,8 @@ class Inventory {
     init() {
         maxCapacity = 100
         usedSpace = 0
-        _ = getRemainingCapacity()
+        remainingCapacity = maxCapacity - usedSpace
+        items = []
     }
     
     func getRemainingCapacity() -> Int {
