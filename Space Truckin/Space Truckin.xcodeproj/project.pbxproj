@@ -7,13 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-
 		829A7EFA2538A94E006751B1 /* AsteroidScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 829A7EF82538A94E006751B1 /* AsteroidScene.sks */; };
 		829A7EFB2538A94E006751B1 /* AsteroidScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829A7EF92538A94E006751B1 /* AsteroidScene.swift */; };
-
 		E33F614525422148005BAB37 /* Truck.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33F614425422148005BAB37 /* Truck.swift */; };
 		E33F6147254221C9005BAB37 /* Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33F6146254221C9005BAB37 /* Inventory.swift */; };
-
+		E33F614925422EC4005BAB37 /* Movable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33F614825422EC4005BAB37 /* Movable.swift */; };
 		E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9B8252BAE6D007AF254 /* AppDelegate.swift */; };
 		E34AB9BD252BAE6D007AF254 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9BC252BAE6D007AF254 /* Actions.sks */; };
 		E34AB9BF252BAE6D007AF254 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9BE252BAE6D007AF254 /* GameScene.swift */; };
@@ -53,13 +51,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-
 		829A7EF82538A94E006751B1 /* AsteroidScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = AsteroidScene.sks; sourceTree = "<group>"; };
 		829A7EF92538A94E006751B1 /* AsteroidScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsteroidScene.swift; sourceTree = "<group>"; };
-
 		E33F614425422148005BAB37 /* Truck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Truck.swift; sourceTree = "<group>"; };
 		E33F6146254221C9005BAB37 /* Inventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inventory.swift; sourceTree = "<group>"; };
-
+		E33F614825422EC4005BAB37 /* Movable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movable.swift; sourceTree = "<group>"; };
 		E34AB9B5252BAE6D007AF254 /* Space Truckin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Space Truckin.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E34AB9B8252BAE6D007AF254 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E34AB9BC252BAE6D007AF254 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -157,6 +153,7 @@
 				E3FF20F8253BA26A002EC9C0 /* galaxy.sks */,
 				E33F614425422148005BAB37 /* Truck.swift */,
 				E33F6146254221C9005BAB37 /* Inventory.swift */,
+				E33F614825422EC4005BAB37 /* Movable.swift */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -323,15 +320,12 @@
 				E34AB9BF252BAE6D007AF254 /* GameScene.swift in Sources */,
 				E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */,
 				E33F6147254221C9005BAB37 /* Inventory.swift in Sources */,
+				E33F614925422EC4005BAB37 /* Movable.swift in Sources */,
 				E34AB9C1252BAE6D007AF254 /* GameViewController.swift in Sources */,
 				E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */,
 				E34AB9F3252BB9D7007AF254 /* TruckScene.swift in Sources */,
-
-				E34AB9EF252BAF9A007AF254 /* Truck.swift in Sources */,
 				829A7EFB2538A94E006751B1 /* AsteroidScene.swift in Sources */,
-
 				E33F614525422148005BAB37 /* Truck.swift in Sources */,
-
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
