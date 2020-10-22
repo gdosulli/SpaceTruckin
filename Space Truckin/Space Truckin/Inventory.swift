@@ -9,10 +9,13 @@
 import Foundation
 
 enum ItemType {case Scrap, Nuclear, Precious, Water, Currency}
+
 struct Item {
     var type: ItemType
     var value: Int
-    
+}
+extension Item{
+
 }
 
 class Inventory {
@@ -28,8 +31,17 @@ class Inventory {
         items = []
     }
     
+    init(_ maxCap: Int, _ used: Int) {
+        maxCapacity = maxCap
+        usedSpace = used
+        remainingCapacity = maxCapacity - usedSpace
+        items = []
+    }
+    
     func getRemainingCapacity() -> Int {
         self.remainingCapacity = maxCapacity - usedSpace
         return remainingCapacity
     }
 }
+
+let NO_INVENTORY = Inventory(0,0)
