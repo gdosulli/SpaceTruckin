@@ -9,9 +9,8 @@
 import Foundation
 import SpriteKit
 
-class SpaceObject {
+class SpaceObject : Movable {
     var durability: Int
-    var sprite: SKSpriteNode!
     var xRange: (CGFloat, CGFloat)
     var yRange: (CGFloat, CGFloat)
     var inventory: Inventory
@@ -20,13 +19,30 @@ class SpaceObject {
           _ sprite: SKSpriteNode,
           _ xRange: (CGFloat, CGFloat),
           _ yRange: (CGFloat, CGFloat),
-          _ inventory: Inventory) {
+          _ inventory: Inventory,
+          _ speed: CGFloat,
+          _ rotation: CGFloat,
+          _ targetAngle: CGFloat) {
         self.durability = durability
-        self.sprite = sprite
         self.xRange = xRange
         self.yRange = yRange
         self.inventory = inventory
+        
+        super.init(speed: speed,
+                   rotation: rotation,
+                   angleInRadians: targetAngle,
+                   sprite: sprite)
     }
+    
+    // convenience for non-moving objects
+    convenience init (_ durability: Int,
+                      _ sprite: SKSpriteNode,
+                      _ xRange: (CGFloat, CGFloat),
+                      _ yRange: (CGFloat, CGFloat),
+                      _ inventory: Inventory) {
+        self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0)
+    }
+    
     
     func spawn() {
         fatalError("Subclasses need to implement the `spawn()` method.")
