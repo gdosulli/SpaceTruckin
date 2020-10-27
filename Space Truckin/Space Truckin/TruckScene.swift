@@ -21,20 +21,6 @@ import GameplayKit
 // and contact between an asteroid and the drill should damge/destroy the asteroid and give materials to
 // the player.
 
-
-extension TruckChain {
-    init(head h: TruckPiece) {
-        head = h
-        truckPieces = []
-        offset = head.sprite.size.height
-        speedDecrement = 15
-        minimumSpeed = 10
-        warningDistance = head.sprite.size.width * 3
-        boostRadius = head.sprite.size.width * 1.5
-    }
-}
-
-
 class TruckScene: SKScene, SKPhysicsContactDelegate {
     var head: TruckPiece!
     var chain: TruckChain!
@@ -104,7 +90,6 @@ class TruckScene: SKScene, SKPhysicsContactDelegate {
     func touchDown(atPoint pos : CGPoint) {
         // calculate target angle
         head.changeAngleTo(point: pos)
-        head.highlighted = true
        
     }
     
@@ -113,7 +98,6 @@ class TruckScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func touchUp(atPoint pos : CGPoint) {
-        head.highlighted = false
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

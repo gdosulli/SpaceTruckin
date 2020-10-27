@@ -9,91 +9,62 @@ import Foundation
 import SpriteKit
 import CoreGraphics
 
-class TruckPiece {
-    var targetAngle: CGFloat
-    
-    var baseSpeed: CGFloat
-    var speed: CGFloat
-    var rotationalSpeed: CGFloat
-    let sprite: SKSpriteNode!
+class TruckPiece: SpaceObject {
     let thruster: SKEmitterNode?
-    var highlighted = false
-    var boosted = false
     var distanceToHead: CGFloat = 0.0
+    var targetPiece: TruckPiece?
     
     init(sprite s1: SKSpriteNode) {
-        sprite = s1
-        baseSpeed = 100
-        speed = baseSpeed
-        rotationalSpeed = 0.25
-        targetAngle = 3.14/2
         thruster = SKEmitterNode(fileNamed: "sparkEmitter")
-        thruster?.zPosition = sprite.zPosition - 1
+
+        super.init(2, s1, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0)
+        
+        thruster?.zPosition = sprite.zPosition - 2
         thruster?.position = sprite.position
-    
     }
     
-    func boostSpeed(to newSpeed: CGFloat, for time: TimeInterval) {
-        speed = newSpeed
-        SKAction.run {
-            SKAction.wait(forDuration: time)
-            self.speed = self.baseSpeed
-        }
+    init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat) {
+        thruster = SKEmitterNode(fileNamed: "sparkEmitter")
+
+        super.init(durability, s1, (size,size), (size,size), Inventory(100,0), speed, 0.5, 0)
     }
     
-    func translate(by vector: CGPoint) {
-        sprite.position.x += vector.x
-        sprite.position.y += vector.y
+    override func translate(by vector: CGPoint) {
+        super.translate(by: vector)
         
         thruster?.position = sprite.position
         thruster?.zRotation = sprite.zRotation
     }
     
-    func changeAngleTo(point pos: CGPoint) {
-        let difference = CGPoint(x: pos.x - sprite.position.x, y: pos.y - sprite.position.y)
-        let diffMag = sqrt(difference.x * difference.x + difference.y * difference.y)
-        let unitVec = CGPoint(x: difference.x / diffMag, y: difference.y / diffMag)
-        let sine = atan2(unitVec.y, unitVec.x)
-        changeTargetAngle(to: sine)
-    }
-    
-    func changeTargetAngle(to angle: CGFloat) {
-        targetAngle = angle
-    }
-    
-    func changeTargetAngle(by angle: CGFloat) {
-        targetAngle = angle
-    }
-    
-    func changeSpeed(to: CGFloat) {
-        speed = to
-    }
-    
-    func changeSpeed(by: CGFloat) {
-        speed += by
-    }
-    
-    func move(by delta: CGFloat) {
+    override func move(by delta: CGFloat) {
         // set the rotation here
         // Truck could have a rotation speed, and set an animation to rotate it the correct angle
         // at the correct speed. getting new input would interrupt the old animation
         // targetAngle needs to be changed so that the nose of the truck is the front
-        let roation = SKAction.rotate(toAngle: targetAngle - (3.14/2), duration: TimeInterval(rotationalSpeed), shortestUnitArc: true)
+        let roation = SKAction.rotate(toAngle: targetAngle - (3.14/2), duration: TimeInterval(self.rotation), shortestUnitArc: true)
         sprite.run(roation)
         // the problem with this code is that it doesn't bother rotating to an angle below the center line
         // some flaw in targetAngle?
-    
-        // do the translation here
-        let translateVector = CGPoint(x: cos(targetAngle) * self.speed * delta, y:  sin(targetAngle) * self.speed * delta)
-        self.translate(by: translateVector)
-        
 
+        super.move(by: delta)
+    }
+    
+    override func spawn() {
+        
+    }
+    
+    override func onDestroy() {
+        
+    }
+    
+    override func getChildren() -> [SKNode?] {
+        return super.getChildren() + [thruster]
     }
 }
 
 
 
-struct TruckChain {
+class TruckChain {
     let head: TruckPiece!
     var truckPieces: [TruckPiece]
     var offset: CGFloat
@@ -103,8 +74,18 @@ struct TruckChain {
     var warningDistance: CGFloat
     var boostRadius: CGFloat
 
+    init(head h: TruckPiece) {
+        head = h
+        truckPieces = []
+        offset = head.sprite.size.height
+        speedDecrement = 5
+        minimumSpeed = 10
+        warningDistance = head.sprite.size.width * 3
+        boostRadius = head.sprite.size.width * 1.5
+    }
+    
     func movePieces(by delta: CGFloat) {
-        head.move(by: delta)
+        //head.move(by: delta)
         for piece in truckPieces {
             piece.move(by: delta)
         }
@@ -146,17 +127,7 @@ struct TruckChain {
         
     }
     
-    func updateHeadDistance() {
-        for piece in truckPieces {
-            piece.distanceToHead = piece.sprite.position.distance(point: head.sprite.position)
-            if !piece.boosted && piece.distanceToHead < boostRadius {
-                print("boosted")
-                piece.boostSpeed(to: head.speed-1, for: 10.0)
-            }
-        }
-    }
-    
-    mutating func updateDistance() {
+    func updateDistance() {
         if getMaxDistance() > warningDistance {
             self.greatDistance = true
         } else {
@@ -186,7 +157,8 @@ struct TruckChain {
         
     }
 
-    mutating func add(piece: TruckPiece) {
+    func add(piece: TruckPiece) {
+        
         var lastPiece: TruckPiece
         var lastPos: CGPoint
         var lastAngle: CGFloat
@@ -205,18 +177,23 @@ struct TruckChain {
         let newPos = CGPoint(x: lastPos.x - (cos(lastAngle) * offset), y: lastPos.y - (sin(lastAngle) * offset))
         
 
+        print(lastPiece.speed)
         piece.sprite.zPosition = lastPiece.sprite.zPosition-1
         piece.sprite.position = newPos
         piece.changeTargetAngle(to: lastAngle)
         piece.changeSpeed(to: lastPiece.speed-speedDecrement)
-        if piece.speed < minimumSpeed {
-            piece.changeSpeed(to: minimumSpeed)
-        }
-        
-        let roation = SKAction.rotate(toAngle: piece.targetAngle, duration: TimeInterval(piece.rotationalSpeed), shortestUnitArc: true)
-        piece.sprite.run(roation)
         
         truckPieces.append(piece)
+    }
+    
+    
+    func getChildren() -> [SKNode?] {
+        var nodes = head.getChildren()
+        for piece in truckPieces {
+            nodes += piece.getChildren()
+        }
+        
+        return nodes
     }
 
 }
