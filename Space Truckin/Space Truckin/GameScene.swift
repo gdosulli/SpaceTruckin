@@ -12,6 +12,7 @@ import GameplayKit
 struct Player {
     var head: TruckPiece
     var chain: TruckChain
+    let cam = SKCameraNode()
     
     func getChildren() -> [SKNode?] {
         return chain.getChildren()
@@ -57,7 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2")))
         player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
         player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
-
+        
         
         for c in player.getChildren() {
             self.addChild(c!)
