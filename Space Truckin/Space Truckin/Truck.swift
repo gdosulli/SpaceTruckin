@@ -49,7 +49,7 @@ class TruckPiece: SpaceObject {
         super.move(by: delta)
     }
     
-    override func spawn() {
+    override func spawn(at spawnPoint: CGPoint) {
         
     }
     
