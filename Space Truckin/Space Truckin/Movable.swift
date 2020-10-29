@@ -53,8 +53,8 @@ class Movable {
     }
        
     func move(by delta: CGFloat) {
-           let translateVector = CGPoint(x: cos(targetAngle) * self.speed * delta, y:  sin(targetAngle) * self.speed * delta)
-           self.translate(by: translateVector)
+        let translateVector = CGPoint(x: cos(targetAngle) * self.speed * delta, y:  sin(targetAngle) * self.speed * delta)
+        self.translate(by: translateVector)
     }
     
 }

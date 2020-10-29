@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "space_truck_capsule2.png",
+      "filename" : "space_truck_capsule2@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "space_truck_capsule2@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "space_truck_capsule2@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -53,5 +53,7 @@ class SpaceObject : Movable {
         fatalError("Subclasses need to implement the `onDestroy()` method.")
     }
     
-    
+    func getChildren() -> [SKNode?] {
+        return [sprite]
+    }
 }
