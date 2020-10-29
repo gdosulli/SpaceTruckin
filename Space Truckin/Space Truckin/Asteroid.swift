@@ -32,7 +32,7 @@ class Asteroid : SpaceObject {
         sprite.position = spawnPoint
         
         // setup asteroid to rotate randomly
-        let spinSpeed = TimeInterval.random(in: 3...8)
+        let spinSpeed = Double.random(in: 2...5) * Double(dimension / 100)
         var action  = [SKAction]()
         let rotateAction = SKAction.repeatForever(SKAction.rotate(byAngle: rotation, duration: spinSpeed))
         action.append(rotateAction)

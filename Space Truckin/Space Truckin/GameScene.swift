@@ -153,7 +153,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let spawnPoint = getRandPos(for: asteroid)
         
-        let speed = CGFloat.random(in: 200...500)
+        let speed = CGFloat.random(in: 50...150)
         let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
         let rotation = Bool.random() ? -2 * CGFloat.pi : 2 * CGFloat.pi
         
@@ -162,8 +162,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let ast = Asteroid(1,
                            asteroid,
-                           (100, 250),
-                           (100, 250),
+                           (150, 350),
+                           (150, 350),
                            Inventory(),
                            speed,
                            rotation,
@@ -190,7 +190,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             x = CGFloat(distr.nextInt())
             
             // select top/bottom for y
-            y = self.frame.size.height / 2 + object.size.height
+            y = self.frame.size.height * 2 + object.size.height
             y = Bool.random() ? y * -1 : y
         } else {
             // get random y coordinate
@@ -199,7 +199,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             y = CGFloat(distr.nextInt())
             
             // select left/right for x
-            x = self.frame.size.width / 2 + object.size.width
+            x = self.frame.size.width * 2 + object.size.width
             x = Bool.random() ? x * -1 : x
         }
         
