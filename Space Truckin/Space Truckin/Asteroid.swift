@@ -39,9 +39,6 @@ class Asteroid : SpaceObject {
         
         // run rotation
         sprite.run(SKAction.sequence(action))
-        
-        // move asteroid across screen
-        move(by: 10)
     }
     
     override func onDestroy() {

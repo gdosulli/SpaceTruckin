@@ -12,6 +12,7 @@ import GameplayKit
 class AsteroidScene: SKScene {
     var head: SKSpriteNode!
     
+    var asteroidsInScene : [Asteroid] = []
     
     // array for randomaly choosing an asteroid to load
     var asteroids = ["asteroid_normal", "asteroid_precious", "asteroid_radioactive"]
@@ -56,6 +57,9 @@ class AsteroidScene: SKScene {
                            targetAngle)
         
         ast.spawn(at: spawnPoint)
+        
+        // add asteroid to asteroids
+        asteroidsInScene.append(ast)
     }
     
     // function returns random offscreen position for space object projectile
