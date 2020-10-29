@@ -12,18 +12,19 @@ import GameplayKit
 class AsteroidScene: SKScene {
     var head: SKSpriteNode!
     
-    // array for randomaly choosing an asteroid to load
-    // TODO: modify to actual asteroids
-    var asteroids = ["asteroid_normal", "asteroid_precious", "asteroid_radioactive"]
-    var asteroidTimer : Timer!
     
-    // setup physics detection
-    let asteroidCategory : UInt32 = 0x1 << 1
+    // array for randomaly choosing an asteroid to load
+    var asteroids = ["asteroid_normal", "asteroid_precious", "asteroid_radioactive"]
+    
+    var asteroidTimer : Timer!
     let truckCategory : UInt32 = 0x1 << 0
     
     
     override func didMove(to view: SKView) {
-        print("In game scene")
+        print("In asteroid scene")
+        // get rid of gravity
+        self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        
         // timer for asteroids
         asteroidTimer = Timer.scheduledTimer(timeInterval: 1.0,
                                              target: self,
@@ -36,44 +37,29 @@ class AsteroidScene: SKScene {
         // randomly select asteroid to load
         let asteroid = SKSpriteNode(imageNamed:asteroids[Int.random(in: 0..<asteroids.count)])
         
-        // set random asteroid size
-        let dimension = Int.random(in: 30...60)
-        asteroid.size = CGSize(width: dimension, height: dimension)
+        let spawnPoint = getRandPos(for: asteroid)
         
-        // add physics and collision detection to asteroid
-        asteroid.physicsBody = SKPhysicsBody(rectangleOf: asteroid.size)
-        asteroid.physicsBody?.isDynamic = true
-        asteroid.physicsBody?.categoryBitMask = asteroidCategory
-        asteroid.physicsBody?.contactTestBitMask = truckCategory
-        asteroid.physicsBody?.collisionBitMask = 0
+        let speed = CGFloat.random(in: 1...3)
+        let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
+        let rotation = Bool.random() ? -2 * CGFloat.pi : 2 * CGFloat.pi
         
         self.addChild(asteroid)
         
-        // set random initial position
-        let (initX, initY) = getRandPos(for: asteroid)
-        asteroid.position = CGPoint(x: initX, y: initY)
         
-        // get random speed and direction for asteroid to travel across screen
-        let duration : TimeInterval = Double.random(in: 8...16)
-        var action  = [SKAction]()
-        let (endX, endY) = getRandPos(for: asteroid)
-        action.append(SKAction.move(to: CGPoint(x: endX, y: endY), duration: duration))
+        let ast = Asteroid(1,
+                           asteroid,
+                           (30, 60),
+                           (30, 60),
+                           Inventory(),
+                           speed,
+                           rotation,
+                           targetAngle)
         
-        // set rotation for asteroid
-        let speed = Double.random(in: 3...8) as TimeInterval
-        let rotation = Bool.random() ? -2 * CGFloat.pi : 2 * CGFloat.pi
-        let rotateAction = SKAction.repeatForever(SKAction.rotate(byAngle: rotation, duration: speed))
-        asteroid.run(rotateAction)
-        
-        // remove object after it has exited the screen
-        action.append(SKAction.removeFromParent())
-        
-        // run action
-        asteroid.run(SKAction.sequence(action))
+        ast.spawn(at: spawnPoint)
     }
     
     // function returns random offscreen position for space object projectile
-    func getRandPos(for object: SKSpriteNode) -> (x: CGFloat, y: CGFloat) {
+    func getRandPos(for object: SKSpriteNode) -> CGPoint {
         var x : CGFloat
         var y : CGFloat
         
@@ -100,7 +86,7 @@ class AsteroidScene: SKScene {
             x = Bool.random() ? x * -1 : x
         }
         
-        return (x, y)
+        return CGPoint(x: x, y: y)
     }
     
     func touchDown(atPoint pos : CGPoint) {

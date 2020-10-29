@@ -8,6 +8,7 @@
 
 import Foundation
 import SpriteKit
+import GameplayKit
 
 class SpaceObject : Movable {
     var durability: Int
@@ -44,11 +45,13 @@ class SpaceObject : Movable {
     }
     
     
-    func spawn() {
+    func spawn(at spawnPoint: CGPoint) {
         fatalError("Subclasses need to implement the `spawn()` method.")
     }
     
     func onDestroy() {
         fatalError("Subclasses need to implement the `onDestroy()` method.")
     }
+    
+    
 }
