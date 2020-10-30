@@ -27,7 +27,7 @@ class Movable {
        sprite.position.x += vector.x
        sprite.position.y += vector.y
     }
-       
+    
     func changeAngleTo(point pos: CGPoint) {
         let difference = CGPoint(x: pos.x - sprite.position.x, y: pos.y - sprite.position.y)
         let diffMag = sqrt(difference.x * difference.x + difference.y * difference.y)

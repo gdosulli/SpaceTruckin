@@ -23,6 +23,17 @@ class TruckPiece: SpaceObject {
         thruster?.position = sprite.position
     }
     
+    init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
+        thruster = SKEmitterNode(fileNamed: "sparkEmitter")
+
+        targetPiece = piece
+        
+        super.init(2, s1, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0)
+
+        thruster?.zPosition = sprite.zPosition - 2
+        thruster?.position = sprite.position
+    }
+ 
     init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat) {
         thruster = SKEmitterNode(fileNamed: "sparkEmitter")
 
@@ -34,6 +45,12 @@ class TruckPiece: SpaceObject {
         
         thruster?.position = sprite.position
         thruster?.zRotation = sprite.zRotation
+    }
+    
+    override func update() {
+        if let piece = targetPiece {
+            changeAngleTo(point: piece.sprite.position)
+        }
     }
     
     override func move(by delta: CGFloat) {
@@ -62,7 +79,7 @@ class TruckPiece: SpaceObject {
     }
 }
 
-
+// TODO: implement barrel-roll/dash/burst on swipe
 
 class TruckChain {
     let head: TruckPiece!
@@ -73,6 +90,10 @@ class TruckChain {
     var greatDistance: Bool = false
     var warningDistance: CGFloat
     var boostRadius: CGFloat
+    var dashSpeed: CGFloat
+    var dashTimer: Timer?
+    var dashIndex = 0
+    var dashAngle: CGFloat = 0
 
     init(head h: TruckPiece) {
         head = h
@@ -82,6 +103,7 @@ class TruckChain {
         minimumSpeed = 10
         warningDistance = head.sprite.size.width * 3
         boostRadius = head.sprite.size.width * 1.5
+        dashSpeed = 5
     }
     
     func movePieces(by delta: CGFloat) {
@@ -154,6 +176,21 @@ class TruckChain {
         }
         
         return maxDistance
+        
+    }
+    
+    func dash(angle: CGFloat) {
+        guard dashTimer == nil else { return }
+        
+        print("dash at \(angle)")
+        dashAngle = angle
+        dashTimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(pieceDash), userInfo: nil, repeats: true)
+    }
+    
+    @objc func pieceDash() {
+        guard dashTimer != nil else { return }
+
+        // DASH
         
     }
 

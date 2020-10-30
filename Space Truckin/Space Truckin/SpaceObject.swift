@@ -56,4 +56,8 @@ class SpaceObject : Movable {
     func getChildren() -> [SKNode?] {
         return [sprite]
     }
+    
+    func update() {
+        
+    }
 }

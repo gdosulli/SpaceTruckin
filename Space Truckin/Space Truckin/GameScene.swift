@@ -21,7 +21,7 @@ struct Player {
     func update(by delta: CGFloat) {
         head.move(by: delta)
         chain.movePieces(by: delta)
-        chain.updateFollowers()
+        //chain.updateFollowers()
     }
 }
 extension Player {
@@ -111,7 +111,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func touchUp(atPoint pos : CGPoint) {
-       
+        //player.chain.dash(angle: 0)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -173,8 +173,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(debrisSprite)
         
-        let debris = Debris(1, debrisSprite, (300,300), (300,300), Inventory(), speed, rotation, targetAngle)
-        debris.spawn(at: CGPoint(x:50,y:100))
+        let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle)
+        debris.spawn(at: CGPoint(x:500,y:500))
         debrisInScene.append(debris)
     }
     
