@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8270C0B8254B73F700424235 /* StarryBackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8270C0B7254B73F700424235 /* StarryBackground.sks */; };
 		82723AE3254228D5002A1E53 /* SpaceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82723AE2254228D5002A1E53 /* SpaceObject.swift */; };
 		82723AE825422E5B002A1E53 /* Asteroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82723AE725422E5B002A1E53 /* Asteroid.swift */; };
 		829A7EFA2538A94E006751B1 /* AsteroidScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 829A7EF82538A94E006751B1 /* AsteroidScene.sks */; };
@@ -53,6 +54,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8270C0B7254B73F700424235 /* StarryBackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StarryBackground.sks; sourceTree = "<group>"; };
 		82723AE2254228D5002A1E53 /* SpaceObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceObject.swift; sourceTree = "<group>"; };
 		82723AE725422E5B002A1E53 /* Asteroid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asteroid.swift; sourceTree = "<group>"; };
 		829A7EF82538A94E006751B1 /* AsteroidScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = AsteroidScene.sks; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				82723AE2254228D5002A1E53 /* SpaceObject.swift */,
 				82723AE725422E5B002A1E53 /* Asteroid.swift */,
 				E33F614825422EC4005BAB37 /* Movable.swift */,
+				8270C0B7254B73F700424235 /* StarryBackground.sks */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				E34AB9F9252BBE31007AF254 /* smokeEmitter.sks in Resources */,
 				E34AB9C9252BAE70007AF254 /* LaunchScreen.storyboard in Resources */,
 				E34AB9BD252BAE6D007AF254 /* Actions.sks in Resources */,
+				8270C0B8254B73F700424235 /* StarryBackground.sks in Resources */,
 				829A7EFA2538A94E006751B1 /* AsteroidScene.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

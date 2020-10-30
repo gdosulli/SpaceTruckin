@@ -43,7 +43,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var showOffScreenPieces = false
     
-    var background: SKSpriteNode?
+    var background: SKEmitterNode!
     
     var asteroidsInScene : [Asteroid] = []
     
@@ -72,14 +72,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         
-        background = SKSpriteNode(imageNamed: "spacebackground")
-        background?.size = CGSize(width: self.frame.size.width * 32, height:  self.frame.size.height * 32)
-        background?.position = CGPoint(x: frame.midX, y: frame.midY)
-        background?.zPosition = -100
-        background?.alpha = 0.6
-        if let bg = background {
-            self.addChild(bg)
-        }
+        background = SKEmitterNode(fileNamed: "StarryBackground")
+        background.advanceSimulationTime(50)
+        background.zPosition = -1
+        self.addChild(background)
         
         // timer for asteroids
         asteroidTimer = Timer.scheduledTimer(timeInterval: 1.0,
