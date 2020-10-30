@@ -46,6 +46,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var background: SKEmitterNode!
     
     var asteroidsInScene : [Asteroid] = []
+    var debrisInScene: [Debris] = []
     
     // array for randomaly choosing an asteroid to load
     var asteroids = ["asteroid_normal", "asteroid_precious", "asteroid_radioactive"]
@@ -72,17 +73,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         
+        
+        
         background = SKEmitterNode(fileNamed: "StarryBackground")
         background.advanceSimulationTime(50)
-        background.zPosition = -1
+        background.zPosition = -100
         self.addChild(background)
         
+//        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
+//        self.addChild(galaxy)
+        
+        
+        // I'm putting this here because I was thinking about it.
+        // different types of asteroids should have different size distributions as well as different
+        // frequencies of occurence
         // timer for asteroids
+
+        // also what if there were only a set number of mineable asteroids in any one area, forcing players to navigate elsewhere, as the player destroys more asteroids, more junk and smaller debris clutters the map
         asteroidTimer = Timer.scheduledTimer(timeInterval: 1.0,
                                              target: self,
                                              selector: #selector(spawnAsteroid),
                                              userInfo: nil,
                                              repeats: true)
+        
+        spawnDebris()
     }
     
     
@@ -129,8 +143,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         lastTime = currentTime
         
         player.update(by: delta)
+        
+        // we could maybe do this in one bigger for-loop, looping through all children
+        // in the scene, and executing move(by: delta) on every movable we encounter
+        
         for asteroid in asteroidsInScene {
             asteroid.move(by: delta)
+        }
+        
+        for debris in debrisInScene {
+            debris.move(by: delta)
         }
         
         updateCamera()
@@ -141,6 +163,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cam.yScale = camScale
         cam.position = player.head.sprite.position
         
+    }
+    
+    func spawnDebris() {
+        let debrisSprite = SKSpriteNode(imageNamed: "satellite_1")
+        let speed = CGFloat.random(in: 25...75)
+        let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
+        let rotation = Bool.random() ? -1 * CGFloat.pi : 1 * CGFloat.pi
+        
+        self.addChild(debrisSprite)
+        
+        let debris = Debris(1, debrisSprite, (300,300), (300,300), Inventory(), speed, rotation, targetAngle)
+        debris.spawn(at: CGPoint(x:50,y:100))
+        debrisInScene.append(debris)
     }
     
     @objc func spawnAsteroid() {
