@@ -21,7 +21,7 @@ struct Player {
     func update(by delta: CGFloat) {
         head.move(by: delta)
         chain.movePieces(by: delta)
-        //chain.updateFollowers()
+        chain.updateFollowers()
     }
 }
 extension Player {
@@ -62,10 +62,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.camera = cam
         let sprite = SKSpriteNode(imageNamed: "space_truck_cab")
         player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 100 ))
-        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
-        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2")))
-        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
-        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head))
+        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.chain.getLastPiece()))
+        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
+        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
         
         
         for c in player.getChildren() {

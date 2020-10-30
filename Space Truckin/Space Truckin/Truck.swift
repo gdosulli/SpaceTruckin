@@ -106,6 +106,10 @@ class TruckChain {
         dashSpeed = 5
     }
     
+    func getLastPiece() -> TruckPiece {
+        return truckPieces[truckPieces.count-1]
+    }
+    
     func movePieces(by delta: CGFloat) {
         //head.move(by: delta)
         for piece in truckPieces {
@@ -137,12 +141,8 @@ class TruckChain {
     }
     
     func updateFollowers() {
-        for i in 0..<truckPieces.count {
-            if i == 0 {
-                truckPieces[i].changeAngleTo(point: head.sprite.position)
-            } else {
-                truckPieces[i].changeAngleTo(point: truckPieces[i-1].sprite.position)
-            }
+        for p in truckPieces {
+            p.update()
         }
         
         //updateHeadDistance()
