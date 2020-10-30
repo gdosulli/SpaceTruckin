@@ -96,7 +96,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                              userInfo: nil,
                                              repeats: true)
         
-        spawnDebris()
+        spawnDebris("satellite_1")
+        spawnDebris("cell_tower1")
     }
     
     
@@ -168,8 +169,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    func spawnDebris() {
-        let debrisSprite = SKSpriteNode(imageNamed: "satellite_1")
+    func spawnDebris(_ sprite_name: String) {
+        let debrisSprite = SKSpriteNode(imageNamed: sprite_name)
         let speed = CGFloat.random(in: 25...75)
         let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
         let rotation = Bool.random() ? -1 * CGFloat.pi : 1 * CGFloat.pi
@@ -177,7 +178,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(debrisSprite)
         
         let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle)
-        debris.spawn(at: CGPoint(x:500,y:500))
+        
+        let x = CGFloat.random(in: -1000...1000)
+        let y = CGFloat.random(in: -500...500)
+        debris.spawn(at: CGPoint(x:x,y:y))
         debrisInScene.append(debris)
     }
     
