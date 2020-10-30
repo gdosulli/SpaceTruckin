@@ -76,7 +76,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         background = SKEmitterNode(fileNamed: "StarryBackground")
-        background.advanceSimulationTime(50)
+        background.advanceSimulationTime(30)
         background.zPosition = -100
         self.addChild(background)
         
@@ -154,6 +154,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for debris in debrisInScene {
             debris.move(by: delta)
         }
+        
+        // reset center spawn location for background particles
+        background.particlePosition = player.head.sprite.position
         
         updateCamera()
     }
