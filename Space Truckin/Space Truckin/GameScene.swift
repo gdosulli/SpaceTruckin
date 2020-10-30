@@ -62,7 +62,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.camera = cam
         let sprite = SKSpriteNode(imageNamed: "space_truck_cab")
         player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 100 ))
-        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head))
+        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
         player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.chain.getLastPiece()))
         player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
         player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))

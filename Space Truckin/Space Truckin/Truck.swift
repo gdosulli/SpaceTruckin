@@ -107,6 +107,9 @@ class TruckChain {
     }
     
     func getLastPiece() -> TruckPiece {
+        if truckPieces.count == 0 {
+            return head
+        }
         return truckPieces[truckPieces.count-1]
     }
     
