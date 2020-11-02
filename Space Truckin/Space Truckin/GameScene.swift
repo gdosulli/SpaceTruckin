@@ -50,6 +50,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // array for randomaly choosing an asteroid to load
     var asteroids = ["asteroid_normal", "asteroid_precious", "asteroid_radioactive"]
+    var debris = ["satellite_1", "cell_tower1"]
     
     var asteroidTimer : Timer!
 
@@ -96,8 +97,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                              userInfo: nil,
                                              repeats: true)
         
-        spawnDebris("satellite_1")
-        spawnDebris("cell_tower1")
+        asteroidTimer = Timer.scheduledTimer(timeInterval: 8.0,
+                                             target: self,
+                                             selector: #selector(spawnDebris),
+                                             userInfo: nil,
+                                             repeats: true)
     }
     
     
@@ -169,8 +173,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    func spawnDebris(_ sprite_name: String) {
-        let debrisSprite = SKSpriteNode(imageNamed: sprite_name)
+    @objc func spawnDebris() {
+        let debrisSprite = SKSpriteNode(imageNamed:debris[Int.random(in: 0..<debris.count)])
         let speed = CGFloat.random(in: 25...75)
         let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
         let rotation = Bool.random() ? -1 * CGFloat.pi : 1 * CGFloat.pi
@@ -242,5 +246,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         return CGPoint(x: x, y: y)
+    }
+    
+    // called when a collision happens
+    func didBegin(_ contact: SKPhysicsContact) {
+        var firstBody: SKPhysicsBody
+        var secondBody: SKPhysicsBody
+        
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+        
+        
+        /*
+        if (firstBody.categoryBitMask & photonTorpedoCategory) != 0 && (secondBody.categoryBitMask & alienCategory) != 0  {
+            didColide(torpedo: firstBody.node as! SKSpriteNode, alien: secondBody.node as! SKSpriteNode)
+        }
+        */
+        
     }
 }
