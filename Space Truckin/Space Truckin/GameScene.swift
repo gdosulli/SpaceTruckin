@@ -54,6 +54,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var asteroidTimer : Timer!
 
+    var musicPlayer: MusicPlayer = MusicPlayer()
 
     override func didMove(to view: SKView) {
         // get rid of gravity
@@ -74,6 +75,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         
+        musicPlayer.playTest()
         
         
         background = SKEmitterNode(fileNamed: "StarryBackground")

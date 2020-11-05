@@ -16,17 +16,33 @@ class MusicPlayer {
     var mood: Mood?
     var song: AVAudioPlayer?
     
-    
+    init() {
+        print("init")
+
+
+    }
 
     func playTest() {
-        let path = Bundle.main.path(forResource: "dark_space.m4a", ofType:nil)!
-        let url = URL(fileURLWithPath: path)
-
+        print("called")
+        guard let url = Bundle.main.url(forResource: "dark_space", withExtension: "m4a") else { print("failed"); return }
         do {
-            song = try AVAudioPlayer(contentsOf: url)
-            song?.play()
-        } catch {
-            // couldn't load file :(
-        }
+            print("file found")
+               try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+               try AVAudioSession.sharedInstance().setActive(true)
+
+               /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
+               song = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.m4a.rawValue)
+
+               /* iOS 10 and earlier require the following line:
+               player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
+
+               guard let song = song else { return }
+
+            print("play")
+               song.play()
+
+           } catch let error {
+               print(error.localizedDescription)
+           }
     }
 }
