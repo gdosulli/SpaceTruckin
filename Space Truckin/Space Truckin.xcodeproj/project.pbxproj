@@ -32,6 +32,7 @@
 		E34AB9F5252BBD3F007AF254 /* sparkEmitter.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9F4252BBD3F007AF254 /* sparkEmitter.sks */; };
 		E34AB9F7252BBDC9007AF254 /* magicEmitter.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9F6252BBDC9007AF254 /* magicEmitter.sks */; };
 		E34AB9F9252BBE31007AF254 /* smokeEmitter.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9F8252BBE31007AF254 /* smokeEmitter.sks */; };
+		E373A3AF25549E1E00D04135 /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E373A3AE25549E1E00D04135 /* MusicPlayer.swift */; };
 		E3FF20F4253B96A0002EC9C0 /* Stars.sks in Resources */ = {isa = PBXBuildFile; fileRef = E3FF20F2253B96A0002EC9C0 /* Stars.sks */; };
 		E3FF20F5253B96A0002EC9C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3FF20F3253B96A0002EC9C0 /* Assets.xcassets */; };
 		E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */; };
@@ -86,6 +87,7 @@
 		E34AB9F4252BBD3F007AF254 /* sparkEmitter.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = sparkEmitter.sks; sourceTree = "<group>"; };
 		E34AB9F6252BBDC9007AF254 /* magicEmitter.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = magicEmitter.sks; sourceTree = "<group>"; };
 		E34AB9F8252BBE31007AF254 /* smokeEmitter.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = smokeEmitter.sks; sourceTree = "<group>"; };
+		E373A3AE25549E1E00D04135 /* MusicPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
 		E3FF20F2253B96A0002EC9C0 /* Stars.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Stars.sks; sourceTree = "<group>"; };
 		E3FF20F3253B96A0002EC9C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxyEmitter.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				8270C0B7254B73F700424235 /* StarryBackground.sks */,
 				E34A4753254BC42000479EFB /* GalaxyBackground.sks */,
 				E34A4755254BDF8B00479EFB /* Debris.swift */,
+				E373A3AE25549E1E00D04135 /* MusicPlayer.swift */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E373A3AF25549E1E00D04135 /* MusicPlayer.swift in Sources */,
 				E34AB9BF252BAE6D007AF254 /* GameScene.swift in Sources */,
 				E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */,
 				E33F6147254221C9005BAB37 /* Inventory.swift in Sources */,
