@@ -31,19 +31,87 @@ extension Player {
     }
 }
 
+struct DropDownMenu {
+    //TODO: resize buttons to be proportional to screen
+    var controller: SKSpriteNode
+    var buttons: [SKSpriteNode]
+    var offset: CGFloat
+    var menuIsOpen = false
+    
+    func move(to position: CGPoint){
+        controller.position = position
+        
+        for i in 0...buttons.count-1{
+            buttons[i].position.x = controller.position.x
+            let dif: CGFloat = offset*CGFloat((Float(i)+1.0))
+            buttons[i].position.y = controller.position.y - dif
+        }
+        
+    }
+    
+    func getButtons() -> [SKSpriteNode] {
+        return buttons
+    }
+    
+    mutating func add(_ button: SKSpriteNode, called name: String){
+        button.position = controller.position
+        button.zPosition = 99
+        button.name = name
+        button.isUserInteractionEnabled = false
+        button.anchorPoint = controller.anchorPoint
+        button.size = controller.size
+        buttons.append(button)
+    }
+
+    
+    mutating func clicked(){
+        menuIsOpen = !menuIsOpen
+        if menuIsOpen{
+            let height = controller.size.height
+            offset = height + height/10.0
+            controller.texture = SKTexture(imageNamed: "Close_arrow")
+        } else {
+            offset = 0
+            controller.texture = SKTexture(imageNamed: "Open_arrow")
+        }
+    }
+    
+    func stop(){
+        for b in buttons{
+            if b.name == "start" {
+                b.name = "stop"
+                b.texture = SKTexture(imageNamed: "Stop")
+            } else if b.name == "stop" {
+                b.name = "start"
+                b.texture = SKTexture(imageNamed: "Start")
+            }
+        }
+    }
+    
+}
+
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var player: Player!
+    var stopped = false
+    
+    var frameWidth: CGFloat!
+    var frameHeight: CGFloat!
     
     let cam = SKCameraNode()
     let scaleBounds = CGPoint(x: 2, y: 5)
-    var camScale: CGFloat = 3
+    
+    var camScale: CGFloat = 2 //TODO: If things on the screen are wrong this is likely the problem, verify on different screens
         
     var lastTime: TimeInterval?
     
     var showOffScreenPieces = false
     
     var background: SKEmitterNode!
+    
+    
+    var menu: DropDownMenu!
+    var touchedButton = false
     
     var asteroidsInScene : [Asteroid] = []
     var debrisInScene: [Debris] = []
@@ -53,13 +121,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var debris = ["satellite_1", "cell_tower1"]
     
     var asteroidTimer : Timer!
-
+    var gameIsPaused = false
 
     override func didMove(to view: SKView) {
+        // Initialize screen height and width
+        frameWidth = self.frame.size.width
+        frameHeight = self.frame.size.height
+        
         // get rid of gravity
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         self.physicsWorld.contactDelegate = self
 
+        //TODO: decide wether to resize objects or accepts screen differences/advantages
         self.camera = cam
         let sprite = SKSpriteNode(imageNamed: "space_truck_cab")
         player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 100 ))
@@ -75,12 +148,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         
-        
         background = SKEmitterNode(fileNamed: "StarryBackground")
         background.advanceSimulationTime(30)
         background.zPosition = -100
         self.addChild(background)
         
+        // need better way to delegate position on screen
+        let menuConroller: SKSpriteNode = SKSpriteNode(imageNamed: "Open_arrow")
+        menuConroller.position = CGPoint(x: cam.position.x + frameWidth, y: cam.position.y + frameHeight)
+        menuConroller.zPosition = 100
+        menuConroller.name = "action menu"
+        menuConroller.isUserInteractionEnabled = false
+        menuConroller.anchorPoint = CGPoint(x: 1, y: 1)
+        menuConroller.size = CGSize(width: frameWidth/5, height: frameHeight/5)
+        menu = DropDownMenu(controller: menuConroller, buttons: [], offset: 0)
+        
+        menu.add(SKSpriteNode(imageNamed: "Mine"), called: "mine")
+        menu.add(SKSpriteNode(imageNamed: "Map_button"), called: "map")
+        menu.add(SKSpriteNode(imageNamed: "Cargo_button"), called: "cargo")
+        menu.add(SKSpriteNode(imageNamed: "Stop"), called: "stop")
+        menu.add(SKSpriteNode(imageNamed: "Pause"), called: "pause")
+        
+        self.addChild(menu.controller)
+        
+        let buttons = menu.getButtons()
+        for b in buttons {
+            self.addChild(b)
+        }
+        
+
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
         
@@ -106,13 +202,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     func touchDown(atPoint pos : CGPoint) {
-        player.head.changeAngleTo(point: pos)
-
+        let touchedNode = self.atPoint(pos)
+        // checks which node was touched and preforms that action
+        if let name = touchedNode.name {
+            touchedButton = true
+            if name == "action menu" {
+                menu.clicked()
+            } else if name == "mine" {
+                menu.clicked()
+                //TODO: start mining
+            } else if name == "map" {
+                //TODO: switch to map view
+                menu.clicked()
+            } else if name == "cargo" {
+                //TODO: impliment cargo view
+                menu.clicked()
+            } else if name == "stop" || name == "start" {
+                menu.stop()
+                stopped = !stopped
+            }  else if name == "pause" {
+                //TODO: need to actually pause the game
+                gameIsPaused = true
+                menu.clicked()
+            
+        } else{
+            touchedButton = false
+        }
+        }
+        if !touchedButton{
+            player.head.changeAngleTo(point: pos)
+        }
     }
     
     func touchMoved(toPoint pos : CGPoint) {
-        player.head.changeAngleTo(point: pos)
-
+        if !touchedButton{
+            player.head.changeAngleTo(point: pos)
+        }
     }
     
     func touchUp(atPoint pos : CGPoint) {
@@ -135,7 +260,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
-    
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         var delta: CGFloat
@@ -147,7 +271,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         lastTime = currentTime
         
-        player.update(by: delta)
+        if !stopped {
+            player.update(by: delta)
+        }
+        
         
         // we could maybe do this in one bigger for-loop, looping through all children
         // in the scene, and executing move(by: delta) on every movable we encounter
@@ -162,8 +289,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // reset center spawn location for background particles
         background.particlePosition = player.head.sprite.position
-        
         updateCamera()
+        
+        menu.move(to: CGPoint(x: cam.position.x + frameWidth - frameWidth/10, y:  cam.position.y + frameHeight))
+        
     }
     
     func updateCamera() {
@@ -232,7 +361,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             x = CGFloat(distr.nextInt())
             
             // select top/bottom for y
-            y = self.frame.size.height * 2 + object.size.height
+            y = frameHeight * 2 + object.size.height
             y = Bool.random() ? y * -1 : y
         } else {
             // get random y coordinate
@@ -241,12 +370,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             y = CGFloat(distr.nextInt())
             
             // select left/right for x
-            x = self.frame.size.width * 2 + object.size.width
+            x = frameWidth * 2 + object.size.width
             x = Bool.random() ? x * -1 : x
         }
         
         return CGPoint(x: x, y: y)
     }
+    
     
     // called when a collision happens
     func didBegin(_ contact: SKPhysicsContact) {
@@ -269,4 +399,5 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         */
         
     }
+    
 }

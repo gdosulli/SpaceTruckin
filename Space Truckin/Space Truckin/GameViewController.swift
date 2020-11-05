@@ -21,6 +21,12 @@ class GameViewController: UIViewController {
                 // Set the scale mode to scale to fit the window
                 scene.scaleMode = .aspectFill
                 
+                let screenWidth: CGFloat = UIScreen.main.bounds.width * UIScreen.main.scale
+                let screenHeight: CGFloat = UIScreen.main.bounds.height * UIScreen.main.scale
+                
+                scene.size = CGSize(width: screenWidth, height: screenHeight)
+                
+                
                 // Present the scene
                 view.presentScene(scene)
             }
@@ -29,6 +35,7 @@ class GameViewController: UIViewController {
             
             view.showsFPS = true
             view.showsNodeCount = true
+            
         }
     }
 
@@ -37,14 +44,11 @@ class GameViewController: UIViewController {
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
-        } else {
-            return .all
-        }
+        return UIInterfaceOrientationMask.landscape
     }
 
     override var prefersStatusBarHidden: Bool {
         return true
     }
+
 }
