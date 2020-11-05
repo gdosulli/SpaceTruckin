@@ -208,30 +208,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             touchedButton = true
             if name == "action menu" {
                 menu.clicked()
-            } else if name == "mine" {
-                menu.clicked()
-                //TODO: start mining
             } else if name == "map" {
                 //TODO: switch to map view
                 menu.clicked()
             } else if name == "cargo" {
-                //TODO: impliment cargo view
                 menu.clicked()
             } else if name == "stop" || name == "start" {
                 menu.stop()
                 stopped = !stopped
-            }  else if name == "pause" {
+            } else if name == "mine" {
+                //TODO: start mining
+                menu.clicked()
+            } else if name == "pause" {
                 //TODO: need to actually pause the game
                 gameIsPaused = true
                 menu.clicked()
-            
-        } else{
+            }
+        }else{
             touchedButton = false
-        }
         }
         if !touchedButton{
             player.head.changeAngleTo(point: pos)
         }
+
     }
     
     func touchMoved(toPoint pos : CGPoint) {
