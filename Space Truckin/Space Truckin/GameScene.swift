@@ -147,7 +147,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         
-        
         background = SKEmitterNode(fileNamed: "StarryBackground")
         background.advanceSimulationTime(30)
         background.zPosition = -100

@@ -15,14 +15,30 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        var screenWidth: CGFloat = UIScreen.main.bounds.width * UIScreen.main.scale
+        var screenHeight: CGFloat = UIScreen.main.bounds.height * UIScreen.main.scale
+        
+        // force into landscapeRight orentation if in portrait mode
+        
+        if screenWidth < screenHeight{
+            let orentationValue = UIInterfaceOrientation.landscapeRight.rawValue
+            UIDevice.current.setValue(orentationValue, forKey: "orientation")
+            // reset screen bounds
+            screenWidth = UIScreen.main.bounds.width * UIScreen.main.scale
+            screenHeight = UIScreen.main.bounds.height * UIScreen.main.scale
+        }
+        
+        
+        
+        
+        
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
             if let scene = SKScene(fileNamed: "GameScene") {
                 // Set the scale mode to scale to fit the window
                 scene.scaleMode = .aspectFill
                 
-                let screenWidth: CGFloat = UIScreen.main.bounds.width * UIScreen.main.scale
-                let screenHeight: CGFloat = UIScreen.main.bounds.height * UIScreen.main.scale
+                
                 
                 scene.size = CGSize(width: screenWidth, height: screenHeight)
                 
@@ -44,11 +60,11 @@ class GameViewController: UIViewController {
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.landscape
+        return .landscape
     }
 
     override var prefersStatusBarHidden: Bool {
         return true
     }
-
+    
 }
