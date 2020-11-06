@@ -109,6 +109,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var background: SKEmitterNode!
     
+
     
     var menu: DropDownMenu!
     var touchedButton = false
@@ -122,6 +123,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var asteroidTimer : Timer!
     var gameIsPaused = false
+    
+    var musicPlayer: MusicPlayer!
 
     override func didMove(to view: SKView) {
         // Initialize screen height and width
@@ -146,9 +149,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(c!)
         }
         
-        
-        musicPlayer.playTest()
-        
+            
         
         background = SKEmitterNode(fileNamed: "StarryBackground")
         background.advanceSimulationTime(30)
@@ -200,6 +201,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                              selector: #selector(spawnDebris),
                                              userInfo: nil,
                                              repeats: true)
+        
+        musicPlayer = MusicPlayer()
     }
     
     
@@ -293,6 +296,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         updateCamera()
         
         menu.move(to: CGPoint(x: cam.position.x + frameWidth - frameWidth/10, y:  cam.position.y + frameHeight))
+        
+        musicPlayer.update()
         
     }
     
