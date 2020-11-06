@@ -17,6 +17,7 @@ class MusicPlayer {
     var song: AVAudioPlayer?
     var looping: Bool = false
     var currentSong: String?
+    var volume: Float = 0.5
     
     let songs: [String: Mood] = ["fall": Mood.BRIGHT, "tension": Mood.DARK, "dark_space": Mood.DARK]
     convenience init() {
@@ -48,7 +49,14 @@ class MusicPlayer {
             }
         }
         if songsWithMood.count > 1 {
-            currentSong = songsWithMood[Int.random(in: 0..<songsWithMood.count)]
+            var newSong = songsWithMood[Int.random(in: 0..<songsWithMood.count)]
+            while newSong == currentSong {
+                newSong = songsWithMood[Int.random(in: 0..<songsWithMood.count)]
+            }
+            currentSong = newSong
+            playSong()
+        } else if songsWithMood.count > 0 {
+            currentSong = songsWithMood[0]
             playSong()
         } else if currentSong != nil {
             playSong()
@@ -68,6 +76,8 @@ class MusicPlayer {
 
                       /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
                       song = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.m4a.rawValue)
+                song?.setVolume(0, fadeDuration: 0)
+                song?.setVolume(volume, fadeDuration: 3)
 
                       /* iOS 10 and earlier require the following line:
                       player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
