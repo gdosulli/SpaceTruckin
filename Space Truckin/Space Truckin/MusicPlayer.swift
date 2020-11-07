@@ -10,28 +10,51 @@ import Foundation
 import AVFoundation
 
 
+
+
+
 enum Mood {case DARK, BRIGHT, CALM}
+enum Setting {case TITLE_SCREEN, SPACE, STATION, CREDITS}
+
+struct Song {
+    let filename: String
+    let moods: [Mood]
+    let settings: [Setting]
+}
+
 
 class MusicPlayer {
     var mood: Mood?
+    var setting: Setting
     var song: AVAudioPlayer?
     var looping: Bool = false
     var currentSong: String?
     var volume: Float = 0.5
     
-    let songs: [String: Mood] = ["fall": Mood.BRIGHT, "tension": Mood.DARK, "dark_space": Mood.DARK]
+    let  songs: [Song] = [
+                         Song(filename: "dark_space", moods: [Mood.CALM, Mood.DARK], settings: [Setting.SPACE, Setting.STATION]),
+                         Song(filename: "tension", moods: [Mood.DARK], settings: [Setting.STATION]),
+                         Song(filename: "fall", moods: [Mood.BRIGHT, Mood.CALM], settings: [Setting.SPACE]),
+                         Song(filename: "space_mall", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION]),
+                         Song(filename: "bright song", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.CREDITS]),
+                         Song(filename: "vibing",moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.SPACE, Setting.STATION])
+ ]
+    
+    
+    
     convenience init() {
         self.init(Mood.DARK)
     }
     
-    convenience init(_ m: Mood) {
+    convenience init(_ m: Mood?) {
         self.init(mood: m, song: nil, looping: false)
     }
     
-    init(mood m: Mood, song s: String?, looping l: Bool) {
+    init(mood m: Mood?, song s: String?, looping l: Bool) {
         mood = m
         currentSong = s
         looping = l
+        setting = Setting.SPACE
         
         if currentSong == nil {
             newSong()
@@ -42,21 +65,25 @@ class MusicPlayer {
     
     func newSong() {
         // find a song in the current mood
-        var songsWithMood :[String] = []
-        for s in songs.keys {
-            if mood == songs[s] {
-                songsWithMood.append(s)
+        var possibleSongs :[String] = []
+        for s in songs {
+            if let m = mood {
+                if s.moods.contains(m) && s.settings.contains(setting) {
+                    possibleSongs.append(s.filename)
+                }
+            } else if s.settings.contains(setting) {
+                possibleSongs.append(s.filename)
             }
         }
-        if songsWithMood.count > 1 {
-            var newSong = songsWithMood[Int.random(in: 0..<songsWithMood.count)]
+        if possibleSongs.count > 1 {
+            var newSong = possibleSongs[Int.random(in: 0..<possibleSongs.count)]
             while newSong == currentSong {
-                newSong = songsWithMood[Int.random(in: 0..<songsWithMood.count)]
+                newSong = possibleSongs[Int.random(in: 0..<possibleSongs.count)]
             }
             currentSong = newSong
             playSong()
-        } else if songsWithMood.count > 0 {
-            currentSong = songsWithMood[0]
+        } else if possibleSongs.count > 0 {
+            currentSong = possibleSongs[0]
             playSong()
         } else if currentSong != nil {
             playSong()
