@@ -217,7 +217,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                              userInfo: nil,
                                              repeats: true)
         
-        musicPlayer = MusicPlayer()
+        musicPlayer = MusicPlayer(mood: nil, setting: Setting.ALL)
     }
     
     
@@ -239,10 +239,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else if name == "mine" {
                 //TODO: start mining
                 menu.clicked()
+                musicPlayer.interrupt(withMood: Mood.DARK)
             } else if name == "pause" {
                 //TODO: need to actually pause the game
                 gameIsPaused = true
                 menu.clicked()
+                musicPlayer.skip()
             } else {
                 touchedButton = false
             }
@@ -281,6 +283,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
+    /// UPDATE
+
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         var delta: CGFloat

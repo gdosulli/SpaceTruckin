@@ -9,37 +9,82 @@
 import Foundation
 import AVFoundation
 
+enum Mood {case DARK, BRIGHT, CALM, INTERRUPTION}
+enum Setting {case TITLE_SCREEN, SPACE, STATION, CREDITS, ALL}
 
-
-
-
-enum Mood {case DARK, BRIGHT, CALM}
-enum Setting {case TITLE_SCREEN, SPACE, STATION, CREDITS}
-
-struct Song {
+class Song {
     let filename: String
     let moods: [Mood]
     let settings: [Setting]
+    let relativeVolume: Float
+    var loop = false
+    
+    var nextSong: Song?
+    
+    
+    // copy constructor
+    convenience init(copy: Song) {
+        self.init(filename: copy.filename, moods: copy.moods, settings: copy.settings, volume: copy.relativeVolume)
+    }
+    
+    // everything but volume (default: 0.5)
+    convenience init(filename: String, moods: [Mood], settings: [Setting]) {
+        self.init(filename: filename, moods: moods, settings: settings, volume: 0.5)
+    }
+    
+    // full constructor
+    init (filename: String, moods: [Mood], settings: [Setting], volume: Float) {
+        self.filename = filename
+        self.moods = moods
+        self.settings = settings
+        self.relativeVolume = volume
+    }
+    
+    func getNext() -> Song{
+        if nextSong == nil || loop {
+            return self
+        } else {
+            return nextSong!
+        }
+    }
+    
+    
+}
+extension Song: Equatable {
+    static func == (lhs: Song, rhs: Song) -> Bool {
+        return lhs.filename == rhs.filename
+    }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+struct MySongs {
+    static let DARK_SPACE = Song(filename: "dark_space", moods: [Mood.CALM, Mood.DARK], settings: [Setting.SPACE, Setting.STATION, Setting.ALL], volume: 0.4)
+    static let TENSION = Song(filename: "tension", moods: [Mood.DARK], settings: [Setting.STATION, Setting.ALL], volume: 0.15)
+    static let FALL = Song(filename: "fall", moods: [Mood.BRIGHT, Mood.CALM], settings: [Setting.SPACE, Setting.ALL], volume: 0.1)
+    static let SPACE_MALL = Song(filename: "space_mall", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION, Setting.ALL], volume: 0.08)
+    static let BRIGHT_SONG = Song(filename: "bright song", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.CREDITS, Setting.ALL], volume: 0.35)
+    static let VIBING = Song(filename: "vibing",moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION, Setting.ALL], volume: 0.2)
+    
+    // interruptions
+    static let INTERRUPT1 = Song(filename: "interrupt1", moods: [Mood.INTERRUPTION, Mood.DARK], settings: [Setting.ALL], volume: 0.4)
+    static let INTERRUPT2 = Song(filename: "interrupt2", moods: [Mood.INTERRUPTION, Mood.DARK], settings: [Setting.ALL], volume: 0.4)
+    
+        
+    static let  ALL_SONGS = [DARK_SPACE,TENSION,FALL,SPACE_MALL,BRIGHT_SONG,VIBING,INTERRUPT1,INTERRUPT2]
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MusicPlayer {
     var mood: Mood?
     var setting: Setting
     var song: AVAudioPlayer?
-    var looping: Bool = false
-    var currentSong: String?
-    var volume: Float = 0.5
+    var currentSong: Song?
+    var currentPlaylist: [Song] = []
+    var globalVolume: Float = 0.5
     
-    let  songs: [Song] = [
-                         Song(filename: "dark_space", moods: [Mood.CALM, Mood.DARK], settings: [Setting.SPACE, Setting.STATION]),
-                         Song(filename: "tension", moods: [Mood.DARK], settings: [Setting.STATION]),
-                         Song(filename: "fall", moods: [Mood.BRIGHT, Mood.CALM], settings: [Setting.SPACE]),
-                         Song(filename: "space_mall", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION]),
-                         Song(filename: "bright song", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.CREDITS]),
-                         Song(filename: "vibing",moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.SPACE, Setting.STATION])
- ]
-    
+
     
     
     convenience init() {
@@ -47,54 +92,82 @@ class MusicPlayer {
     }
     
     convenience init(_ m: Mood?) {
-        self.init(mood: m, song: nil, looping: false)
+        self.init(mood: m, setting: Setting.SPACE)
     }
     
-    init(mood m: Mood?, song s: String?, looping l: Bool) {
+    
+    init(mood m: Mood?, setting s: Setting) {
         mood = m
-        currentSong = s
-        looping = l
-        setting = Setting.SPACE
+        setting = s
         
-        if currentSong == nil {
-            newSong()
-        } else {
+        getPlaylist()
+        
+        if currentPlaylist != [] {
             playSong()
         }
+        
     }
     
-    func newSong() {
-        // find a song in the current mood
-        var possibleSongs :[String] = []
-        for s in songs {
-            if let m = mood {
-                if s.moods.contains(m) && s.settings.contains(setting) {
-                    possibleSongs.append(s.filename)
+    func getPlaylist() {
+        var tempSongList: [Song] = []
+        // get songs in the current setting and with the current mood (if applicable)
+        for s in MySongs.ALL_SONGS {
+            if !s.moods.contains(Mood.INTERRUPTION) {
+                if let m = mood {
+                    if s.moods.contains(m) && s.settings.contains(setting){
+                        tempSongList.append(Song.init(copy: s))
+                    }
+                } else if s.settings.contains(setting) {
+                    tempSongList.append(Song.init(copy: s))
                 }
-            } else if s.settings.contains(setting) {
-                possibleSongs.append(s.filename)
             }
         }
-        if possibleSongs.count > 1 {
-            var newSong = possibleSongs[Int.random(in: 0..<possibleSongs.count)]
-            while newSong == currentSong {
-                newSong = possibleSongs[Int.random(in: 0..<possibleSongs.count)]
+        
+        // shuffle the list and connect the songs before assigning to the class field
+        tempSongList.shuffle()
+        for i in 0..<tempSongList.count {
+            if i == tempSongList.count-1 {
+                tempSongList[i].nextSong = tempSongList[0]
+            } else {
+                tempSongList[i].nextSong = tempSongList[i+1]
             }
-            currentSong = newSong
-            playSong()
-        } else if possibleSongs.count > 0 {
-            currentSong = possibleSongs[0]
-            playSong()
-        } else if currentSong != nil {
-            playSong()
+        }
+        currentPlaylist = tempSongList
+        
+        if currentPlaylist != [] {
+            currentSong = currentPlaylist[0]
         }
         
-        // set it to play
+    }
+    
+    func skip() {
+        currentSong = currentSong!.nextSong
+        playSong()
+    }
+ 
+    
+    func interrupt(withMood m: Mood) {
         
+        mood = m
+        getPlaylist()
+        
+        var interruptions: [Song] = []
+        for s in MySongs.ALL_SONGS {
+            if s.moods.contains(Mood.INTERRUPTION) {
+                interruptions.append(Song(copy: s))
+            }
+        }
+        
+        if let interruption = interruptions.randomElement() {
+            interruption.nextSong = currentSong
+            currentSong = interruption
+        }
+        
+        playSong()
     }
     
     func playSong() {
-        let file = currentSong
+        let file = currentSong?.filename
         guard let url = Bundle.main.url(forResource:file, withExtension: "m4a") else { print("failed"); return }
                do {
                    print("file found")
@@ -104,7 +177,7 @@ class MusicPlayer {
                       /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
                       song = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.m4a.rawValue)
                 song?.setVolume(0, fadeDuration: 0)
-                song?.setVolume(volume, fadeDuration: 3)
+                song?.setVolume(currentSong!.relativeVolume, fadeDuration: 3)
 
                       /* iOS 10 and earlier require the following line:
                       player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
@@ -119,39 +192,19 @@ class MusicPlayer {
                   }
     }
 
-    func playTest() {
-        print("called")
-        let file = "tension"
-        print("file")
-        guard let url = Bundle.main.url(forResource:file, withExtension: "m4a") else { print("failed"); return }
-        do {
-            print("file found")
-               try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-               try AVAudioSession.sharedInstance().setActive(true)
-
-               /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
-               song = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.m4a.rawValue)
-
-               /* iOS 10 and earlier require the following line:
-               player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
-
-               guard let song = song else { return }
-
-            print("play")
-               song.play()
-
-           } catch let error {
-               print(error.localizedDescription)
-           }
-    }
     
     func update() {
-        if !(song?.isPlaying ?? false) {
-            if looping {
+        // if the current playlist exists
+        if currentPlaylist != [] {
+            if !song!.isPlaying {
+                currentSong = currentSong?.getNext()
                 playSong()
-            } else {
-                newSong()
             }
+            
         }
+    }
+    
+    func setLooping(loop: Bool) {
+        currentSong?.loop = loop
     }
 }
