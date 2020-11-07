@@ -63,7 +63,6 @@ struct DropDownMenu {
         buttons.append(button)
     }
 
-    
     mutating func clicked(){
         menuIsOpen = !menuIsOpen
         if menuIsOpen{
@@ -114,8 +113,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var menu: DropDownMenu!
     var touchedButton = false
     
-    var asteroidsInScene : [Asteroid] = []
-    var debrisInScene: [Debris] = []
+    var asteroidsInScene : [String? : Asteroid] = [:]
+    var debrisInScene: [String? : Debris] = [:]
     
     // array for randomaly choosing an asteroid to load
     var asteroids = ["asteroid_normal", "asteroid_precious", "asteroid_radioactive"]
@@ -125,6 +124,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameIsPaused = false
     
     var musicPlayer: MusicPlayer!
+    
+    var explosions: [SKTexture]! //TODO: consider moving this to a better home
+    var destroyedNodes: (Set<String?>, Set<String?>)  = ([], [])
+    var destroyTimer: Timer!
 
     override func didMove(to view: SKView) {
         // Initialize screen height and width
@@ -179,6 +182,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(b)
         }
         
+        var drillFrames: [SKTexture] = [] //TODO: rename this stuff
+        for i in [4, 3, 2, 1]{
+          let drillTextureName = "explosion\(i)"
+            drillFrames.append(SKTexture(imageNamed: drillTextureName))
+        }
+        explosions = drillFrames
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
@@ -199,6 +208,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         asteroidTimer = Timer.scheduledTimer(timeInterval: 8.0,
                                              target: self,
                                              selector: #selector(spawnDebris),
+                                             userInfo: nil,
+                                             repeats: true)
+        
+        destroyTimer = Timer.scheduledTimer(timeInterval: 1.0,
+                                             target: self,
+                                             selector: #selector(removeFreeNodes),
                                              userInfo: nil,
                                              repeats: true)
         
@@ -228,6 +243,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 //TODO: need to actually pause the game
                 gameIsPaused = true
                 menu.clicked()
+            } else {
+                touchedButton = false
             }
         }else{
             touchedButton = false
@@ -284,11 +301,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // in the scene, and executing move(by: delta) on every movable we encounter
         
         for asteroid in asteroidsInScene {
-            asteroid.move(by: delta)
+            asteroid.value.move(by: delta)
         }
         
         for debris in debrisInScene {
-            debris.move(by: delta)
+            debris.value.move(by: delta)
         }
         
         // reset center spawn location for background particles
@@ -298,6 +315,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         menu.move(to: CGPoint(x: cam.position.x + frameWidth - frameWidth/10, y:  cam.position.y + frameHeight))
         
         musicPlayer.update()
+        
+        checkContact()
+
+        
         
     }
     
@@ -310,9 +331,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     @objc func spawnDebris() {
         let debrisSprite = SKSpriteNode(imageNamed:debris[Int.random(in: 0..<debris.count)])
+        
         let speed = CGFloat.random(in: 25...75)
         let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
         let rotation = Bool.random() ? -1 * CGFloat.pi : 1 * CGFloat.pi
+        
+        let made = Date()
+        debrisSprite.name = "\(made)"
         
         self.addChild(debrisSprite)
         
@@ -321,7 +346,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let x = CGFloat.random(in: -1000...1000)
         let y = CGFloat.random(in: -500...500)
         debris.spawn(at: CGPoint(x:x,y:y))
-        debrisInScene.append(debris)
+        debrisInScene[debris.sprite.name] = debris
     }
     
     @objc func spawnAsteroid() {
@@ -333,6 +358,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let speed = CGFloat.random(in: 50...150)
         let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
         let rotation = Bool.random() ? -2 * CGFloat.pi : 2 * CGFloat.pi
+        
+        let made = Date()
+        asteroid.name = "\(made)"
         
         self.addChild(asteroid)
         
@@ -349,7 +377,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ast.spawn(at: spawnPoint)
         
         // add asteroid to asteroids
-        asteroidsInScene.append(ast)
+        asteroidsInScene[ast.sprite.name] = ast
     }
     
     // function returns random offscreen position for space object projectile
@@ -404,6 +432,77 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         */
         
+    }
+    
+    func checkContact(){
+        for a in asteroidsInScene {
+            for c in player.getChildren() {
+                if let collision = c?.intersects(a.value.sprite) {
+                    if collision == true{
+                        a.value.sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
+                        destroyedNodes.0.insert(a.value.sprite.name)
+                    }
+                }
+            }
+        }
+        
+        
+        for d in debrisInScene {
+            for c in player.getChildren() {
+                if let collision = c?.intersects(d.value.sprite) {
+                    if collision == true{
+                        d.value.sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
+                        destroyedNodes.1.insert(d.value.sprite.name)
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc func removeFreeNodes() {
+        let removedAsteroids = destroyedNodes.0
+        let removedDebris = destroyedNodes.1
+        
+        destroyedNodes.0.removeAll()
+        destroyedNodes.1.removeAll()
+        
+        // remove asteroids and debris that have been destroyed by the player
+        for i in removedAsteroids {
+            print("boom")
+            asteroidsInScene[i]?.sprite.removeFromParent()
+            asteroidsInScene.removeValue(forKey: asteroidsInScene[i]?.sprite.name)
+        }
+        
+        for j in removedDebris {
+            print("bam")
+            debrisInScene[j]?.sprite.removeFromParent()
+            debrisInScene.removeValue(forKey: debrisInScene[j]?.sprite.name)
+        }
+        
+        // remove asteroids and deris that are too far from player
+        let playerX = player.head.sprite.position.x
+        let playerY = player.head.sprite.position.y
+        for a in asteroidsInScene {
+            let position = a.value.sprite.position
+            if position.x > (playerX + 3 * frameWidth) || position.x < (playerX - 3 * frameWidth) {
+                a.value.sprite.removeFromParent()
+                asteroidsInScene.removeValue(forKey: a.key)
+            } else if position.y > (playerY + 3 * frameHeight) || position.y < (playerY - 3 * frameHeight){
+                a.value.sprite.removeFromParent()
+                asteroidsInScene.removeValue(forKey: a.key)
+            }
+        }
+        
+        for d in debrisInScene {
+            let position = d.value.sprite.position
+            if position.x > (playerX + 3 * frameWidth) || position.x < (playerX - 3 * frameWidth) {
+                d.value.sprite.removeFromParent()
+                debrisInScene.removeValue(forKey: d.key)
+            } else if position.y > (playerY + 3 * frameHeight) || position.y < (playerY - 3 * frameHeight){
+                d.value.sprite.removeFromParent()
+                debrisInScene.removeValue(forKey: d.key)
+            }
+        }
     }
     
 }
