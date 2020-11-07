@@ -59,12 +59,12 @@ extension Song: Equatable {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct MySongs {
-    static let DARK_SPACE = Song(filename: "dark_space", moods: [Mood.CALM, Mood.DARK], settings: [Setting.SPACE, Setting.STATION, Setting.ALL], volume: 0.4)
-    static let TENSION = Song(filename: "tension", moods: [Mood.DARK], settings: [Setting.STATION, Setting.ALL], volume: 0.15)
-    static let FALL = Song(filename: "fall", moods: [Mood.BRIGHT, Mood.CALM], settings: [Setting.SPACE, Setting.ALL], volume: 0.1)
-    static let SPACE_MALL = Song(filename: "space_mall", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION, Setting.ALL], volume: 0.08)
-    static let BRIGHT_SONG = Song(filename: "bright song", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.CREDITS, Setting.ALL], volume: 0.35)
-    static let VIBING = Song(filename: "vibing",moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION, Setting.ALL], volume: 0.2)
+    static let DARK_SPACE = Song(filename: "dark_space", moods: [Mood.CALM, Mood.DARK], settings: [Setting.SPACE, Setting.STATION, Setting.ALL], volume: 0.5)
+    static let TENSION = Song(filename: "tension", moods: [Mood.DARK], settings: [Setting.STATION, Setting.ALL], volume: 0.3)
+    static let FALL = Song(filename: "fall", moods: [Mood.BRIGHT, Mood.CALM], settings: [Setting.SPACE, Setting.ALL], volume: 0.2)
+    static let SPACE_MALL = Song(filename: "space_mall", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION, Setting.ALL], volume: 0.2)
+    static let BRIGHT_SONG = Song(filename: "bright song", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.CREDITS, Setting.ALL], volume: 0.4)
+    static let VIBING = Song(filename: "vibing",moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION, Setting.ALL], volume: 0.3)
     
     // interruptions
     static let INTERRUPT1 = Song(filename: "interrupt1", moods: [Mood.INTERRUPTION, Mood.DARK], settings: [Setting.ALL], volume: 0.4)
@@ -82,7 +82,7 @@ class MusicPlayer {
     var song: AVAudioPlayer?
     var currentSong: Song?
     var currentPlaylist: [Song] = []
-    var globalVolume: Float = 0.5
+    var globalVolume: Float = 1.0
     
 
     
@@ -170,14 +170,14 @@ class MusicPlayer {
         let file = currentSong?.filename
         guard let url = Bundle.main.url(forResource:file, withExtension: "m4a") else { print("failed"); return }
                do {
-                   print("file found")
+                   print("\(file!)")
                       try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
                       try AVAudioSession.sharedInstance().setActive(true)
 
                       /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
                       song = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.m4a.rawValue)
                 song?.setVolume(0, fadeDuration: 0)
-                song?.setVolume(currentSong!.relativeVolume, fadeDuration: 3)
+                song?.setVolume(globalVolume * currentSong!.relativeVolume, fadeDuration: 3)
 
                       /* iOS 10 and earlier require the following line:
                       player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
