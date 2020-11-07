@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7F5C093C255324B80028F808 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5C093B255324B80028F808 /* MenuViewController.swift */; };
 		7F5C094B2553B4B40028F808 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9BE252BAE6D007AF254 /* GameScene.swift */; };
+		7F7E297F255500ED00202B56 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F7E297E255500EC00202B56 /* Assets.xcassets */; };
 		8270C0B8254B73F700424235 /* StarryBackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8270C0B7254B73F700424235 /* StarryBackground.sks */; };
 		82723AE3254228D5002A1E53 /* SpaceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82723AE2254228D5002A1E53 /* SpaceObject.swift */; };
 		82723AE825422E5B002A1E53 /* Asteroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82723AE725422E5B002A1E53 /* Asteroid.swift */; };
@@ -35,7 +36,6 @@
 		E373A3BD2554C97C00D04135 /* fall.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E373A3BC2554B89600D04135 /* fall.m4a */; };
 		E373A3BE2554C97C00D04135 /* tension.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E373A3BB2554B88A00D04135 /* tension.m4a */; };
 		E3FF20F4253B96A0002EC9C0 /* Stars.sks in Resources */ = {isa = PBXBuildFile; fileRef = E3FF20F2253B96A0002EC9C0 /* Stars.sks */; };
-		E3FF20F5253B96A0002EC9C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3FF20F3253B96A0002EC9C0 /* Assets.xcassets */; };
 		E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +59,7 @@
 /* Begin PBXFileReference section */
 		7F5C0936255323C00028F808 /* Menu.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Menu.storyboard; sourceTree = "<group>"; };
 		7F5C093B255324B80028F808 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		7F7E297E255500EC00202B56 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8270C0B7254B73F700424235 /* StarryBackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StarryBackground.sks; sourceTree = "<group>"; };
 		82723AE2254228D5002A1E53 /* SpaceObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceObject.swift; sourceTree = "<group>"; };
 		82723AE725422E5B002A1E53 /* Asteroid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asteroid.swift; sourceTree = "<group>"; };
@@ -91,7 +92,6 @@
 		E373A3BB2554B88A00D04135 /* tension.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = tension.m4a; sourceTree = "<group>"; };
 		E373A3BC2554B89600D04135 /* fall.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = fall.m4a; sourceTree = "<group>"; };
 		E3FF20F2253B96A0002EC9C0 /* Stars.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Stars.sks; sourceTree = "<group>"; };
-		E3FF20F3253B96A0002EC9C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxyEmitter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -124,7 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				E3FF20F2253B96A0002EC9C0 /* Stars.sks */,
-				E3FF20F3253B96A0002EC9C0 /* Assets.xcassets */,
+				7F7E297E255500EC00202B56 /* Assets.xcassets */,
 				E34AB9B7252BAE6D007AF254 /* Space Truckin */,
 				E34AB9D2252BAE71007AF254 /* Space TruckinTests */,
 				E34AB9DD252BAE71007AF254 /* Space TruckinUITests */,
@@ -318,7 +318,7 @@
 				E373A3BE2554C97C00D04135 /* tension.m4a in Resources */,
 				E373A3B22554AC7500D04135 /* dark_space.m4a in Resources */,
 				E34AB9F5252BBD3F007AF254 /* sparkEmitter.sks in Resources */,
-				E3FF20F5253B96A0002EC9C0 /* Assets.xcassets in Resources */,
+				7F7E297F255500ED00202B56 /* Assets.xcassets in Resources */,
 				E34AB9F7252BBDC9007AF254 /* magicEmitter.sks in Resources */,
 				E34AB9C4252BAE6D007AF254 /* Main.storyboard in Resources */,
 				E34AB9ED252BAF32007AF254 /* GameScene.sks in Resources */,
