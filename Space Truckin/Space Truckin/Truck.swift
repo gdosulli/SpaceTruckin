@@ -9,42 +9,69 @@ import Foundation
 import SpriteKit
 import CoreGraphics
 
+
+struct CollisionCategories {
+    static let TRUCK_CATEGORY = UInt32(0)
+    static let ASTEROID_CATEGORY = UInt32(1.0)
+    static let SPACE_JUNK_CATEGORY = UInt32(2.0)
+}
+
+
+
 class TruckPiece: SpaceObject {
-    let thruster: SKEmitterNode?
+    let thruster: SKEmitterNode = SKEmitterNode(fileNamed: "sparkEmitter")!
     var distanceToHead: CGFloat = 0.0
     var targetPiece: TruckPiece?
     
-    init(sprite s1: SKSpriteNode) {
-        thruster = SKEmitterNode(fileNamed: "sparkEmitter")
-
-        super.init(2, s1, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0)
-        
-        thruster?.zPosition = sprite.zPosition - 2
-        thruster?.position = sprite.position
+    convenience init(sprite s1: SKSpriteNode) {
+        self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY)
     }
     
-    init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
-        thruster = SKEmitterNode(fileNamed: "sparkEmitter")
+    convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
+        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY)
 
-        targetPiece = piece
-        
-        super.init(2, s1, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0)
-
-        thruster?.zPosition = sprite.zPosition - 2
-        thruster?.position = sprite.position
     }
  
-    init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat) {
-        thruster = SKEmitterNode(fileNamed: "sparkEmitter")
+    convenience init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat) {
 
-        super.init(durability, s1, (size,size), (size,size), Inventory(100,0), speed, 0.5, 0)
+        self.init(durability, s1, nil, (size,size), (size,size), Inventory(100,0), speed, 2, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY)
     }
+    
+    init(_ durability: Int,
+    _ sprite: SKSpriteNode,
+    _ targetPiece: TruckPiece?,
+    _ xRange: (CGFloat, CGFloat),
+    _ yRange: (CGFloat, CGFloat),
+    _ inventory: Inventory,
+    _ speed: CGFloat,
+    _ rotation: CGFloat,
+    _ targetAngle: CGFloat,
+    _ collisionCategory: UInt32,
+    _ testCategory: UInt32) {
+        
+        
+        
+        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory)
+        
+        self.targetPiece = targetPiece
+        
+        let margin: CGFloat = 0.8
+        sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: sprite.size.width * margin, height: margin * sprite.size.height))
+        sprite.physicsBody?.isDynamic = true
+        sprite.physicsBody?.categoryBitMask = self.collisionCategory
+        sprite.physicsBody?.contactTestBitMask = self.testCategory
+        sprite.physicsBody?.collisionBitMask = 0
+        
+        thruster.zPosition = sprite.zPosition - 2
+        thruster.position = sprite.position
+    }
+    
     
     override func translate(by vector: CGPoint) {
         super.translate(by: vector)
         
-        thruster?.position = sprite.position
-        thruster?.zRotation = sprite.zRotation
+        thruster.position = sprite.position
+        thruster.zRotation = sprite.zRotation
     }
     
     override func update() {
@@ -54,16 +81,12 @@ class TruckPiece: SpaceObject {
     }
     
     override func move(by delta: CGFloat) {
-        // set the rotation here
-        // Truck could have a rotation speed, and set an animation to rotate it the correct angle
-        // at the correct speed. getting new input would interrupt the old animation
-        // targetAngle needs to be changed so that the nose of the truck is the front
-        let roation = SKAction.rotate(toAngle: targetAngle - (3.14/2), duration: TimeInterval(self.rotation), shortestUnitArc: true)
-        sprite.run(roation)
-        // the problem with this code is that it doesn't bother rotating to an angle below the center line
-        // some flaw in targetAngle?
-
-        super.move(by: delta)
+        
+        if !angleLocked {
+            turn(by: delta)
+        }
+        
+        super.moveForward(by: delta)
     }
     
     override func spawn(at spawnPoint: CGPoint) {
@@ -131,13 +154,13 @@ class TruckChain {
     
     func getThrusters() -> [SKEmitterNode] {
         var thrusters : [SKEmitterNode] = []
-        if let t = head.thruster {
-            thrusters.append(t)
-        }
+        let t1 = head.thruster
+        thrusters.append(t1)
+        
         for piece in truckPieces {
-            if let t2 = piece.thruster {
-                thrusters.append(t2)
-            }
+            let t2 = piece.thruster
+            thrusters.append(t2)
+
         }
         
         return thrusters

@@ -40,6 +40,7 @@
 		E373A3C42556829500D04135 /* bright song.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E373A3C1255681F800D04135 /* bright song.m4a */; };
 		E373A3C72556A42F00D04135 /* interrupt1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E373A3C52556A39600D04135 /* interrupt1.m4a */; };
 		E373A3C82556A42F00D04135 /* interrupt2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E373A3C62556A39E00D04135 /* interrupt2.m4a */; };
+		E373A3CA2557798800D04135 /* spacejazz.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E373A3C92557798000D04135 /* spacejazz.m4a */; };
 		E3FF20F4253B96A0002EC9C0 /* Stars.sks in Resources */ = {isa = PBXBuildFile; fileRef = E3FF20F2253B96A0002EC9C0 /* Stars.sks */; };
 		E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */; };
 /* End PBXBuildFile section */
@@ -101,6 +102,7 @@
 		E373A3C22556828000D04135 /* vibing.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = vibing.m4a; sourceTree = "<group>"; };
 		E373A3C52556A39600D04135 /* interrupt1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = interrupt1.m4a; sourceTree = "<group>"; };
 		E373A3C62556A39E00D04135 /* interrupt2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = interrupt2.m4a; sourceTree = "<group>"; };
+		E373A3C92557798000D04135 /* spacejazz.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = spacejazz.m4a; sourceTree = "<group>"; };
 		E3FF20F2253B96A0002EC9C0 /* Stars.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Stars.sks; sourceTree = "<group>"; };
 		E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxyEmitter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -206,6 +208,7 @@
 		E373A3B12554AB5C00D04135 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
+				E373A3C92557798000D04135 /* spacejazz.m4a */,
 				E373A3C22556828000D04135 /* vibing.m4a */,
 				E373A3C52556A39600D04135 /* interrupt1.m4a */,
 				E373A3C62556A39E00D04135 /* interrupt2.m4a */,
@@ -329,6 +332,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E373A3CA2557798800D04135 /* spacejazz.m4a in Resources */,
 				E373A3C72556A42F00D04135 /* interrupt1.m4a in Resources */,
 				E373A3C82556A42F00D04135 /* interrupt2.m4a in Resources */,
 				E373A3C32556829500D04135 /* vibing.m4a in Resources */,

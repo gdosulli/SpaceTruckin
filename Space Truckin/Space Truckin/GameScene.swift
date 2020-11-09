@@ -320,7 +320,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         musicPlayer.update()
         
-        checkContact()
+        //checkContact()
 
         
         
@@ -345,7 +345,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(debrisSprite)
         
-        let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle)
+        let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY)
         
         let x = CGFloat.random(in: -1000...1000)
         let y = CGFloat.random(in: -500...500)
@@ -376,7 +376,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                            Inventory(),
                            speed,
                            rotation,
-                           targetAngle)
+                           targetAngle,
+                           CollisionCategories.ASTEROID_CATEGORY,
+                           CollisionCategories.TRUCK_CATEGORY)
         
         ast.spawn(at: spawnPoint)
         
@@ -417,10 +419,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     // called when a collision happens
+    
+    // The problem we're having is that collisions are registered between sprites, and we need the
+    // effects to act on the SpaceObjects that have the sprites as a component
+    // Two potential fixes:
+    // 1. Rework the SpaceObject class so it actuall extends SKSpriteNode, inextricably linking the game
+    // code and the sprite
+    // 2. Figure out some way to associate a sprite with its SpaceObject
     func didBegin(_ contact: SKPhysicsContact) {
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody
-        
+
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
             firstBody = contact.bodyA
             secondBody = contact.bodyB
@@ -428,7 +437,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             firstBody = contact.bodyB
             secondBody = contact.bodyA
         }
+        print("normal: \(contact.contactNormal)")
         
+        // find the truck piece associated with the first body (if one exists)
+        var truckPiece: TruckPiece?
+        for p in player.chain.truckPieces {
+            if let s = firstBody.node as? SKSpriteNode {
+                if s == p.sprite {
+                    print("yes")
+                    truckPiece = p
+                    break
+                }
+                
+            } else {
+                break
+            }
+            
+        }
+        //secondBody.applyForce(contact.contactNormal)
+        if let sprite = secondBody.node as? SKSpriteNode{
+            sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
+            destroyedNodes.0.insert(sprite.name)
+            destroyedNodes.1.insert(sprite.name)
+
+        }
         
         /*
         if (firstBody.categoryBitMask & photonTorpedoCategory) != 0 && (secondBody.categoryBitMask & alienCategory) != 0  {
@@ -508,5 +540,4 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
-    
 }
