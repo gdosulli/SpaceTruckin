@@ -213,7 +213,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // timer for asteroids
 
         // also what if there were only a set number of mineable asteroids in any one area, forcing players to navigate elsewhere, as the player destroys more asteroids, more junk and smaller debris clutters the map
-        asteroidTimer = Timer.scheduledTimer(timeInterval: 1.0,
+        asteroidTimer = Timer.scheduledTimer(timeInterval: 2.0,
                                              target: self,
                                              selector: #selector(spawnAsteroid),
                                              userInfo: nil,
@@ -362,9 +362,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, speed)
         
-        let x = CGFloat.random(in: -1000...1000)
-        let y = CGFloat.random(in: -500...500)
-        debris.spawn(at: CGPoint(x:x,y:y))
+        let spawnPoint = getRandPos(for: debrisSprite)
+        debris.spawn(at: spawnPoint)
         debrisInScene[debris.sprite.name] = debris
     }
     
@@ -408,24 +407,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // pick x or y for object randomly
         let pickRandWidth = Bool.random()
+        let center = CGPoint(x: player.head.sprite.position.x,
+                             y: player.head.sprite.position.y)
         
         if pickRandWidth {
             // get random x coordinate
-            let distr = GKRandomDistribution(lowestValue: Int(-self.frame.width / 2),
-                                             highestValue: Int(self.frame.width / 2))
+            let distr = GKRandomDistribution(lowestValue: Int(center.x - (self.frame.width / 2) * camScale),
+                                             highestValue: Int(center.x + (self.frame.width / 2) * camScale))
             x = CGFloat(distr.nextInt())
             
             // select top/bottom for y
-            y = frameHeight * 2 + object.size.height
+            y = center.y + self.frame.height / 2 * camScale + object.size.height * 2
             y = Bool.random() ? y * -1 : y
         } else {
             // get random y coordinate
-            let distr = GKRandomDistribution(lowestValue: Int(-self.frame.height / 2),
-                                             highestValue: Int(self.frame.height / 2))
+            let distr = GKRandomDistribution(lowestValue: Int(center.y - (self.frame.height / 2) * camScale),
+                                             highestValue: Int(center.y + (self.frame.height / 2) * camScale))
             y = CGFloat(distr.nextInt())
             
             // select left/right for x
-            x = frameWidth * 2 + object.size.width
+            x = center.x + self.frame.width / 2 * camScale + object.size.width * 2
             x = Bool.random() ? x * -1 : x
         }
         
