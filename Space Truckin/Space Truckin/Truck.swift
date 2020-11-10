@@ -98,6 +98,8 @@ class TruckPiece: SpaceObject {
         self.sprite.physicsBody?.applyForce(translateVector)
     }
     
+    
+    // mining may end up as something that happens as long as a button is being held down (and there's enough energy) meaning the timeInterval aspect may not be forever
     func mine(for duration: TimeInterval) {
         lockDirection(for: duration)
         boostSpeed(for: duration)
