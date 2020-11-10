@@ -63,9 +63,10 @@ class TruckPiece: SpaceObject {
         sprite.physicsBody?.categoryBitMask = self.collisionCategory
         sprite.physicsBody?.contactTestBitMask = self.testCategory
         sprite.physicsBody?.collisionBitMask = 0
-        
+        //sprite.physicsBody?.linearDamping = 1 // testing
         thruster.zPosition = sprite.zPosition - 2
         thruster.position = sprite.position
+        //thruster.targetNode = //gamescene
     }
     
     
@@ -121,15 +122,12 @@ class TruckPiece: SpaceObject {
         self.sprite.physicsBody?.applyForce(translateVector)
     }
     
-    
     // mining may end up as something that happens as long as a button is being held down (and there's enough energy) meaning the timeInterval aspect may not be forever
     func mine(for duration: TimeInterval) {
         lockDirection(for: duration)
         boostSpeed(for: duration)
         sprite.physicsBody?.angularVelocity = 0
     }
-    
-    
     
     override func spawn(at spawnPoint: CGPoint) {
         
