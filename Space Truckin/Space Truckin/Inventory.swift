@@ -14,7 +14,7 @@ struct Item {
     var type: ItemType
     var value: Int
 }
-extension Item{
+extension Item {
 
 }
 
@@ -41,6 +41,22 @@ class Inventory {
     func getRemainingCapacity() -> Int {
         self.remainingCapacity = maxCapacity - usedSpace
         return remainingCapacity
+    }
+    
+    func addItem(item: Item) -> Bool {
+        if item.value > remainingCapacity {
+            return false
+        }
+        
+        items.append(item)
+        usedSpace = usedSpace + item.value
+        remainingCapacity = maxCapacity - usedSpace
+        
+        return true
+    }
+
+    func getAll() -> [Item] {
+        return items
     }
 }
 
