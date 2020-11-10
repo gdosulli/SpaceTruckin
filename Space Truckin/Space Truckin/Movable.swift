@@ -13,14 +13,22 @@ import SpriteKit
 class Movable {
     var speed: CGFloat
     var rotation: CGFloat
+    var currentAngle: CGFloat
     var targetAngle: CGFloat
     var sprite: SKSpriteNode!
+    var angleLocked = false
+    var boostSpeed: CGFloat
+    var normalSpeed: CGFloat
     
-    init(speed: CGFloat, rotation: CGFloat, angleInRadians: CGFloat, sprite: SKSpriteNode) {
-        self.speed = speed;
+    init(speed: CGFloat, rotation: CGFloat, angleInRadians: CGFloat, sprite: SKSpriteNode, boostSpeed: CGFloat) {
+        self.speed = speed
         self.rotation = rotation
         self.targetAngle = angleInRadians
         self.sprite = sprite
+        self.currentAngle = 3.14/2
+        self.normalSpeed = speed
+        self.boostSpeed = boostSpeed
+        
     }
 
     func translate(by vector: CGPoint) {
@@ -41,7 +49,7 @@ class Movable {
     }
        
     func changeTargetAngle(by angle: CGFloat) {
-           targetAngle = angle
+           targetAngle += angle
     }
        
     func changeSpeed(to: CGFloat) {
@@ -57,4 +65,55 @@ class Movable {
         self.translate(by: translateVector)
     }
     
+    func moveForward(by delta: CGFloat) {
+        // moves forward instead of in the direction of the target angle
+        let translateVector = CGPoint(x: cos(angleCorrector()) * self.speed * delta, y:  sin(angleCorrector()) * self.speed * delta)
+        self.translate(by: translateVector)
+    }
+    
+    
+    // Adjusts angular velocity of truckpiece depending on angle to target
+    func turn(by delta: CGFloat) {
+        // TODO: POSSIBLY REIMPLEMENT DELTA INTO THIS / or limit turn speed if needed
+        var angleDifference = (targetAngle - angleCorrector())
+        if (angleDifference > CGFloat(Double.pi)) {
+            angleDifference -= CGFloat(Double.pi*2)
+        } else if (angleDifference) < CGFloat(-Double.pi){
+            angleDifference += CGFloat(Double.pi*2)
+        }
+        sprite.physicsBody?.angularVelocity = angleDifference
+    }
+    
+    func lockDirection(for interval: TimeInterval) {
+        angleLocked = true
+        let date = Date().addingTimeInterval(interval)
+        let timer = Timer(fireAt: date, interval: 0, target: self, selector: #selector(unlock), userInfo: nil, repeats: false)
+        RunLoop.main.add(timer, forMode: .common)
+    }
+    
+    func boostSpeed(for duration: TimeInterval) {
+        speed = boostSpeed
+        let date = Date().addingTimeInterval(duration)
+        let timer = Timer(fireAt: date, interval: 0, target: self, selector: #selector(revertSpeed), userInfo: nil, repeats: false)
+        RunLoop.main.add(timer, forMode: .common)
+    }
+    
+    func angleCorrector() -> CGFloat { return (sprite.zRotation + CGFloat(Double.pi/2)) }
+    
+    @objc func unlock() {
+        angleLocked = false
+    }
+    
+    @objc func revertSpeed() {
+        speed = normalSpeed
+    }
+    
 }
+
+
+// TODO: Implement a lockDirection(for interval: TimeInterval) that makes it so a Movable can't rotate for
+// a specified time
+
+
+// Also TODO: make it so ships can only move forwards, and rotate towards a targetPoint over time
+

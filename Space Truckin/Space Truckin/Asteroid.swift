@@ -23,11 +23,11 @@ class Asteroid : SpaceObject {
         
         // add physics and collision detection to asteroid
         // create a rectangel that's a bit smaller than the image, to work for the collider
-        let margin: CGFloat = 0.2
+        let margin: CGFloat = 0.5
         sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: dimension-(margin * dimension), height: dimension-(margin * dimension)))
         sprite.physicsBody?.isDynamic = true
-        sprite.physicsBody?.categoryBitMask = asteroidCategory
-        sprite.physicsBody?.contactTestBitMask = truckCategory
+        sprite.physicsBody?.categoryBitMask = self.collisionCategory
+        sprite.physicsBody?.contactTestBitMask = self.testCategory
         sprite.physicsBody?.collisionBitMask = 0
         
         // set random initial position

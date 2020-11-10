@@ -18,7 +18,8 @@ class Debris : SpaceObject {
         // add physics and collision detection to asteroid
         sprite.physicsBody = SKPhysicsBody(rectangleOf: sprite.size)
         sprite.physicsBody?.isDynamic = true
-
+        sprite.physicsBody?.categoryBitMask = self.collisionCategory
+        sprite.physicsBody?.contactTestBitMask = self.testCategory
         sprite.physicsBody?.collisionBitMask = 0
         
         // set random initial position

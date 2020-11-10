@@ -15,6 +15,8 @@ class SpaceObject : Movable {
     var xRange: (CGFloat, CGFloat)
     var yRange: (CGFloat, CGFloat)
     var inventory: Inventory
+    var collisionCategory: UInt32
+    var testCategory: UInt32
     
     init (_ durability: Int,
           _ sprite: SKSpriteNode,
@@ -23,16 +25,21 @@ class SpaceObject : Movable {
           _ inventory: Inventory,
           _ speed: CGFloat,
           _ rotation: CGFloat,
-          _ targetAngle: CGFloat) {
+          _ targetAngle: CGFloat,
+          _ collisionCategory: UInt32,
+          _ testCategory: UInt32,
+          _ boostSpeed: CGFloat) {
         self.durability = durability
         self.xRange = xRange
         self.yRange = yRange
         self.inventory = inventory
+        self.collisionCategory = collisionCategory
+        self.testCategory = testCategory
         
         super.init(speed: speed,
                    rotation: rotation,
                    angleInRadians: targetAngle,
-                   sprite: sprite)
+                   sprite: sprite, boostSpeed: boostSpeed)
     }
     
     // convenience for non-moving objects
@@ -41,7 +48,7 @@ class SpaceObject : Movable {
                       _ xRange: (CGFloat, CGFloat),
                       _ yRange: (CGFloat, CGFloat),
                       _ inventory: Inventory) {
-        self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0)
+        self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
     }
     
     

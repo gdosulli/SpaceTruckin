@@ -65,13 +65,14 @@ struct MySongs {
     static let SPACE_MALL = Song(filename: "space_mall", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION, Setting.ALL], volume: 0.2)
     static let BRIGHT_SONG = Song(filename: "bright song", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.CREDITS, Setting.ALL], volume: 0.4)
     static let VIBING = Song(filename: "vibing",moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION, Setting.ALL], volume: 0.3)
+    static let SPACEJAZZ = Song(filename: "spacejazz", moods: [Mood.CALM], settings: [Setting.SPACE, Setting.ALL])
     
     // interruptions
     static let INTERRUPT1 = Song(filename: "interrupt1", moods: [Mood.INTERRUPTION, Mood.DARK], settings: [Setting.ALL], volume: 0.4)
     static let INTERRUPT2 = Song(filename: "interrupt2", moods: [Mood.INTERRUPTION, Mood.DARK], settings: [Setting.ALL], volume: 0.4)
     
         
-    static let  ALL_SONGS = [DARK_SPACE,TENSION,FALL,SPACE_MALL,BRIGHT_SONG,VIBING,INTERRUPT1,INTERRUPT2]
+    static let  ALL_SONGS = [DARK_SPACE,TENSION,FALL,SPACE_MALL,BRIGHT_SONG,VIBING,SPACEJAZZ,INTERRUPT1,INTERRUPT2]
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +83,7 @@ class MusicPlayer {
     var song: AVAudioPlayer?
     var currentSong: Song?
     var currentPlaylist: [Song] = []
-    var globalVolume: Float = 1.0
+    var globalVolume: Float = 2.0
     
 
     

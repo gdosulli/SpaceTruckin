@@ -18,6 +18,7 @@ struct Player {
         return chain.getChildren()
     }
     
+    
     func update(by delta: CGFloat) {
         head.move(by: delta)
         chain.movePieces(by: delta)
@@ -29,6 +30,8 @@ extension Player {
         self.head = head
         self.chain = TruckChain(head: head)
     }
+    
+    
 }
 
 struct DropDownMenu {
@@ -128,6 +131,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var explosions: [SKTexture]! //TODO: consider moving this to a better home
     var destroyedNodes: (Set<String?>, Set<String?>)  = ([], [])
     var destroyTimer: Timer!
+    var swarm = false
 
     override func didMove(to view: SKView) {
         // Initialize screen height and width
@@ -141,12 +145,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //TODO: decide wether to resize objects or accepts screen differences/advantages
         self.camera = cam
         let sprite = SKSpriteNode(imageNamed: "space_truck_cab")
-        player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 100 ))
-        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
-        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.chain.getLastPiece()))
-        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
-        player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
+
         
+        if swarm {
+            player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.head))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head))
+            
+        } else {
+            player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.chain.getLastPiece()))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
+        }
         
         for c in player.getChildren() {
             self.addChild(c!)
@@ -217,7 +231,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                              userInfo: nil,
                                              repeats: true)
         
-        musicPlayer = MusicPlayer(mood: nil, setting: Setting.ALL)
+        musicPlayer = MusicPlayer(mood: Mood.CALM, setting: Setting.ALL)
     }
     
     
@@ -239,7 +253,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else if name == "mine" {
                 //TODO: start mining
                 menu.clicked()
-                musicPlayer.interrupt(withMood: Mood.DARK)
+                //musicPlayer.interrupt(withMood: Mood.DARK)
+                player.chain.mine(for: 1.5)
             } else if name == "pause" {
                 //TODO: need to actually pause the game
                 gameIsPaused = true
@@ -320,7 +335,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         musicPlayer.update()
         
-        checkContact()
+        //checkContact()
 
         
         
@@ -345,7 +360,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(debrisSprite)
         
-        let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle)
+        let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, speed)
         
         let x = CGFloat.random(in: -1000...1000)
         let y = CGFloat.random(in: -500...500)
@@ -376,7 +391,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                            Inventory(),
                            speed,
                            rotation,
-                           targetAngle)
+                           targetAngle,
+                           CollisionCategories.ASTEROID_CATEGORY,
+                           CollisionCategories.TRUCK_CATEGORY, speed)
         
         ast.spawn(at: spawnPoint)
         
@@ -417,10 +434,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     // called when a collision happens
+    
+    // The problem we're having is that collisions are registered between sprites, and we need the
+    // effects to act on the SpaceObjects that have the sprites as a component
+    // Two potential fixes:
+    // 1. Rework the SpaceObject class so it actuall extends SKSpriteNode, inextricably linking the game
+    // code and the sprite
+    // 2. Figure out some way to associate a sprite with its SpaceObject
     func didBegin(_ contact: SKPhysicsContact) {
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody
-        
+
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
             firstBody = contact.bodyA
             secondBody = contact.bodyB
@@ -428,7 +452,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             firstBody = contact.bodyB
             secondBody = contact.bodyA
         }
+        print("normal: \(contact.contactNormal)")
         
+        // find the truck piece associated with the first body (if one exists)
+        var truckPiece: TruckPiece?
+        for p in player.chain.truckPieces {
+            if let s = firstBody.node as? SKSpriteNode {
+                if s == p.sprite {
+                    print("yes")
+                    truckPiece = p
+                    break
+                }
+                
+            } else {
+                break
+            }
+            
+        }
+        
+        // act on the truck piece
+        if let piece = truckPiece {
+            piece.sprite.physicsBody?.applyForce(CGVector(dx: 100, dy:  100))
+            print("force")
+        }
+        
+        
+        //secondBody.applyForce(contact.contactNormal)
+        if let sprite = secondBody.node as? SKSpriteNode{
+            sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
+            destroyedNodes.0.insert(sprite.name)
+            destroyedNodes.1.insert(sprite.name)
+
+        }
         
         /*
         if (firstBody.categoryBitMask & photonTorpedoCategory) != 0 && (secondBody.categoryBitMask & alienCategory) != 0  {
@@ -508,5 +563,4 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
-    
 }

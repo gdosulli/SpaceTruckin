@@ -9,77 +9,104 @@ import Foundation
 import SpriteKit
 import CoreGraphics
 
+
+struct CollisionCategories {
+    static let TRUCK_CATEGORY = UInt32(0)
+    static let ASTEROID_CATEGORY = UInt32(1.0)
+    static let SPACE_JUNK_CATEGORY = UInt32(2.0)
+}
+
+
+
 class TruckPiece: SpaceObject {
-    let thruster: SKEmitterNode?
+    let thruster: SKEmitterNode = SKEmitterNode(fileNamed: "sparkEmitter")!
     var distanceToHead: CGFloat = 0.0
     var targetPiece: TruckPiece?
+    let mineDuration: TimeInterval = 5.0
     
-    init(sprite s1: SKSpriteNode) {
-        thruster = SKEmitterNode(fileNamed: "sparkEmitter")
-
-        super.init(2, s1, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0)
-        
-        thruster?.zPosition = sprite.zPosition - 2
-        thruster?.position = sprite.position
+    convenience init(sprite s1: SKSpriteNode) {
+        self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, 0)
     }
     
-    init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
-        thruster = SKEmitterNode(fileNamed: "sparkEmitter")
+    convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
+        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(100,0), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, piece.boostSpeed * 0.95)
 
-        targetPiece = piece
-        
-        super.init(2, s1, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0)
-
-        thruster?.zPosition = sprite.zPosition - 2
-        thruster?.position = sprite.position
     }
  
-    init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat) {
-        thruster = SKEmitterNode(fileNamed: "sparkEmitter")
+    convenience init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat, boostedSpeed: CGFloat) {
 
-        super.init(durability, s1, (size,size), (size,size), Inventory(100,0), speed, 0.5, 0)
+        self.init(durability, s1, nil, (size,size), (size,size), Inventory(100,0), speed, 10, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, boostedSpeed)
     }
+    
+    init(_ durability: Int,
+    _ sprite: SKSpriteNode,
+    _ targetPiece: TruckPiece?,
+    _ xRange: (CGFloat, CGFloat),
+    _ yRange: (CGFloat, CGFloat),
+    _ inventory: Inventory,
+    _ speed: CGFloat,
+    _ rotation: CGFloat,
+    _ targetAngle: CGFloat,
+    _ collisionCategory: UInt32,
+    _ testCategory: UInt32,
+    _ boostSpeed: CGFloat) {
+        
+        
+        
+        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory, boostSpeed)
+        
+        self.targetPiece = targetPiece
+        
+        let margin: CGFloat = 0.8
+        sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: sprite.size.width * margin, height: margin * sprite.size.height))
+        sprite.physicsBody?.isDynamic = true
+        sprite.physicsBody?.categoryBitMask = self.collisionCategory
+        sprite.physicsBody?.contactTestBitMask = self.testCategory
+        sprite.physicsBody?.collisionBitMask = 0
+        
+        thruster.zPosition = sprite.zPosition - 2
+        thruster.position = sprite.position
+    }
+    
     
     override func translate(by vector: CGPoint) {
         super.translate(by: vector)
         
-        thruster?.position = sprite.position
-        thruster?.zRotation = sprite.zRotation
+        thruster.position = sprite.position
+        thruster.zRotation = sprite.zRotation
     }
     
     override func update() {
         if let piece = targetPiece {
             changeAngleTo(point: piece.sprite.position)
         }
+        
+        currentAngle = sprite.zRotation - 3.14/2
     }
     
     override func move(by delta: CGFloat) {
-        // set the rotation here
-        // Truck could have a rotation speed, and set an animation to rotate it the correct angle
-        // at the correct speed. getting new input would interrupt the old animation
-        // targetAngle needs to be changed so that the nose of the truck is the front
-        let rotation = SKAction.rotate(toAngle: targetAngle - (3.14/2), duration: TimeInterval(self.rotation), shortestUnitArc: true)
-        sprite.run(rotation)
-        // the problem with this code is that it doesn't bother rotating to an angle below the center line
-        // some flaw in targetAngle?
         
-        // deltaMod adjusts the delta to 'accelerate' and 'decelerate' to maintain follow distance of trucks
-        let gapMax = CGFloat(130) // max encouraged follow distance
-        let gapMin = CGFloat(125) // min encouraged follow
-        let speedupMod = CGFloat(1.5) // increase by this when behind
-        let slowdownMod = CGFloat(6) // decrease by this when ahead
-        
-        var deltaMod = delta
-        if let piece = targetPiece{
-            let distToNext = getGapSize(nextPiece: piece)
-            if distToNext > gapMax{
-                deltaMod = deltaMod * speedupMod
-            } else if distToNext < gapMin{
-                deltaMod = deltaMod / slowdownMod
-            }
+        if !angleLocked {
+            turn(by: delta)
         }
-        super.move(by: deltaMod)
+        
+        super.moveForward(by: delta)
     }
+    
+    override func moveForward(by delta: CGFloat) {
+        let translateVector = CGVector(dx: cos(angleCorrector()) * self.speed * delta, dy:  sin(angleCorrector()) * self.speed * delta)
+        self.sprite.physicsBody?.applyForce(translateVector)
+    }
+    
+    
+    // mining may end up as something that happens as long as a button is being held down (and there's enough energy) meaning the timeInterval aspect may not be forever
+    func mine(for duration: TimeInterval) {
+        lockDirection(for: duration)
+        boostSpeed(for: duration)
+        sprite.physicsBody?.angularVelocity = 0
+    }
+    
+    
     
     override func spawn(at spawnPoint: CGPoint) {
         
@@ -154,13 +181,13 @@ class TruckChain {
     
     func getThrusters() -> [SKEmitterNode] {
         var thrusters : [SKEmitterNode] = []
-        if let t = head.thruster {
-            thrusters.append(t)
-        }
+        let t1 = head.thruster
+        thrusters.append(t1)
+        
         for piece in truckPieces {
-            if let t2 = piece.thruster {
-                thrusters.append(t2)
-            }
+            let t2 = piece.thruster
+            thrusters.append(t2)
+
         }
         
         return thrusters
@@ -202,7 +229,13 @@ class TruckChain {
         }
         
         return maxDistance
-        
+    }
+    
+    func mine(for duration: TimeInterval) {
+        head.mine(for: duration)
+        for p in truckPieces {
+            p.boostSpeed(for: duration)
+        }
     }
     
     func dash(angle: CGFloat) {
