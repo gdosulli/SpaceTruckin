@@ -79,18 +79,41 @@ class TruckPiece: SpaceObject {
     override func update() {
         if let piece = targetPiece {
             changeAngleTo(point: piece.sprite.position)
+            //Chain breaking condition
+            if getGapSize(nextPiece: piece) > 250{ //change value to change break range, TODO make this an external value
+                self.targetPiece = nil
+            }
         }
-        
+
         currentAngle = sprite.zRotation - 3.14/2
     }
     
+    //Currently contains semi-hardcoded values for leashing truck pieces
     override func move(by delta: CGFloat) {
+        // deltaMod adjusts the delta to 'accelerate' and 'decelerate' to maintain follow distance of trucks
+        let gapMax = CGFloat(130) // max encouraged follow distance
+        let gapMin = CGFloat(125) // min encouraged follow
+        let speedupMod = CGFloat(1.1) // increase by this when behind
+        let slowdownMod = CGFloat(0.9) // decrease by this when ahead
         
-        if !angleLocked {
-            turn(by: delta)
+        var turnMod = CGFloat(60)
+        var deltaMod = delta
+        
+        if let piece = targetPiece{
+            let distToNext = getGapSize(nextPiece: piece)
+            if distToNext > gapMax{
+                deltaMod = deltaMod * speedupMod
+                turnMod = 180
+            } else if distToNext < gapMin{
+                deltaMod = deltaMod * slowdownMod
+            }
         }
         
-        super.moveForward(by: delta)
+        if !angleLocked {
+            turn(by: delta * turnMod)
+        }
+        
+        super.moveForward(by: deltaMod)
     }
     
     override func moveForward(by delta: CGFloat) {
@@ -124,7 +147,7 @@ class TruckPiece: SpaceObject {
         let distancex = sprite.position.x - nextPiece.sprite.position.x
         let distancey = sprite.position.y - nextPiece.sprite.position.y
         let distance = sqrt(distancex * distancex + distancey * distancey)
-        print(distance)
+        
         return distance
     }
 }

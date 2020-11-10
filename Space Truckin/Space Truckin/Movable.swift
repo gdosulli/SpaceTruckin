@@ -68,6 +68,7 @@ class Movable {
     func moveForward(by delta: CGFloat) {
         // moves forward instead of in the direction of the target angle
         let translateVector = CGPoint(x: cos(angleCorrector()) * self.speed * delta, y:  sin(angleCorrector()) * self.speed * delta)
+        print(translateVector)
         self.translate(by: translateVector)
     }
     
@@ -81,7 +82,7 @@ class Movable {
         } else if (angleDifference) < CGFloat(-Double.pi){
             angleDifference += CGFloat(Double.pi*2)
         }
-        sprite.physicsBody?.angularVelocity = angleDifference
+        sprite.physicsBody?.angularVelocity = angleDifference * delta
     }
     
     func lockDirection(for interval: TimeInterval) {
