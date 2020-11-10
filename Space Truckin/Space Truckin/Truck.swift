@@ -58,12 +58,27 @@ class TruckPiece: SpaceObject {
         // Truck could have a rotation speed, and set an animation to rotate it the correct angle
         // at the correct speed. getting new input would interrupt the old animation
         // targetAngle needs to be changed so that the nose of the truck is the front
-        let roation = SKAction.rotate(toAngle: targetAngle - (3.14/2), duration: TimeInterval(self.rotation), shortestUnitArc: true)
-        sprite.run(roation)
+        let rotation = SKAction.rotate(toAngle: targetAngle - (3.14/2), duration: TimeInterval(self.rotation), shortestUnitArc: true)
+        sprite.run(rotation)
         // the problem with this code is that it doesn't bother rotating to an angle below the center line
         // some flaw in targetAngle?
-
-        super.move(by: delta)
+        
+        // deltaMod adjusts the delta to 'accelerate' and 'decelerate' to maintain follow distance of trucks
+        let gapMax = CGFloat(130) // max encouraged follow distance
+        let gapMin = CGFloat(125) // min encouraged follow
+        let speedupMod = CGFloat(1.5) // increase by this when behind
+        let slowdownMod = CGFloat(6) // decrease by this when ahead
+        
+        var deltaMod = delta
+        if let piece = targetPiece{
+            let distToNext = getGapSize(nextPiece: piece)
+            if distToNext > gapMax{
+                deltaMod = deltaMod * speedupMod
+            } else if distToNext < gapMin{
+                deltaMod = deltaMod / slowdownMod
+            }
+        }
+        super.move(by: deltaMod)
     }
     
     override func spawn(at spawnPoint: CGPoint) {
@@ -76,6 +91,14 @@ class TruckPiece: SpaceObject {
     
     override func getChildren() -> [SKNode?] {
         return super.getChildren() + [thruster]
+    }
+    
+    func getGapSize(nextPiece: TruckPiece) -> CGFloat{
+        let distancex = sprite.position.x - nextPiece.sprite.position.x
+        let distancey = sprite.position.y - nextPiece.sprite.position.y
+        let distance = sqrt(distancex * distancex + distancey * distancey)
+        print(distance)
+        return distance
     }
 }
 
@@ -99,7 +122,7 @@ class TruckChain {
         head = h
         truckPieces = []
         offset = head.sprite.size.height
-        speedDecrement = 5
+        speedDecrement = 0
         minimumSpeed = 10
         warningDistance = head.sprite.size.width * 3
         boostRadius = head.sprite.size.width * 1.5
