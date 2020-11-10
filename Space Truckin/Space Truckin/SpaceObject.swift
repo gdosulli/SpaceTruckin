@@ -27,7 +27,8 @@ class SpaceObject : Movable {
           _ rotation: CGFloat,
           _ targetAngle: CGFloat,
           _ collisionCategory: UInt32,
-          _ testCategory: UInt32) {
+          _ testCategory: UInt32,
+          _ boostSpeed: CGFloat) {
         self.durability = durability
         self.xRange = xRange
         self.yRange = yRange
@@ -38,7 +39,7 @@ class SpaceObject : Movable {
         super.init(speed: speed,
                    rotation: rotation,
                    angleInRadians: targetAngle,
-                   sprite: sprite)
+                   sprite: sprite, boostSpeed: boostSpeed)
     }
     
     // convenience for non-moving objects
@@ -47,7 +48,7 @@ class SpaceObject : Movable {
                       _ xRange: (CGFloat, CGFloat),
                       _ yRange: (CGFloat, CGFloat),
                       _ inventory: Inventory) {
-        self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY)
+        self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
     }
     
     

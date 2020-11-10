@@ -22,19 +22,20 @@ class TruckPiece: SpaceObject {
     let thruster: SKEmitterNode = SKEmitterNode(fileNamed: "sparkEmitter")!
     var distanceToHead: CGFloat = 0.0
     var targetPiece: TruckPiece?
+    let mineDuration: TimeInterval = 5.0
     
     convenience init(sprite s1: SKSpriteNode) {
-        self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY)
+        self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, 0)
     }
     
     convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
-        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY)
+        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(100,0), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, piece.boostSpeed * 0.95)
 
     }
  
-    convenience init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat) {
+    convenience init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat, boostedSpeed: CGFloat) {
 
-        self.init(durability, s1, nil, (size,size), (size,size), Inventory(100,0), speed, 2, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY)
+        self.init(durability, s1, nil, (size,size), (size,size), Inventory(100,0), speed, 10, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, boostedSpeed)
     }
     
     init(_ durability: Int,
@@ -47,11 +48,12 @@ class TruckPiece: SpaceObject {
     _ rotation: CGFloat,
     _ targetAngle: CGFloat,
     _ collisionCategory: UInt32,
-    _ testCategory: UInt32) {
+    _ testCategory: UInt32,
+    _ boostSpeed: CGFloat) {
         
         
         
-        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory)
+        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory, boostSpeed)
         
         self.targetPiece = targetPiece
         
@@ -78,6 +80,8 @@ class TruckPiece: SpaceObject {
         if let piece = targetPiece {
             changeAngleTo(point: piece.sprite.position)
         }
+        
+        currentAngle = sprite.zRotation - 3.14/2
     }
     
     override func move(by delta: CGFloat) {
@@ -88,6 +92,19 @@ class TruckPiece: SpaceObject {
         
         super.moveForward(by: delta)
     }
+    
+    override func moveForward(by delta: CGFloat) {
+        let translateVector = CGVector(dx: cos(angleCorrector()) * self.speed * delta, dy:  sin(angleCorrector()) * self.speed * delta)
+        self.sprite.physicsBody?.applyForce(translateVector)
+    }
+    
+    func mine(for duration: TimeInterval) {
+        lockDirection(for: duration)
+        boostSpeed(for: duration)
+        sprite.physicsBody?.angularVelocity = 0
+    }
+    
+    
     
     override func spawn(at spawnPoint: CGPoint) {
         
@@ -202,7 +219,13 @@ class TruckChain {
         }
         
         return maxDistance
-        
+    }
+    
+    func mine(for duration: TimeInterval) {
+        head.mine(for: duration)
+        for p in truckPieces {
+            p.boostSpeed(for: duration)
+        }
     }
     
     func dash(angle: CGFloat) {

@@ -17,13 +17,18 @@ class Movable {
     var targetAngle: CGFloat
     var sprite: SKSpriteNode!
     var angleLocked = false
+    var boostSpeed: CGFloat
+    var normalSpeed: CGFloat
     
-    init(speed: CGFloat, rotation: CGFloat, angleInRadians: CGFloat, sprite: SKSpriteNode) {
-        self.speed = speed;
+    init(speed: CGFloat, rotation: CGFloat, angleInRadians: CGFloat, sprite: SKSpriteNode, boostSpeed: CGFloat) {
+        self.speed = speed
         self.rotation = rotation
         self.targetAngle = angleInRadians
         self.sprite = sprite
         self.currentAngle = 3.14/2
+        self.normalSpeed = speed
+        self.boostSpeed = boostSpeed
+        
     }
 
     func translate(by vector: CGPoint) {
@@ -44,7 +49,7 @@ class Movable {
     }
        
     func changeTargetAngle(by angle: CGFloat) {
-           targetAngle = angle
+           targetAngle += angle
     }
        
     func changeSpeed(to: CGFloat) {
@@ -61,13 +66,22 @@ class Movable {
     }
     
     func moveForward(by delta: CGFloat) {
-        let translateVector = CGPoint(x: cos(currentAngle) * self.speed * delta, y:  sin(currentAngle) * self.speed * delta)
+        // moves forward instead of in the direction of the target angle
+        let translateVector = CGPoint(x: cos(angleCorrector()) * self.speed * delta, y:  sin(angleCorrector()) * self.speed * delta)
         self.translate(by: translateVector)
     }
     
+    
+    // Adjusts angular velocity of truckpiece depending on angle to target
     func turn(by delta: CGFloat) {
-        let rotate = SKAction.rotate(toAngle: currentAngle + (targetAngle * delta * rotation), duration: TimeInterval(delta), shortestUnitArc: true)
-        sprite.run(rotate)
+        // TODO: POSSIBLY REIMPLEMENT DELTA INTO THIS / or limit turn speed if needed
+        var angleDifference = (targetAngle - angleCorrector())
+        if (angleDifference > CGFloat(Double.pi)) {
+            angleDifference -= CGFloat(Double.pi*2)
+        } else if (angleDifference) < CGFloat(-Double.pi){
+            angleDifference += CGFloat(Double.pi*2)
+        }
+        sprite.physicsBody?.angularVelocity = angleDifference
     }
     
     func lockDirection(for interval: TimeInterval) {
@@ -77,8 +91,21 @@ class Movable {
         RunLoop.main.add(timer, forMode: .common)
     }
     
+    func boostSpeed(for duration: TimeInterval) {
+        speed = boostSpeed
+        let date = Date().addingTimeInterval(duration)
+        let timer = Timer(fireAt: date, interval: 0, target: self, selector: #selector(revertSpeed), userInfo: nil, repeats: false)
+        RunLoop.main.add(timer, forMode: .common)
+    }
+    
+    func angleCorrector() -> CGFloat { return (sprite.zRotation + CGFloat(Double.pi/2)) }
+    
     @objc func unlock() {
         angleLocked = false
+    }
+    
+    @objc func revertSpeed() {
+        speed = normalSpeed
     }
     
 }
