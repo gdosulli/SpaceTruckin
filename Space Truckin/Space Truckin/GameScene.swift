@@ -473,8 +473,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // act on the truck piece
         if let piece = truckPiece {
-            piece.sprite.physicsBody?.applyForce(CGVector(dx: 100, dy:  100))
-            print("force")
+            piece.addForce(vec: contact.contactNormal)
+            print("bump")
         }
         
         

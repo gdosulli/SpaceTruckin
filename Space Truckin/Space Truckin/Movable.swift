@@ -19,6 +19,7 @@ class Movable {
     var angleLocked = false
     var boostSpeed: CGFloat
     var normalSpeed: CGFloat
+    var outsideForces: CGVector
     
     init(speed: CGFloat, rotation: CGFloat, angleInRadians: CGFloat, sprite: SKSpriteNode, boostSpeed: CGFloat) {
         self.speed = speed
@@ -28,12 +29,14 @@ class Movable {
         self.currentAngle = 3.14/2
         self.normalSpeed = speed
         self.boostSpeed = boostSpeed
-        
+        self.outsideForces = CGVector(dx: 0, dy: 0)
     }
 
     func translate(by vector: CGPoint) {
-       sprite.position.x += vector.x
-       sprite.position.y += vector.y
+        sprite.position.x += vector.x + outsideForces.dx
+        sprite.position.y += vector.y + outsideForces.dy
+        outsideForces.dx *= 0.9
+        outsideForces.dy *= 0.9
     }
     
     func changeAngleTo(point pos: CGPoint) {
@@ -59,6 +62,13 @@ class Movable {
     func changeSpeed(by: CGFloat) {
            speed += by
     }
+    
+    func addForce(vec: CGVector) {
+        let x = outsideForces.dx - vec.dx
+        let y = outsideForces.dy - vec.dy
+        
+        outsideForces = CGVector(dx: x*10, dy: y*10)
+    }
        
     func move(by delta: CGFloat) {
         let translateVector = CGPoint(x: cos(targetAngle) * self.speed * delta, y:  sin(targetAngle) * self.speed * delta)
@@ -68,7 +78,6 @@ class Movable {
     func moveForward(by delta: CGFloat) {
         // moves forward instead of in the direction of the target angle
         let translateVector = CGPoint(x: cos(angleCorrector()) * self.speed * delta, y:  sin(angleCorrector()) * self.speed * delta)
-        print(translateVector)
         self.translate(by: translateVector)
     }
     
