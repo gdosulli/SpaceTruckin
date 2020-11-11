@@ -25,17 +25,17 @@ class TruckPiece: SpaceObject {
     let mineDuration: TimeInterval = 5.0
     
     convenience init(sprite s1: SKSpriteNode) {
-        self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(100,0), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, 0)
+        self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, 0)
     }
     
     convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
-        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(100,0), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, piece.boostSpeed * 0.95)
+        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, piece.boostSpeed * 0.95)
 
     }
  
     convenience init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat, boostedSpeed: CGFloat) {
 
-        self.init(durability, s1, nil, (size,size), (size,size), Inventory(100,0), speed, 10, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, boostedSpeed)
+        self.init(durability, s1, nil, (size,size), (size,size), Inventory(), speed, 10, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, boostedSpeed)
     }
     
     init(_ durability: Int,
