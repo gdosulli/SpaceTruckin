@@ -56,6 +56,17 @@ class Inventory {
         items[item.type] = items[item.type]! + item.value
         return true
     }
+    
+    func remove(from type: ItemType, quantity: Int) -> Item? {
+        if items[type]! >= quantity {
+            let removedItem = Item(type: type, value: quantity)
+            items[type]! = items[type]! - quantity
+            
+            return removedItem
+        }
+        
+        return nil
+    }
 
     func getAll() -> [ItemType:Int] {
         return items
