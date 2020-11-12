@@ -43,7 +43,28 @@ class Asteroid : SpaceObject {
         sprite.run(SKAction.sequence(action))
     }
     
+    //TODO: May need to make normal vector direction a field in order to know whether to flip vector or not
+    override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
+        let newNormal = CGVector(dx: 10 * contact.contactNormal.dx, dy: 10 * contact.contactNormal.dy)
+        self.addForce(vec: newNormal)
+        durability -= obj.impactDamage
+        if durability <= 0 {
+            self.onDestroy()
+        }
+    }
+    
     override func onDestroy() {
-        print("asteroid destroyed")
+        explode()
+        let duration = Double.random(in: 0.4...0.7)
+        let removeDate = Date().addingTimeInterval(duration)
+        let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
+        RunLoop.main.add(timer, forMode: .common)
+    }
+    
+    @objc func deleteSelf() {
+        self.sprite.removeFromParent()
     }
 }
+
+
+// make one list of destroyed items, we don't fuckin need two

@@ -8,11 +8,13 @@
 
 import Foundation
 
-enum ItemType : CaseIterable {
-    case Scrap,
+enum ItemType : Int, CaseIterable {
+        case Scrap,
          Nuclear,
          Precious,
          Water,
+         Oxygen,
+         Stone,
          Currency
 }
 

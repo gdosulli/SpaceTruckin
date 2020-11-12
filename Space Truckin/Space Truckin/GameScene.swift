@@ -20,8 +20,8 @@ struct Player {
     
     
     func update(by delta: CGFloat) {
-        head.move(by: delta)
-        chain.movePieces(by: delta)
+//        head.move(by: delta)
+//        chain.movePieces(by: delta)
         chain.updateFollowers()
     }
 }
@@ -93,6 +93,8 @@ struct DropDownMenu {
 }
 
 
+
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var player: Player!
     var stopped = false
@@ -111,14 +113,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var background: SKEmitterNode!
     
-
-    var miscItems: [SpaceObject] = []
     
     var menu: DropDownMenu!
     var touchedButton = false
     
-    var asteroidsInScene : [String? : Asteroid] = [:]
-    var debrisInScene: [String? : Debris] = [:]
+    var objectsInScene: [String? : SpaceObject] = [:]
     
     // array for randomaly choosing an asteroid to load
     var asteroids = ["asteroid_normal", "asteroid_precious", "asteroid_radioactive"]
@@ -130,9 +129,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var musicPlayer: MusicPlayer!
     
     var explosions: [SKTexture]! //TODO: consider moving this to a better home
-    var destroyedNodes: (Set<String?>, Set<String?>)  = ([], [])
+    var destroyedNodes: (Set<String?>) = []
     var destroyTimer: Timer!
     var swarm = false
+
 
     override func didMove(to view: SKView) {
         // Initialize screen height and width
@@ -163,8 +163,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
         }
         
-        for c in player.getChildren() {
-            self.addChild(c!)
+        
+        for c in player.chain.getAllPieces() {
+            
+            objectsInScene[c.sprite.name] = c
+            
+            self.addChild(c.sprite!)
+            self.addChild(c.thruster)
         }
         
             
@@ -197,12 +202,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(b)
         }
         
-        var drillFrames: [SKTexture] = [] //TODO: rename this stuff
-        for i in [4, 3, 2, 1]{
-          let drillTextureName = "explosion\(i)"
-            drillFrames.append(SKTexture(imageNamed: drillTextureName))
-        }
-        explosions = drillFrames
+//        var explosionFrames: [SKTexture] = [] //TODO: rename this stuff
+//        for i in [4, 3, 2, 1]{
+//          let explosionTextureName = "explosion\(i)"
+//            explosionFrames.append(SKTexture(imageNamed: explosionTextureName))
+//        }
+//        explosions = explosionFrames
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
@@ -312,6 +317,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         lastTime = currentTime
         
+        
         if !stopped {
             player.update(by: delta)
         }
@@ -320,12 +326,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // we could maybe do this in one bigger for-loop, looping through all children
         // in the scene, and executing move(by: delta) on every movable we encounter
         
-        for asteroid in asteroidsInScene {
-            asteroid.value.move(by: delta)
-        }
-        
-        for debris in debrisInScene {
-            debris.value.move(by: delta)
+        for object in objectsInScene {
+            object.value.move(by: delta)
+            object.value.update()
+            if object.value.destroyed {
+                destroyedNodes.insert(object.value.sprite.name)
+            }
         }
         
         // reset center spawn location for background particles
@@ -356,16 +362,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
         let rotation = Bool.random() ? -1 * CGFloat.pi : 1 * CGFloat.pi
         
-        let made = Date()
-        debrisSprite.name = "\(made)"
-        
+//        let made = Date()
+//        debrisSprite.name = "\(made)"
+//
         self.addChild(debrisSprite)
         
         let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, speed)
         
         let spawnPoint = getRandPos(for: debrisSprite)
         debris.spawn(at: spawnPoint)
-        debrisInScene[debris.sprite.name] = debris
+        objectsInScene[debris.sprite.name] = debris
     }
     
     @objc func spawnAsteroid() {
@@ -378,9 +384,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
         let rotation = Bool.random() ? -2 * CGFloat.pi : 2 * CGFloat.pi
         
-        let made = Date()
-        asteroid.name = "\(made)"
-        
+//        let made = Date()
+//        asteroid.name = "\(made)"
+//
         self.addChild(asteroid)
         
         
@@ -398,7 +404,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ast.spawn(at: spawnPoint)
         
         // add asteroid to asteroids
-        asteroidsInScene[ast.sprite.name] = ast
+        objectsInScene[ast.sprite.name] = ast
     }
     
     // function returns random offscreen position for space object projectile
@@ -446,6 +452,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody
+        
+        var firstObject: SpaceObject?
+        var secondObject: SpaceObject?
 
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
             firstBody = contact.bodyA
@@ -457,39 +466,53 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         print("normal: \(contact.contactNormal)")
         
         // find the truck piece associated with the first body (if one exists)
-        var truckPiece: TruckPiece?
-        for p in player.chain.truckPieces {
-            if let s = firstBody.node as? SKSpriteNode {
-                if s == p.sprite {
-                    print("yes")
-                    truckPiece = p
-                    break
-                }
-                
-            } else {
-                break
-            }
-            
+//        for p in player.chain.getAllPieces() {
+//            if let s = firstBody.node as? SKSpriteNode {
+//                if s == p.sprite {
+//                    firstObject = p
+//                    break
+//                }
+//            } else {
+//                break
+//            }
+//        }
+//
+//        // act on the truck piece
+//        if let piece = truckPiece {
+//            let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+//            piece.addForce(vec: newNormal)
+//            print("bump")
+//        }
+//
+        print( (firstBody.node as? SKSpriteNode)?.name )
+        print( (secondBody.node as? SKSpriteNode)?.name )
+
+        if let sprite = firstBody.node as? SKSpriteNode{
+            firstObject = objectsInScene[sprite.name]
         }
         
-        // act on the truck piece
-        if let piece = truckPiece {
-            let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
-            piece.addForce(vec: newNormal)
-            print("bump")
+        if let sprite = secondBody.node as? SKSpriteNode{
+            secondObject = objectsInScene[sprite.name]
+        }
+
+        print("obj1: \(firstObject)")
+        print("obj2: \(secondObject)")
+
+        if let object1 = firstObject, let object2 = secondObject {
+            print("objects")
+            object1.onImpact(with: object2, contact)
+            object2.onImpact(with: object1, contact)
         }
         
         
         //secondBody.applyForce(contact.contactNormal)
-        if let sprite = secondBody.node as? SKSpriteNode{
-            sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
-            destroyedNodes.0.insert(sprite.name)
-            destroyedNodes.1.insert(sprite.name)
-            
-            dropItems(itemNum: 4, with: Item(type: ItemType.Nuclear, value: 10), around: contact.contactPoint)
-
-        }
+//        if let sprite = secondBody.node as? SKSpriteNode{
+//            print("Yoyo")
+//            sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
+//            //destroyedNodes.insert(sprite.name)
+//        }
         
+        print(destroyedNodes)
         /*
         if (firstBody.categoryBitMask & photonTorpedoCategory) != 0 && (secondBody.categoryBitMask & alienCategory) != 0  {
             didColide(torpedo: firstBody.node as! SKSpriteNode, alien: secondBody.node as! SKSpriteNode)
@@ -500,82 +523,73 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func dropItems(itemNum n: Int, with item: Item, around point: CGPoint) {
         for i in 0..<n {
-            let drop = ItemDrop(sprite: SKSpriteNode(imageNamed: ItemDrop.filenames.randomElement()!), item: item, speed: 0, direction: 0)
+            let drop = ItemDrop(sprite: SKSpriteNode(imageNamed: ItemDrop.filenames[item.type.rawValue]), item: item, speed: 50, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
             
-            drop.spawn(at: CGPoint(x: point.x + 3.0 * CGFloat(i), y: point.y + 3.0 * CGFloat(i)))
-            miscItems.append(drop)
+            drop.spawn(at: CGPoint(x: point.x + 10 * CGFloat(i), y: point.y + 10 * CGFloat(i)))
+            objectsInScene[drop.sprite.name] = drop
             self.addChild(drop.sprite)
         }
     }
-    
-    func checkContact(){
-        for a in asteroidsInScene {
-            for c in player.getChildren() {
-                if let collision = c?.intersects(a.value.sprite) {
-                    if collision == true{
-                        a.value.sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
-                        destroyedNodes.0.insert(a.value.sprite.name)
-                    }
-                }
-            }
-        }
-        
-        
-        for d in debrisInScene {
-            for c in player.getChildren() {
-                if let collision = c?.intersects(d.value.sprite) {
-                    if collision == true{
-                        d.value.sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
-                        destroyedNodes.1.insert(d.value.sprite.name)
-                    }
-                }
-            }
-        }
-    }
+//
+//    func checkContact(){
+//
+//        for a in asteroidsInScene {
+//            for c in player.getChildren() {
+//                if let collision = c?.intersects(a.value.sprite) {
+//                    if collision == true{
+//                        a.value.sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
+//                        destroyedNodes.0.insert(a.value.sprite.name)
+//                    }
+//                }
+//            }
+//        }
+//
+//
+//        for d in debrisInScene {
+//            for c in player.getChildren() {
+//                if let collision = c?.intersects(d.value.sprite) {
+//                    if collision == true{
+//                        d.value.sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
+//                        destroyedNodes.1.insert(d.value.sprite.name)
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     @objc func removeFreeNodes() {
-        let removedAsteroids = destroyedNodes.0
-        let removedDebris = destroyedNodes.1
+        let removedObjects = destroyedNodes
+        destroyedNodes.removeAll()
         
-        destroyedNodes.0.removeAll()
-        destroyedNodes.1.removeAll()
+        let asteroidItemTypes = [ItemType.Precious, ItemType.Nuclear, ItemType.Stone]
+        let spaceJunkItemTypes = [ItemType.Precious, ItemType.Scrap, ItemType.Nuclear]
         
         // remove asteroids and debris that have been destroyed by the player
-        for i in removedAsteroids {
+        for i in removedObjects {
             print("boom")
-            asteroidsInScene[i]?.sprite.removeFromParent()
-            asteroidsInScene.removeValue(forKey: asteroidsInScene[i]?.sprite.name)
+            let type = asteroidItemTypes.randomElement()!
+            print(type)
+            //dropItems(itemNum: Int.random(in: 1...3), with: Item(type: type, value: 20), around: (objectsInScene[i]?.sprite.position)!)
+//            objectsInScene[i]?.sprite.removeFromParent()
+            objectsInScene[i]?.onDestroy()
+            objectsInScene.removeValue(forKey: objectsInScene[i]?.sprite.name)
         }
         
-        for j in removedDebris {
-            print("bam")
-            debrisInScene[j]?.sprite.removeFromParent()
-            debrisInScene.removeValue(forKey: debrisInScene[j]?.sprite.name)
-        }
+       
         
         // remove asteroids and deris that are too far from player
         let playerX = player.head.sprite.position.x
         let playerY = player.head.sprite.position.y
-        for a in asteroidsInScene {
+        for a in objectsInScene {
             let position = a.value.sprite.position
             if position.x > (playerX + 3 * frameWidth) || position.x < (playerX - 3 * frameWidth) {
                 a.value.sprite.removeFromParent()
-                asteroidsInScene.removeValue(forKey: a.key)
+                objectsInScene.removeValue(forKey: a.key)
             } else if position.y > (playerY + 3 * frameHeight) || position.y < (playerY - 3 * frameHeight){
                 a.value.sprite.removeFromParent()
-                asteroidsInScene.removeValue(forKey: a.key)
+                objectsInScene.removeValue(forKey: a.key)
             }
         }
-        
-        for d in debrisInScene {
-            let position = d.value.sprite.position
-            if position.x > (playerX + 3 * frameWidth) || position.x < (playerX - 3 * frameWidth) {
-                d.value.sprite.removeFromParent()
-                debrisInScene.removeValue(forKey: d.key)
-            } else if position.y > (playerY + 3 * frameHeight) || position.y < (playerY - 3 * frameHeight){
-                d.value.sprite.removeFromParent()
-                debrisInScene.removeValue(forKey: d.key)
-            }
-        }
+       
     }
 }

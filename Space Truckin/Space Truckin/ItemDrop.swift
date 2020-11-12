@@ -13,12 +13,13 @@ import SpriteKit
 
 class ItemDrop: SpaceObject {
     var item: Item
+    var lifeSpan: TimeInterval = 10.0
     
     static let filenames = ["Inventory_ScrapMetal", "Inventory_radioactiveMaterial",  "Inventory_PreciousMetal", "Inventory_water","Inventory_Oxygen", "Inventory_Stone" ]
     
     init(sprite s1: SKSpriteNode, item i1: Item, speed: CGFloat, direction: CGFloat) {
         self.item = i1
-        super.init(1, s1, (0.5,0.5), (0.5,0.5), Inventory(), speed, 3.14, direction, CollisionCategories.ITEM_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
+        super.init(1, s1, (200,50), (200,50), Inventory(), speed, 3.14, direction, CollisionCategories.ITEM_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
     }
     
     
@@ -45,4 +46,14 @@ class ItemDrop: SpaceObject {
         sprite.run(SKAction.sequence(action))
         
     }
+    
+    func update(by delta: CGFloat) {
+        lifeSpan -= TimeInterval(delta)
+        if lifeSpan < 0.0 {
+            // Item disappears
+            print("poof")
+        }
+        
+    }
+    
 }

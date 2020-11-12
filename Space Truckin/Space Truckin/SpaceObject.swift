@@ -17,6 +17,11 @@ class SpaceObject : Movable {
     var inventory: Inventory
     var collisionCategory: UInt32
     var testCategory: UInt32
+    var destroyed = false
+    var impactDamage = 1
+    static var objectCount = 0
+    
+    static let explosionAnimation = [SKTexture(imageNamed: "explosion1"), SKTexture(imageNamed: "explosion2"), SKTexture(imageNamed: "explosion3"), SKTexture(imageNamed: "explosion4"),]
     
     init (_ durability: Int,
           _ sprite: SKSpriteNode,
@@ -35,11 +40,15 @@ class SpaceObject : Movable {
         self.inventory = inventory
         self.collisionCategory = collisionCategory
         self.testCategory = testCategory
-        
+
         super.init(speed: speed,
                    rotation: rotation,
                    angleInRadians: targetAngle,
                    sprite: sprite, boostSpeed: boostSpeed)
+        
+        self.sprite.name = "\(SpaceObject.objectCount)"
+        SpaceObject.objectCount += 1
+        
     }
     
     // convenience for non-moving objects
@@ -56,8 +65,16 @@ class SpaceObject : Movable {
         fatalError("Subclasses need to implement the `spawn()` method.")
     }
     
+    func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
+        fatalError("Subclasses need to implement the `onDestroy()` method.")
+    }
+    
     func onDestroy() {
         fatalError("Subclasses need to implement the `onDestroy()` method.")
+    }
+    
+    func explode(){
+        sprite.run(SKAction.animate(with: SpaceObject.explosionAnimation, timePerFrame: 0.1, resize: false, restore: false))
     }
     
     func getChildren() -> [SKNode?] {

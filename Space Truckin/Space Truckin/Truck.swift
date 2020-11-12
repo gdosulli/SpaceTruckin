@@ -74,9 +74,7 @@ class TruckPiece: SpaceObject {
     
     override func translate(by vector: CGPoint) {
         super.translate(by: vector)
-        
-        thruster.position = sprite.position
-        thruster.zRotation = sprite.zRotation
+
     }
     
     override func update() {
@@ -87,7 +85,10 @@ class TruckPiece: SpaceObject {
                 self.targetPiece = nil
             }
         }
-
+        
+        thruster.position = sprite.position
+        thruster.zRotation = sprite.zRotation
+        
         currentAngle = sprite.zRotation - 3.14/2
     }
     
@@ -135,8 +136,13 @@ class TruckPiece: SpaceObject {
         
     }
     
+    override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
+        let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+        self.addForce(vec: newNormal)
+    }
+    
     override func onDestroy() {
-        
+        print("Truck should be destroyed but i didnt code this whoops my bad sorry team")
     }
     
     override func getChildren() -> [SKNode?] {
@@ -179,6 +185,9 @@ class TruckChain {
         dashSpeed = 5
     }
 
+    func getAllPieces() -> [TruckPiece] {
+        return [head] + truckPieces
+    }
     
     func getLastPiece() -> TruckPiece {
         if truckPieces.count == 0 {
@@ -305,7 +314,6 @@ class TruckChain {
         
         truckPieces.append(piece)
     }
-    
     
     func getChildren() -> [SKNode?] {
         var nodes = head.getChildren()
