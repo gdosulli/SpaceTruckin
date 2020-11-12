@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "342313E4-332C-4382-BCC4-345161E6F715"
+            uuid = "EDCF4B1C-74DE-463C-B100-EB7A33BABFA1"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Space Truckin/GameScene.swift"
+            filePath = "Space Truckin/Truck.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "483"
-            endingLineNumber = "483"
-            landmarkName = "dropItems(itemNum:with:around:)"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
+            landmarkName = "onImpact(with:_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -15,20 +15,24 @@ class TruckPiece: SpaceObject {
     let thruster: SKEmitterNode = SKEmitterNode(fileNamed: "sparkEmitter")!
     var distanceToHead: CGFloat = 0.0
     var targetPiece: TruckPiece?
+    var followingPiece: TruckPiece?
     let mineDuration: TimeInterval = 5.0
+    var lost = false
+    var releashing = false
     
     convenience init(sprite s1: SKSpriteNode) {
-        self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, 0)
+        self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, 0)
     }
     
     convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
-        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, piece.boostSpeed * 0.95)
+        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, piece.boostSpeed * 0.95)
+        piece.followingPiece = self
 
     }
  
     convenience init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat, boostedSpeed: CGFloat) {
 
-        self.init(durability, s1, nil, (size,size), (size,size), Inventory(), speed, 10, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.ASTEROID_CATEGORY, boostedSpeed)
+        self.init(durability, s1, nil, (size,size), (size,size), Inventory(), speed, 10, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, boostedSpeed)
     }
     
     init(_ durability: Int,
@@ -66,13 +70,10 @@ class TruckPiece: SpaceObject {
 
     }
     
+    
     override func update() {
         if let piece = targetPiece {
             changeAngleTo(point: piece.sprite.position)
-            //Chain breaking condition
-            if getGapSize(nextPiece: piece) > 250{ //change value to change break range, TODO make this an external value
-                self.targetPiece = nil
-            }
         }
         
         thruster.position = sprite.position
@@ -81,32 +82,46 @@ class TruckPiece: SpaceObject {
         currentAngle = sprite.zRotation - 3.14/2
     }
     
+    func moveLost(by delta: CGFloat){
+        // deltaMod adjusts the delta to 'accelerate' and 'decelerate' to maintain follow distance of trucks
+
+        super.moveForward(by: delta * 0.4)
+    }
+    
     //Currently contains semi-hardcoded values for leashing truck pieces
     override func move(by delta: CGFloat) {
-        // deltaMod adjusts the delta to 'accelerate' and 'decelerate' to maintain follow distance of trucks
-        let gapMax = CGFloat(130) // max encouraged follow distance
-        let gapMin = CGFloat(125) // min encouraged follow
-        let speedupMod = CGFloat(1.1) // increase by this when behind
-        let slowdownMod = CGFloat(0.9) // decrease by this when ahead
-        
-        var turnMod = CGFloat(60)
-        var deltaMod = delta
-        
-        if let piece = targetPiece{
-            let distToNext = getGapSize(nextPiece: piece)
-            if distToNext > gapMax{
-                deltaMod = deltaMod * speedupMod
-                turnMod = 180
-            } else if distToNext < gapMin{
-                deltaMod = deltaMod * slowdownMod
+        if lost {
+            moveLost(by: delta)
+        } else {
+            // deltaMod adjusts the delta to 'accelerate' and 'decelerate' to maintain follow distance of trucks
+            let gapMax = CGFloat(130) // max encouraged follow distance
+            let gapMin = CGFloat(125) // min encouraged follow
+            let speedupMod = CGFloat(1.1)// increase by this when behind
+            let releashingMod = CGFloat(1.5)
+            let slowdownMod = CGFloat(0.9) // decrease by this when ahead
+            //TODO slow down turnspeed and increase movespeed during mining boost
+            var turnMod = CGFloat(60)
+            var deltaMod = delta
+            
+            if let piece = targetPiece{
+                let distToNext = getGapSize(nextPiece: piece)
+                if distToNext < gapMin{
+                    deltaMod = deltaMod * slowdownMod
+                } else if releashing {
+                    deltaMod = deltaMod * releashingMod
+                    turnMod = 240
+                } else if distToNext > gapMax{
+                    deltaMod = deltaMod * speedupMod
+                    turnMod = 180
+                }
             }
+            
+            if !angleLocked {
+                turn(by: delta * turnMod)
+            }
+            
+            super.moveForward(by: deltaMod)
         }
-        
-        if !angleLocked {
-            turn(by: delta * turnMod)
-        }
-        
-        super.moveForward(by: deltaMod)
     }
     
     override func moveForward(by delta: CGFloat) {
@@ -119,16 +134,65 @@ class TruckPiece: SpaceObject {
         lockDirection(for: duration)
         boostSpeed(for: duration)
         sprite.physicsBody?.angularVelocity = 0
+        
+        //set to not clash with other releashings ??
+//        releashing = true
+//        let date = Date().addingTimeInterval(3.0) //releashing timer
+//        let timer = Timer(fireAt: date, interval: 0, target: self, selector: #selector(endReleashing), userInfo: nil, repeats: false)
+//        RunLoop.main.add(timer, forMode: .common)
     }
     
     override func spawn(at spawnPoint: CGPoint) {
         
     }
     
+    func getLastPiece() -> TruckPiece {
+        var lastPiece: TruckPiece = self
+        while let p = lastPiece.followingPiece {
+            lastPiece = p
+        }
+        
+        return lastPiece
+    }
+    
+    
+    func reattach(at piece: TruckPiece) {
+        piece.lost = false
+        
+        piece.targetPiece?.followingPiece = nil
+        piece.targetPiece = getLastPiece()
+        piece.followingPiece?.targetPiece = nil
+        piece.followingPiece = nil
+        getLastPiece().followingPiece = piece
+        
+        var followPiece: TruckPiece? = piece
+        while let p = followPiece {
+            p.releashing = true
+            print("reattaching\(p.sprite.name)")
+            p.collisionCategory = CollisionCategories.TRUCK_CATEGORY
+            p.testCategory = CollisionCategories.ASTEROID_CATEGORY
+            p.sprite.physicsBody?.categoryBitMask = self.collisionCategory
+            p.sprite.physicsBody?.contactTestBitMask = self.testCategory
+            followPiece = p.followingPiece
+            let date = Date().addingTimeInterval(3.0) //releashing timer
+            let timer = Timer(fireAt: date, interval: 0, target: p, selector: #selector(endReleashing), userInfo: nil, repeats: false)
+            RunLoop.main.add(timer, forMode: .common)
+         }
+    }
+    
+    @objc func endReleashing() {
+        releashing = false
+        print("Releashing ended")
+    }
+    
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
-        if obj.collisionCategory ==  0x1 << 1 || obj.collisionCategory ==  0x1 << 2 {
+        if obj.collisionCategory ==  CollisionCategories.ASTEROID_CATEGORY || obj.collisionCategory ==  CollisionCategories.SPACE_JUNK_CATEGORY {
             let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
             self.addForce(vec: newNormal)
+        } else if obj.collisionCategory == CollisionCategories.LOST_CAPSULE_CATEGORY {
+            let newNormal = CGVector(dx: -1 * contact.contactNormal.dx, dy: -1 * contact.contactNormal.dy)
+            self.addForce(vec: newNormal)
+            reattach(at: (obj as? TruckPiece)!)
         }
     }
     
@@ -153,6 +217,7 @@ class TruckPiece: SpaceObject {
 
 class TruckChain {
     let head: TruckPiece!
+    var tail: TruckPiece!
     var truckPieces: [TruckPiece]
     var offset: CGFloat
     var speedDecrement: CGFloat
@@ -164,9 +229,11 @@ class TruckChain {
     var dashTimer: Timer?
     var dashIndex = 0
     var dashAngle: CGFloat = 0
+    var maxLeashLength: CGFloat = 250
 
     init(head h: TruckPiece) {
         head = h
+        tail = head
         truckPieces = []
         offset = head.sprite.size.height
         speedDecrement = 0
@@ -181,10 +248,12 @@ class TruckChain {
     }
     
     func getLastPiece() -> TruckPiece {
-        if truckPieces.count == 0 {
-            return head
+        var lastPiece: TruckPiece = head
+        while let p = lastPiece.followingPiece {
+            lastPiece = p
         }
-        return truckPieces[truckPieces.count-1]
+        
+        return lastPiece
     }
     
     func movePieces(by delta: CGFloat) {
@@ -220,10 +289,28 @@ class TruckChain {
     func updateFollowers() {
         for p in truckPieces {
             p.update()
+            if let target = p.targetPiece{
+                if p.getGapSize(nextPiece: target) > maxLeashLength && !p.releashing{
+                    print("SNAP")
+                    breakChain(at: p)
+                }
+            }
         }
+    }
+    
+    func breakChain(at piece: TruckPiece){
+        piece.targetPiece?.followingPiece = nil
+        piece.targetPiece = nil
+        piece.lost = true
         
-        //updateHeadDistance()
-        
+        var followPiece: TruckPiece? = piece
+        while let p = followPiece {
+            p.collisionCategory = CollisionCategories.LOST_CAPSULE_CATEGORY
+            p.testCategory = CollisionCategories.TRUCK_CATEGORY
+            p.sprite.physicsBody?.categoryBitMask = p.collisionCategory
+            p.sprite.physicsBody?.contactTestBitMask = p.testCategory
+            followPiece = p.followingPiece
+        }
     }
     
     func updateDistance() {
@@ -258,7 +345,9 @@ class TruckChain {
     func mine(for duration: TimeInterval) {
         head.mine(for: duration)
         for p in truckPieces {
-            p.boostSpeed(for: duration)
+            if p.collisionCategory == CollisionCategories.TRUCK_CATEGORY {
+                p.boostSpeed(for: duration)
+            }
         }
     }
     
