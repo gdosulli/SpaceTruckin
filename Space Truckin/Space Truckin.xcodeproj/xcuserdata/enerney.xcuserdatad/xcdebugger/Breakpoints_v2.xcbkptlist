@@ -14,8 +14,8 @@
             filePath = "Space Truckin/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "525"
-            endingLineNumber = "525"
+            startingLineNumber = "483"
+            endingLineNumber = "483"
             landmarkName = "dropItems(itemNum:with:around:)"
             landmarkType = "7">
          </BreakpointContent>

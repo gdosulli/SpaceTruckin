@@ -201,13 +201,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for b in buttons {
             self.addChild(b)
         }
-        
-//        var explosionFrames: [SKTexture] = [] //TODO: rename this stuff
-//        for i in [4, 3, 2, 1]{
-//          let explosionTextureName = "explosion\(i)"
-//            explosionFrames.append(SKTexture(imageNamed: explosionTextureName))
-//        }
-//        explosions = explosionFrames
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
@@ -342,7 +335,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         musicPlayer.update()
         
-        //checkContact()
 
         
         
@@ -361,10 +353,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let speed = CGFloat.random(in: 25...75)
         let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
         let rotation = Bool.random() ? -1 * CGFloat.pi : 1 * CGFloat.pi
-        
-//        let made = Date()
-//        debrisSprite.name = "\(made)"
-//
+
         self.addChild(debrisSprite)
         
         let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, speed)
@@ -383,10 +372,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let speed = CGFloat.random(in: 50...150)
         let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
         let rotation = Bool.random() ? -2 * CGFloat.pi : 2 * CGFloat.pi
-        
-//        let made = Date()
-//        asteroid.name = "\(made)"
-//
+
         self.addChild(asteroid)
         
         
@@ -446,7 +432,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // The problem we're having is that collisions are registered between sprites, and we need the
     // effects to act on the SpaceObjects that have the sprites as a component
     // Two potential fixes:
-    // 1. Rework the SpaceObject class so it actuall extends SKSpriteNode, inextricably linking the game
+    // 1. Rework the SpaceObject class so it actually extends SKSpriteNode, inextricably linking the game
     // code and the sprite
     // 2. Figure out some way to associate a sprite with its SpaceObject
     func didBegin(_ contact: SKPhysicsContact) {
@@ -465,25 +451,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         print("normal: \(contact.contactNormal)")
         
-        // find the truck piece associated with the first body (if one exists)
-//        for p in player.chain.getAllPieces() {
-//            if let s = firstBody.node as? SKSpriteNode {
-//                if s == p.sprite {
-//                    firstObject = p
-//                    break
-//                }
-//            } else {
-//                break
-//            }
-//        }
-//
-//        // act on the truck piece
-//        if let piece = truckPiece {
-//            let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
-//            piece.addForce(vec: newNormal)
-//            print("bump")
-//        }
-//
         print( (firstBody.node as? SKSpriteNode)?.name )
         print( (secondBody.node as? SKSpriteNode)?.name )
 
@@ -504,15 +471,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             object2.onImpact(with: object1, contact)
         }
         
-        
-        //secondBody.applyForce(contact.contactNormal)
-//        if let sprite = secondBody.node as? SKSpriteNode{
-//            print("Yoyo")
-//            sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
-//            //destroyedNodes.insert(sprite.name)
-//        }
-        
-        print(destroyedNodes)
         /*
         if (firstBody.categoryBitMask & photonTorpedoCategory) != 0 && (secondBody.categoryBitMask & alienCategory) != 0  {
             didColide(torpedo: firstBody.node as! SKSpriteNode, alien: secondBody.node as! SKSpriteNode)
@@ -530,33 +488,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(drop.sprite)
         }
     }
-//
-//    func checkContact(){
-//
-//        for a in asteroidsInScene {
-//            for c in player.getChildren() {
-//                if let collision = c?.intersects(a.value.sprite) {
-//                    if collision == true{
-//                        a.value.sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
-//                        destroyedNodes.0.insert(a.value.sprite.name)
-//                    }
-//                }
-//            }
-//        }
-//
-//
-//        for d in debrisInScene {
-//            for c in player.getChildren() {
-//                if let collision = c?.intersects(d.value.sprite) {
-//                    if collision == true{
-//                        d.value.sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
-//                        destroyedNodes.1.insert(d.value.sprite.name)
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
+
     @objc func removeFreeNodes() {
         let removedObjects = destroyedNodes
         destroyedNodes.removeAll()
@@ -564,8 +496,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // remove asteroids and debris that have been destroyed by the player
         for i in removedObjects {
             print("boom")
-            //dropItems(itemNum: Int.random(in: 1...3), with: Item(type: type, value: 20), around: (objectsInScene[i]?.sprite.position)!)
-//            objectsInScene[i]?.sprite.removeFromParent()
             objectsInScene[i]?.onDestroy()
             objectsInScene.removeValue(forKey: objectsInScene[i]?.sprite.name)
         }

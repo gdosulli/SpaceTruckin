@@ -56,10 +56,8 @@ class TruckPiece: SpaceObject {
         sprite.physicsBody?.categoryBitMask = self.collisionCategory
         sprite.physicsBody?.contactTestBitMask = self.testCategory
         sprite.physicsBody?.collisionBitMask = 0
-        //sprite.physicsBody?.linearDamping = 1 // testing
         thruster.zPosition = sprite.zPosition - 2
         thruster.position = sprite.position
-        //thruster.targetNode = //gamescene
     }
     
     
