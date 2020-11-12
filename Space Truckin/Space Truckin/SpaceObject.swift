@@ -10,6 +10,16 @@ import Foundation
 import SpriteKit
 import GameplayKit
 
+
+struct CollisionCategories {
+    static let TRUCK_CATEGORY: UInt32 = 0x1 << 0
+    static let ASTEROID_CATEGORY: UInt32 = 0x1 << 1
+    static let SPACE_JUNK_CATEGORY: UInt32 = 0x1 << 2
+    static let LOST_CAPSULE_CATEGORY: UInt32 = 0x1 << 3
+    static let ITEM_CATEGORY: UInt32 = 0x1 << 4
+}
+
+
 class SpaceObject : Movable {
     var durability: Int
     var xRange: (CGFloat, CGFloat)
@@ -72,6 +82,9 @@ class SpaceObject : Movable {
     func onDestroy() {
         fatalError("Subclasses need to implement the `onDestroy()` method.")
     }
+    
+    
+
     
     func explode(){
         sprite.run(SKAction.animate(with: SpaceObject.explosionAnimation, timePerFrame: 0.1, resize: false, restore: false))

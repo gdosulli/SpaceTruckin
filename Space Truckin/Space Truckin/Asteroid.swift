@@ -54,17 +54,37 @@ class Asteroid : SpaceObject {
     }
     
     override func onDestroy() {
-        explode()
-        let duration = Double.random(in: 0.4...0.7)
-        let removeDate = Date().addingTimeInterval(duration)
-        let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
-        RunLoop.main.add(timer, forMode: .common)
+        if !destroyed {
+            destroyed = true
+            explode()
+            let duration = Double.random(in: 0.4...0.7)
+            let removeDate = Date().addingTimeInterval(duration)
+            let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
+            RunLoop.main.add(timer, forMode: .common)
+            
+        }
+        
     }
     
-    @objc func deleteSelf() {
+    func dropItems(at point: CGPoint) {
+        let numItems = Int.random(in: 2...4)
+        let quantity = 20
+        let point = self.sprite.position
+        //TODO
+        let asteroidItemTypes = [ItemType.Precious, ItemType.Nuclear, ItemType.Stone]
+
+        let item = Item(type: asteroidItemTypes.randomElement()!, value: 20)
+        for i in 0..<numItems {
+            let drop = DroppedItem(sprite: SKSpriteNode(imageNamed: DroppedItem.filenames[item.type.rawValue]), item: item, speed: 120, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
+
+            drop.spawn(at: CGPoint(x: point.x + 10 * CGFloat(i), y: point.y + 10 * CGFloat(i)))
+            (self.sprite.parent as? GameScene)!.objectsInScene[drop.sprite.name] = drop
+            self.sprite.parent!.addChild(drop.sprite)
+        }
+    }
+    
+    @objc func deleteSelf () {
+        dropItems(at: self.sprite.position)
         self.sprite.removeFromParent()
     }
 }
-
-
-// make one list of destroyed items, we don't fuckin need two

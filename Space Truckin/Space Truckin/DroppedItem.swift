@@ -11,9 +11,9 @@ import SpriteKit
 
 
 
-class ItemDrop: SpaceObject {
+class DroppedItem: SpaceObject {
     var item: Item
-    var lifeSpan: TimeInterval = 10.0
+    var lifeSpan: TimeInterval = 300.0
     
     static let filenames = ["Inventory_ScrapMetal", "Inventory_radioactiveMaterial",  "Inventory_PreciousMetal", "Inventory_water","Inventory_Oxygen", "Inventory_Stone" ]
     
@@ -26,8 +26,8 @@ class ItemDrop: SpaceObject {
     override func spawn(at spawnPoint: CGPoint) {
         sprite.size = CGSize(width: xRange.0, height: yRange.0)
         
-        //let margin: CGFloat = 0.5
-        sprite.physicsBody = SKPhysicsBody(rectangleOf: sprite.size)
+        let margin: CGFloat = 0.5
+        sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: xRange.0-(margin * xRange.0), height: yRange.0-(margin * yRange.0)))
         sprite.physicsBody?.isDynamic = true
         sprite.physicsBody?.categoryBitMask = self.collisionCategory
         sprite.physicsBody?.contactTestBitMask = self.testCategory
@@ -53,7 +53,15 @@ class ItemDrop: SpaceObject {
             // Item disappears
             print("poof")
         }
-        
     }
     
+    override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
+        //TODO add item to player inventory w/ animation
+        //possibly make func to pull into inventory
+        onDestroy()
+    }
+    
+    override func onDestroy() {
+        self.sprite.removeFromParent()
+    }
 }

@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 
-enum Mood {case DARK, BRIGHT, CALM, INTERRUPTION}
+enum Mood {case DARK, BRIGHT, CALM, INTERRUPTION, PRESENT}
 enum Setting {case TITLE_SCREEN, SPACE, STATION, CREDITS, ALL}
 
 class Song {
@@ -59,20 +59,20 @@ extension Song: Equatable {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct MySongs {
-    static let DARK_SPACE = Song(filename: "dark_space", moods: [Mood.CALM, Mood.DARK], settings: [Setting.SPACE, Setting.STATION, Setting.ALL], volume: 0.5)
-    static let TENSION = Song(filename: "tension", moods: [Mood.DARK], settings: [Setting.STATION, Setting.ALL], volume: 0.3)
+    static let DARK_SPACE = Song(filename: "dark_space", moods: [Mood.CALM, Mood.DARK, Mood.PRESENT], settings: [Setting.SPACE, Setting.STATION, Setting.ALL], volume: 0.5)
+    static let TENSION = Song(filename: "tension", moods: [Mood.DARK, Mood.PRESENT], settings: [Setting.STATION, Setting.ALL], volume: 0.3)
     static let FALL = Song(filename: "fall", moods: [Mood.BRIGHT, Mood.CALM], settings: [Setting.SPACE, Setting.ALL], volume: 0.2)
-    static let SPACE_MALL = Song(filename: "space_mall", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION, Setting.ALL], volume: 0.2)
+    static let SPACE_MALL = Song(filename: "space_mall", moods: [Mood.CALM, Mood.BRIGHT, Mood.PRESENT], settings: [Setting.STATION, Setting.ALL], volume: 0.2)
     static let BRIGHT_SONG = Song(filename: "bright song", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.CREDITS, Setting.ALL], volume: 0.4)
     static let VIBING = Song(filename: "vibing",moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION, Setting.ALL], volume: 0.3)
-    static let SPACEJAZZ = Song(filename: "spacejazz", moods: [Mood.CALM], settings: [Setting.SPACE, Setting.ALL])
+    static let SPACEJAZZ = Song(filename: "spacejazz", moods: [Mood.CALM, Mood.PRESENT], settings: [Setting.SPACE, Setting.ALL])
     
     // interruptions
     static let INTERRUPT1 = Song(filename: "interrupt1", moods: [Mood.INTERRUPTION, Mood.DARK], settings: [Setting.ALL], volume: 0.4)
     static let INTERRUPT2 = Song(filename: "interrupt2", moods: [Mood.INTERRUPTION, Mood.DARK], settings: [Setting.ALL], volume: 0.4)
     
         
-    static let  ALL_SONGS = [DARK_SPACE,TENSION,SPACE_MALL]//,FALL,BRIGHT_SONG,VIBING,SPACEJAZZ,INTERRUPT1,INTERRUPT2]
+    static let  ALL_SONGS = [DARK_SPACE,TENSION,SPACE_MALL, SPACEJAZZ]//,FALL,BRIGHT_SONG,VIBING,,INTERRUPT1,INTERRUPT2]
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -14,9 +14,10 @@ class Debris : SpaceObject {
         // set random asteroid size
         let dimension = CGFloat.random(in: xRange.0...xRange.1)
         sprite.size = CGSize(width: dimension, height: dimension)
-        
         // add physics and collision detection to asteroid
-        sprite.physicsBody = SKPhysicsBody(rectangleOf: sprite.size)
+        // create a rectangle that's a bit smaller than the image, to work for the collider
+        let margin: CGFloat = 0.3
+        sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: dimension-(margin * dimension), height: dimension-(margin * dimension)))
         sprite.physicsBody?.isDynamic = true
         sprite.physicsBody?.categoryBitMask = self.collisionCategory
         sprite.physicsBody?.contactTestBitMask = self.testCategory
@@ -46,14 +47,34 @@ class Debris : SpaceObject {
     }
         
     override func onDestroy() {
-        explode()
-        let duration = Double.random(in: 0.7...1.3)
-        let removeDate = Date().addingTimeInterval(duration)
-        let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
-        RunLoop.main.add(timer, forMode: .common)
+        if !destroyed {
+            destroyed = true
+            explode()
+            let duration = Double.random(in: 0.7...1.3)
+            let removeDate = Date().addingTimeInterval(duration)
+            let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
+            RunLoop.main.add(timer, forMode: .common)
+        }
+    }
+    
+    func dropItems(at point: CGPoint) {
+        let numItems = Int.random(in: 2...4)
+        let quantity = 20
+        let point = self.sprite.position
+        let spaceJunkItemTypes = [ItemType.Precious, ItemType.Scrap, ItemType.Nuclear]
+
+        let item = Item(type: spaceJunkItemTypes.randomElement()!, value: 20)
+        for i in 0..<numItems {
+            let drop = DroppedItem(sprite: SKSpriteNode(imageNamed: DroppedItem.filenames[item.type.rawValue]), item: item, speed: 120, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
+
+            drop.spawn(at: CGPoint(x: point.x + 10 * CGFloat(i), y: point.y + 10 * CGFloat(i)))
+            (self.sprite.parent as? GameScene)!.objectsInScene[drop.sprite.name] = drop
+            self.sprite.parent!.addChild(drop.sprite)
+        }
     }
     
     @objc func deleteSelf() {
+        dropItems(at: sprite.position)
         self.sprite.removeFromParent()
     }
 }

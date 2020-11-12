@@ -10,15 +10,6 @@ import SpriteKit
 import CoreGraphics
 
 
-struct CollisionCategories {
-    static let TRUCK_CATEGORY = UInt32(0)
-    static let ASTEROID_CATEGORY = UInt32(1.0)
-    static let SPACE_JUNK_CATEGORY = UInt32(2.0)
-    static let LOST_CAPSULE_CATEGORY = UInt32(3.0)
-    static let ITEM_CATEGORY = UInt32(4.0)
-}
-
-
 
 class TruckPiece: SpaceObject {
     let thruster: SKEmitterNode = SKEmitterNode(fileNamed: "sparkEmitter")!
@@ -137,8 +128,10 @@ class TruckPiece: SpaceObject {
     }
     
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
-        let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
-        self.addForce(vec: newNormal)
+        if obj.collisionCategory ==  0x1 << 1 || obj.collisionCategory ==  0x1 << 2 {
+            let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+            self.addForce(vec: newNormal)
+        }
     }
     
     override func onDestroy() {

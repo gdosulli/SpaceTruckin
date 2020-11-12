@@ -237,7 +237,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                              userInfo: nil,
                                              repeats: true)
         
-        musicPlayer = MusicPlayer(mood: Mood.CALM, setting: Setting.ALL)
+        musicPlayer = MusicPlayer(mood: Mood.PRESENT, setting: Setting.ALL)
     }
     
     
@@ -523,7 +523,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func dropItems(itemNum n: Int, with item: Item, around point: CGPoint) {
         for i in 0..<n {
-            let drop = ItemDrop(sprite: SKSpriteNode(imageNamed: ItemDrop.filenames[item.type.rawValue]), item: item, speed: 50, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
+            let drop = DroppedItem(sprite: SKSpriteNode(imageNamed: DroppedItem.filenames[item.type.rawValue]), item: item, speed: 50, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
             
             drop.spawn(at: CGPoint(x: point.x + 10 * CGFloat(i), y: point.y + 10 * CGFloat(i)))
             objectsInScene[drop.sprite.name] = drop
@@ -560,15 +560,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc func removeFreeNodes() {
         let removedObjects = destroyedNodes
         destroyedNodes.removeAll()
-        
-        let asteroidItemTypes = [ItemType.Precious, ItemType.Nuclear, ItemType.Stone]
-        let spaceJunkItemTypes = [ItemType.Precious, ItemType.Scrap, ItemType.Nuclear]
-        
+    
         // remove asteroids and debris that have been destroyed by the player
         for i in removedObjects {
             print("boom")
-            let type = asteroidItemTypes.randomElement()!
-            print(type)
             //dropItems(itemNum: Int.random(in: 1...3), with: Item(type: type, value: 20), around: (objectsInScene[i]?.sprite.position)!)
 //            objectsInScene[i]?.sprite.removeFromParent()
             objectsInScene[i]?.onDestroy()
