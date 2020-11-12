@@ -14,6 +14,8 @@ struct CollisionCategories {
     static let TRUCK_CATEGORY = UInt32(0)
     static let ASTEROID_CATEGORY = UInt32(1.0)
     static let SPACE_JUNK_CATEGORY = UInt32(2.0)
+    static let LOST_CAPSULE_CATEGORY = UInt32(3.0)
+    static let ITEM_CATEGORY = UInt32(4.0)
 }
 
 
@@ -52,7 +54,7 @@ class TruckPiece: SpaceObject {
     _ boostSpeed: CGFloat) {
         
         
-        
+
         super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory, boostSpeed)
         
         self.targetPiece = targetPiece
@@ -176,6 +178,7 @@ class TruckChain {
         boostRadius = head.sprite.size.width * 1.5
         dashSpeed = 5
     }
+
     
     func getLastPiece() -> TruckPiece {
         if truckPieces.count == 0 {

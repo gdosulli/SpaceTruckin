@@ -64,10 +64,10 @@ class Movable {
     }
     
     func addForce(vec: CGVector) {
-        let x = outsideForces.dx - vec.dx
-        let y = outsideForces.dy - vec.dy
+        let x = outsideForces.dx + vec.dx
+        let y = outsideForces.dy + vec.dy
         
-        outsideForces = CGVector(dx: x*10, dy: y*10)
+        outsideForces = CGVector(dx: x, dy: y)
     }
        
     func move(by delta: CGFloat) {

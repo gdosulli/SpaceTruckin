@@ -72,7 +72,7 @@ struct MySongs {
     static let INTERRUPT2 = Song(filename: "interrupt2", moods: [Mood.INTERRUPTION, Mood.DARK], settings: [Setting.ALL], volume: 0.4)
     
         
-    static let  ALL_SONGS = [DARK_SPACE,TENSION,FALL,SPACE_MALL,BRIGHT_SONG,VIBING,SPACEJAZZ,INTERRUPT1,INTERRUPT2]
+    static let  ALL_SONGS = [DARK_SPACE,TENSION,SPACE_MALL]//,FALL,BRIGHT_SONG,VIBING,SPACEJAZZ,INTERRUPT1,INTERRUPT2]
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

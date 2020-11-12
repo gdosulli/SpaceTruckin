@@ -112,6 +112,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var background: SKEmitterNode!
     
 
+    var miscItems: [SpaceObject] = []
     
     var menu: DropDownMenu!
     var touchedButton = false
@@ -473,7 +474,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // act on the truck piece
         if let piece = truckPiece {
-            piece.addForce(vec: contact.contactNormal)
+            let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+            piece.addForce(vec: newNormal)
             print("bump")
         }
         
@@ -483,6 +485,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             sprite.run(SKAction.animate(with: explosions, timePerFrame: 0.25, resize: false, restore: false))
             destroyedNodes.0.insert(sprite.name)
             destroyedNodes.1.insert(sprite.name)
+            
+            dropItems(itemNum: 4, with: Item(type: ItemType.Nuclear, value: 10), around: contact.contactPoint)
 
         }
         
@@ -492,6 +496,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         */
         
+    }
+    
+    func dropItems(itemNum n: Int, with item: Item, around point: CGPoint) {
+        for i in 0..<n {
+            let drop = ItemDrop(sprite: SKSpriteNode(imageNamed: ItemDrop.filenames.randomElement()!), item: item, speed: 0, direction: 0)
+            
+            drop.spawn(at: CGPoint(x: point.x + 3.0 * CGFloat(i), y: point.y + 3.0 * CGFloat(i)))
+            miscItems.append(drop)
+            self.addChild(drop.sprite)
+        }
     }
     
     func checkContact(){
