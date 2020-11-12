@@ -156,6 +156,14 @@ class TruckPiece: SpaceObject {
         return lastPiece
     }
     
+    func getFirst() -> TruckPiece{
+        var firstPiece: TruckPiece = self
+        while let p = firstPiece.targetPiece {
+                   firstPiece = p
+               }
+               
+               return firstPiece
+    }
     
     func reattach(at piece: TruckPiece) {
         piece.lost = false

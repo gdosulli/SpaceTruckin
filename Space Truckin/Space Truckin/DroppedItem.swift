@@ -14,6 +14,7 @@ import SpriteKit
 class DroppedItem: SpaceObject {
     var item: Item
     var lifeSpan: TimeInterval = 300.0
+    var collected = false
     
     static let filenames = ["Inventory_ScrapMetal", "Inventory_radioactiveMaterial",  "Inventory_PreciousMetal", "Inventory_water","Inventory_Oxygen", "Inventory_Stone" ]
     
@@ -59,20 +60,16 @@ class DroppedItem: SpaceObject {
         //TODO add item to player inventory w/ animation
         //possibly make func to pull into inventory
         
+        // I want every piece to be able to collect items, but have them
         
-        
-        if let truckPiece = obj as? TruckPiece,
-           truckPiece.isHead {
-            if truckPiece.inventory.addItem(item: item) {
-                print("\(item.value) \(item.type) added to head")
-                onDestroy()
-                return
-            }
-            var nextPiece = truckPiece
-            while let p = nextPiece.followingPiece {
+        if !collected, let truckPiece = obj as? TruckPiece {
+            
+            var nextPiece: TruckPiece? = truckPiece.getFirst()
+            while let p = nextPiece {
                 if p.inventory.addItem(item: item) {
+                    collected = true
                     // TODO add animation from current position to capsule
-                    let duration : TimeInterval = 1
+                    let duration : TimeInterval = 0.2
                     var action  = [SKAction]()
                     action.append(SKAction.move(to: CGPoint(x: p.sprite.position.x,
                                                             y: p.sprite.position.y),
@@ -86,7 +83,7 @@ class DroppedItem: SpaceObject {
                     return
                 }
                 
-                nextPiece = p
+                nextPiece = p.followingPiece
             }
         }
     }
