@@ -8,7 +8,13 @@
 
 import Foundation
 
-enum ItemType {case Scrap, Nuclear, Precious, Water, Currency}
+enum ItemType : CaseIterable {
+    case Scrap,
+         Nuclear,
+         Precious,
+         Water,
+         Currency
+}
 
 struct Item {
     var type: ItemType
@@ -19,45 +25,52 @@ extension Item {
 }
 
 class Inventory {
-    var maxCapacity : Int
-    var remainingCapacity : Int
-    var usedSpace : Int
-    var items : [Item]
+    var maxCapacities : [ItemType:Int]
+    var items : [ItemType:Int]
     
     init() {
-        maxCapacity = 100
-        usedSpace = 0
-        remainingCapacity = maxCapacity - usedSpace
-        items = []
+        maxCapacities = [ItemType:Int]()
+        items = [ItemType:Int]()
+        
+        for type in ItemType.allCases {
+            maxCapacities[type] = 100
+            items[type] = 0
+        }
     }
     
-    init(_ maxCap: Int, _ used: Int) {
-        maxCapacity = maxCap
-        usedSpace = used
-        remainingCapacity = maxCapacity - usedSpace
-        items = []
+    init(_ maxCapacities: [ItemType:Int], _ items: [ItemType:Int]) {
+        self.maxCapacities = maxCapacities
+        self.items = items
     }
     
-    func getRemainingCapacity() -> Int {
-        self.remainingCapacity = maxCapacity - usedSpace
-        return remainingCapacity
+    func getRemainingCapacity(for type: ItemType) -> Int {
+        return maxCapacities[type]! - items[type]!
     }
     
     func addItem(item: Item) -> Bool {
+        let remainingCapacity = maxCapacities[item.type]! - items[item.type]!
         if item.value > remainingCapacity {
             return false
         }
         
-        items.append(item)
-        usedSpace = usedSpace + item.value
-        remainingCapacity = maxCapacity - usedSpace
-        
+        items[item.type] = items[item.type]! + item.value
         return true
     }
+    
+    func remove(from type: ItemType, quantity: Int) -> Item? {
+        if items[type]! >= quantity {
+            let removedItem = Item(type: type, value: quantity)
+            items[type]! = items[type]! - quantity
+            
+            return removedItem
+        }
+        
+        return nil
+    }
 
-    func getAll() -> [Item] {
+    func getAll() -> [ItemType:Int] {
         return items
     }
 }
 
-let NO_INVENTORY = Inventory(0,0)
+let NO_INVENTORY = Inventory()
