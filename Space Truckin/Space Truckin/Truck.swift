@@ -19,6 +19,7 @@ class TruckPiece: SpaceObject {
     let mineDuration: TimeInterval = 5.0
     var lost = false
     var releashing = false
+    var isHead = false
     
     convenience init(sprite s1: SKSpriteNode) {
         self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, 0)
@@ -233,6 +234,7 @@ class TruckChain {
 
     init(head h: TruckPiece) {
         head = h
+        head.isHead = true
         tail = head
         truckPieces = []
         offset = head.sprite.size.height

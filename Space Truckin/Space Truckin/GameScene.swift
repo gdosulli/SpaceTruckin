@@ -449,10 +449,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             firstBody = contact.bodyB
             secondBody = contact.bodyA
         }
-        print("normal: \(contact.contactNormal)")
+        //print("normal: \(contact.contactNormal)")
         
-        print( (firstBody.node as? SKSpriteNode)?.name )
-        print( (secondBody.node as? SKSpriteNode)?.name )
+        //print( (firstBody.node as? SKSpriteNode)?.name )
+        //print( (secondBody.node as? SKSpriteNode)?.name )
 
         if let sprite = firstBody.node as? SKSpriteNode{
             firstObject = objectsInScene[sprite.name]
@@ -462,11 +462,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             secondObject = objectsInScene[sprite.name]
         }
 
-        print("obj1: \(firstObject)")
-        print("obj2: \(secondObject)")
+        //print("obj1: \(firstObject)")
+        //print("obj2: \(secondObject)")
 
         if let object1 = firstObject, let object2 = secondObject {
-            print("objects")
+            //print("objects")
             object1.onImpact(with: object2, contact)
             object2.onImpact(with: object1, contact)
         }

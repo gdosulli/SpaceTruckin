@@ -58,7 +58,37 @@ class DroppedItem: SpaceObject {
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
         //TODO add item to player inventory w/ animation
         //possibly make func to pull into inventory
-        onDestroy()
+        
+        
+        
+        if let truckPiece = obj as? TruckPiece,
+           truckPiece.isHead {
+            if truckPiece.inventory.addItem(item: item) {
+                print("\(item.value) \(item.type) added to head")
+                onDestroy()
+                return
+            }
+            var nextPiece = truckPiece
+            while let p = nextPiece.followingPiece {
+                if p.inventory.addItem(item: item) {
+                    // TODO add animation from current position to capsule
+                    let duration : TimeInterval = 1
+                    var action  = [SKAction]()
+                    action.append(SKAction.move(to: CGPoint(x: p.sprite.position.x,
+                                                            y: p.sprite.position.y),
+                                                duration: duration))
+                    
+                    action.append(SKAction.removeFromParent())
+                    sprite.run(SKAction.sequence(action))
+                    
+                    
+                    print("\(item.value) \(item.type) added to capsule")
+                    return
+                }
+                
+                nextPiece = p
+            }
+        }
     }
     
     override func onDestroy() {
