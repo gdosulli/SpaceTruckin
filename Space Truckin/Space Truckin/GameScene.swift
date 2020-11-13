@@ -117,7 +117,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var menu: DropDownMenu!
     var touchedButton = false
     
-    var objectsInScene: [String? : SpaceObject] = [:]
+    var objectsInScene: [SKSpriteNode? : SpaceObject] = [:]
     
     // array for randomaly choosing an asteroid to load
     var asteroids = ["asteroid_normal", "asteroid_precious", "asteroid_radioactive"]
@@ -129,7 +129,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var musicPlayer: MusicPlayer!
     
     var explosions: [SKTexture]! //TODO: consider moving this to a better home
-    var destroyedNodes: (Set<String?>) = []
+    var destroyedNodes: (Set<SKSpriteNode?>) = []
     var destroyTimer: Timer!
     var swarm = false
 
@@ -166,7 +166,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         for c in player.chain.getAllPieces() {
             
-            objectsInScene[c.sprite.name] = c
+            objectsInScene[c.sprite] = c
             
             self.addChild(c.sprite!)
             self.addChild(c.thruster)
@@ -239,30 +239,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // checks which node was touched and preforms that action
         if let name = touchedNode.name {
             touchedButton = true
-            if name == "action menu" {
+            switch name {
+            case "action menu":
                 menu.clicked()
-            } else if name == "map" {
+            case "map":
                 //TODO: switch to map view
                 menu.clicked()
-            } else if name == "cargo" {
+            case "cargo":
                 menu.clicked()
-            } else if name == "stop" || name == "start" {
+            case "stop",
+                 "start":
                 menu.stop()
                 stopped = !stopped
-            } else if name == "mine" {
+            case "mine":
                 //TODO: start mining
                 menu.clicked()
                 //musicPlayer.interrupt(withMood: Mood.DARK)
                 player.chain.mine(for: 1.5)
-            } else if name == "pause" {
+            case "pause":
                 //TODO: need to actually pause the game
                 gameIsPaused = true
                 menu.clicked()
                 musicPlayer.skip()
-            } else {
+            case "capsule":
+                print("tapped capsule")
+            default:
                 touchedButton = false
             }
-        }else{
+        } else {
             touchedButton = false
         }
         if !touchedButton{
@@ -323,7 +327,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             object.value.move(by: delta)
             object.value.update()
             if object.value.destroyed {
-                destroyedNodes.insert(object.value.sprite.name)
+                destroyedNodes.insert(object.value.sprite)
             }
         }
         
@@ -360,7 +364,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let spawnPoint = getRandPos(for: debrisSprite)
         debris.spawn(at: spawnPoint)
-        objectsInScene[debris.sprite.name] = debris
+        objectsInScene[debris.sprite] = debris
     }
     
     @objc func spawnAsteroid() {
@@ -390,7 +394,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ast.spawn(at: spawnPoint)
         
         // add asteroid to asteroids
-        objectsInScene[ast.sprite.name] = ast
+        objectsInScene[ast.sprite] = ast
     }
     
     // function returns random offscreen position for space object projectile
@@ -455,11 +459,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //print( (secondBody.node as? SKSpriteNode)?.name )
 
         if let sprite = firstBody.node as? SKSpriteNode{
-            firstObject = objectsInScene[sprite.name]
+            firstObject = objectsInScene[sprite]
         }
         
         if let sprite = secondBody.node as? SKSpriteNode{
-            secondObject = objectsInScene[sprite.name]
+            secondObject = objectsInScene[sprite]
         }
 
         //print("obj1: \(firstObject)")
@@ -484,7 +488,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let drop = DroppedItem(sprite: SKSpriteNode(imageNamed: DroppedItem.filenames[item.type.rawValue]), item: item, speed: 50, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
             
             drop.spawn(at: CGPoint(x: point.x + 10 * CGFloat(i), y: point.y + 10 * CGFloat(i)))
-            objectsInScene[drop.sprite.name] = drop
+            objectsInScene[drop.sprite] = drop
             self.addChild(drop.sprite)
         }
     }
@@ -497,7 +501,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for i in removedObjects {
             print("boom")
             objectsInScene[i]?.onDestroy()
-            objectsInScene.removeValue(forKey: objectsInScene[i]?.sprite.name)
+            objectsInScene.removeValue(forKey: objectsInScene[i]?.sprite)
         }
         
        

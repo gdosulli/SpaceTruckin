@@ -78,7 +78,7 @@ class Asteroid : SpaceObject {
             let drop = DroppedItem(sprite: SKSpriteNode(imageNamed: DroppedItem.filenames[item.type.rawValue]), item: item, speed: 120, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
 
             drop.spawn(at: CGPoint(x: point.x + 10 * CGFloat(i), y: point.y + 10 * CGFloat(i)))
-            (self.sprite.parent as? GameScene)!.objectsInScene[drop.sprite.name] = drop
+            (self.sprite.parent as? GameScene)!.objectsInScene[drop.sprite] = drop
             self.sprite.parent!.addChild(drop.sprite)
         }
     }

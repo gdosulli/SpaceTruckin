@@ -63,6 +63,8 @@ class TruckPiece: SpaceObject {
         sprite.physicsBody?.collisionBitMask = 0
         thruster.zPosition = sprite.zPosition - 2
         thruster.position = sprite.position
+        
+        sprite.name = "capsule"
     }
     
     
@@ -177,7 +179,7 @@ class TruckPiece: SpaceObject {
         var followPiece: TruckPiece? = piece
         while let p = followPiece {
             p.releashing = true
-            print("reattaching\(p.sprite.name)")
+            print("reattaching\(String(describing: p.sprite.name))")
             p.collisionCategory = CollisionCategories.TRUCK_CATEGORY
             p.testCategory = CollisionCategories.ASTEROID_CATEGORY
             p.sprite.physicsBody?.categoryBitMask = self.collisionCategory
