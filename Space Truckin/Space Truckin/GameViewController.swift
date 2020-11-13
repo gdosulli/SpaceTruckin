@@ -42,7 +42,6 @@ class GameViewController: UIViewController {
                 
                 scene.size = CGSize(width: screenWidth, height: screenHeight)
                 
-                
                 // Present the scene
                 view.presentScene(scene)
             }

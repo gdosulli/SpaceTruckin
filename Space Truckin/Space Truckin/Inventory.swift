@@ -14,8 +14,8 @@ enum ItemType : Int, CaseIterable {
          Precious,
          Water,
          Oxygen,
-         Stone,
-         Currency
+         Stone
+         //Currency
 }
 
 struct Item {

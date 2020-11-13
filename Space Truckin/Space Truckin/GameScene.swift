@@ -18,6 +18,15 @@ struct Player {
         return chain.getChildren()
     }
     
+    func getClickedPiece(from node: SKSpriteNode) -> TruckPiece? {
+        for piece in chain.getAllPieces() {
+            if piece.sprite === node {
+                return piece
+            }
+        }
+        return nil
+    }
+    
     
     func update(by delta: CGFloat) {
 //        head.move(by: delta)
@@ -92,12 +101,79 @@ struct DropDownMenu {
     
 }
 
+struct SelectedInventory {
+    var inventory: Inventory
+    var capsule: SKSpriteNode
+    var invTypes: [ItemType:SKSpriteNode]
+    var invLabels: [ItemType:SKLabelNode]
+    var baseOpacity: CGFloat
+    var fadeInterval: TimeInterval
+    var fadeTime: TimeInterval
+    var lastFade: TimeInterval = 0
+    var capsuleClicked = false
+    var faded = false
+    
+    mutating func update(_ currentTime: TimeInterval) {
+        refreshLabels()
+        
+        if capsuleClicked {
+            capsuleClicked = false
+            lastFade = currentTime
+        } else if currentTime - lastFade >= fadeInterval && !faded {
+            fadeOpacity()
+            lastFade = currentTime
+        }
+    }
+    
+    func move(to position: CGPoint) {
+        var pos = position
+        
+        capsule.position = position
+        pos.y = pos.y - UIScreen.main.bounds.height / 4
+        for type in ItemType.allCases {
+            invTypes[type]?.position = pos
+            invLabels[type]?.position.x = pos.x + UIScreen.main.bounds.width / 8
+            invLabels[type]?.position.y = pos.y - UIScreen.main.bounds.height / 15
+            
+            pos.y = pos.y - UIScreen.main.bounds.height / 5
+        }
+    }
+    
+    func refreshLabels() {
+        for type in ItemType.allCases {
+            invLabels[type]?.text = "\(String(describing: inventory.items[type]!)) / \(String(describing: inventory.maxCapacities[type]!))"
+        }
+    }
+    
+    mutating func fadeOpacity() {
+        let fadeAction = SKAction.fadeAlpha(to: baseOpacity, duration: fadeTime)
+        capsule.run(fadeAction)
+        for type in ItemType.allCases {
+            invTypes[type]?.run(fadeAction)
+            invLabels[type]?.run(fadeAction)
+        }
+        faded = true
+    }
+    
+    mutating func resetOpacity() {
+        capsule.alpha = 1
+        for type in ItemType.allCases {
+            invTypes[type]?.alpha = 1
+            invLabels[type]?.alpha = 1
+        }
+        capsuleClicked = true
+        faded = false
+    }
+}
+
 
 
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var player: Player!
     var stopped = false
+    
+    var selectedInventory: SelectedInventory!
     
     var frameWidth: CGFloat!
     var frameHeight: CGFloat!
@@ -201,6 +277,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for b in buttons {
             self.addChild(b)
         }
+        
+        var invTypes = [ItemType:SKSpriteNode]()
+        var invLabels = [ItemType:SKLabelNode]()
+        
+        let capsule = SKSpriteNode(imageNamed: "space_truck_cab")
+        capsule.setScale(0.75)
+        capsule.zPosition = 100
+        capsule.isUserInteractionEnabled = false
+        capsule.anchorPoint = CGPoint(x: 1, y: 1)
+        //capsule.size = CGSize(width: frameWidth/5, height: frameHeight/5)
+        self.addChild(capsule)
+        for type in ItemType.allCases {
+            let item = SKSpriteNode(imageNamed: DroppedItem.filenames[type.rawValue])
+            item.zPosition = 100
+            item.isUserInteractionEnabled = false
+            item.anchorPoint = CGPoint(x: 1, y: 1)
+            item.size = CGSize(width: frameWidth/8, height: frameHeight/8)
+            
+            let label = SKLabelNode(fontNamed: "AvenirNext-Bold")
+            label.zPosition = 100
+            label.fontColor = UIColor.white
+            label.verticalAlignmentMode = SKLabelVerticalAlignmentMode.top
+            label.fontSize = 45
+            
+            invTypes[type] = item
+            invLabels[type] = label
+            self.addChild(item)
+            self.addChild(label)
+        }
+        
+        selectedInventory = SelectedInventory(inventory: player.head.inventory,
+                                              capsule: capsule,
+                                              invTypes: invTypes,
+                                              invLabels: invLabels,
+                                              baseOpacity: 0.5,
+                                              fadeInterval: 3,
+                                              fadeTime: 1.5)
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
@@ -263,6 +376,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 musicPlayer.skip()
             case "capsule":
                 print("tapped capsule")
+                if let selectedPiece = player.getClickedPiece(from: touchedNode as! SKSpriteNode) {
+                    selectedInventory.inventory = selectedPiece.inventory
+                    selectedInventory.capsule.texture = selectedPiece.sprite.texture
+                    selectedInventory.resetOpacity()
+                }
             default:
                 touchedButton = false
             }
@@ -336,11 +454,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         updateCamera()
         
         menu.move(to: CGPoint(x: cam.position.x + frameWidth - frameWidth/10, y:  cam.position.y + frameHeight))
+        selectedInventory.move(to: CGPoint(x: cam.position.x - frameWidth + frameWidth/5,
+                                           y:  cam.position.y + frameHeight - frameHeight/10))
+        selectedInventory.update(currentTime)
         
         musicPlayer.update()
-        
-
-        
         
     }
     
