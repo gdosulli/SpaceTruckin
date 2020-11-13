@@ -109,6 +109,9 @@ struct SelectedInventory {
     var baseOpacity: CGFloat
     var fadeInterval: TimeInterval
     var fadeTime: TimeInterval
+    var frameWidth: CGFloat
+    var frameHeight: CGFloat
+    
     var lastFade: TimeInterval = 0
     var capsuleClicked = false
     var faded = false
@@ -129,13 +132,13 @@ struct SelectedInventory {
         var pos = position
         
         capsule.position = position
-        pos.y = pos.y - UIScreen.main.bounds.height / 4
+        pos.y = pos.y - frameHeight / 8
         for type in ItemType.allCases {
             invTypes[type]?.position = pos
-            invLabels[type]?.position.x = pos.x + UIScreen.main.bounds.width / 8
-            invLabels[type]?.position.y = pos.y - UIScreen.main.bounds.height / 15
+            invLabels[type]?.position.x = pos.x + frameWidth / 15
+            invLabels[type]?.position.y = pos.y - invLabels[type]!.fontSize
             
-            pos.y = pos.y - UIScreen.main.bounds.height / 5
+            pos.y = pos.y - frameHeight / 7
         }
     }
     
@@ -293,13 +296,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             item.zPosition = 100
             item.isUserInteractionEnabled = false
             item.anchorPoint = CGPoint(x: 1, y: 1)
-            item.size = CGSize(width: frameWidth/8, height: frameHeight/8)
+            item.size = CGSize(width: frameWidth/8, height: frameWidth/8)
             
             let label = SKLabelNode(fontNamed: "AvenirNext-Bold")
             label.zPosition = 100
             label.fontColor = UIColor.white
             label.verticalAlignmentMode = SKLabelVerticalAlignmentMode.top
-            label.fontSize = 45
+            label.fontSize = frameWidth / 25
             
             invTypes[type] = item
             invLabels[type] = label
@@ -313,7 +316,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                               invLabels: invLabels,
                                               baseOpacity: 0.5,
                                               fadeInterval: 3,
-                                              fadeTime: 1.5)
+                                              fadeTime: 1.5,
+                                              frameWidth: frameWidth,
+                                              frameHeight: frameHeight)
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
