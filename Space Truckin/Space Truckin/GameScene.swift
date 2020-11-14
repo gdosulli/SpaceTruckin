@@ -216,7 +216,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         var invTypes = [ItemType:SKSpriteNode]()
-        var invLabels = [ItemType:SKLabelNode]()
+        var invBars = [ItemType:InterfaceBar]()
         
         let capsule = SKSpriteNode(imageNamed: "space_truck_cab")
         capsule.setScale(0.75)
@@ -231,36 +231,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             item.isUserInteractionEnabled = false
             item.anchorPoint = CGPoint(x: 1, y: 1)
             item.size = CGSize(width: frameWidth/8, height: frameWidth/8)
+            self.addChild(item)
             
-            let label = SKLabelNode(fontNamed: "AvenirNext-Bold")
-            label.zPosition = 100
-            label.fontColor = UIColor.white
-            label.verticalAlignmentMode = SKLabelVerticalAlignmentMode.top
-            label.fontSize = frameWidth / 25
+            let bar = createStorageBar(size: CGSize(width: frameWidth * 0.2,
+                                                    height: frameHeight * 0.05))
+            for child in bar.getChildren() {
+                child.zPosition = 100
+                self.addChild(child)
+            }
             
             invTypes[type] = item
-            invLabels[type] = label
-            self.addChild(item)
-            self.addChild(label)
+            invBars[type] = bar
         }
         
         selectedInventory = SelectedInventory(inventory: player.head.inventory,
                                               capsule: capsule,
                                               invTypes: invTypes,
-                                              invLabels: invLabels,
+                                              invBars: invBars,
                                               baseOpacity: 0.5,
                                               fadeInterval: 3,
                                               fadeTime: 1.5,
                                               frameWidth: frameWidth,
                                               frameHeight: frameHeight)
-        
-        
-        // bar stuff
-        storageBar = createStorageBar(size: CGSize(width: self.frame.width * 0.2, height: 25.0))
-        
-        for child in storageBar.getChildren() {
-            self.addChild(child)
-        }
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
@@ -396,8 +388,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         
-        storageBar.update()
-        storageBar.move(to: CGPoint(x: cam.position.x - 150, y: cam.position.y))
         
         
         // we could maybe do this in one bigger for-loop, looping through all children
