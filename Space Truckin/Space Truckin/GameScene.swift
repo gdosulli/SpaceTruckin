@@ -143,6 +143,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var destroyedNodes: (Set<SKSpriteNode?>) = []
     var destroyTimer: Timer!
     var swarm = false
+    
+    var storageBar: InterfaceBar!
 
 
     override func didMove(to view: SKView) {
@@ -251,6 +253,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                               fadeTime: 1.5,
                                               frameWidth: frameWidth,
                                               frameHeight: frameHeight)
+        
+        
+        // bar stuff
+        storageBar = createStorageBar(size: CGSize(width: self.frame.width * 0.2, height: 25.0))
+        
+        for child in storageBar.getChildren() {
+            self.addChild(child)
+        }
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
@@ -296,10 +306,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 //TODO: switch to map view
                 menu.clicked()
             case "cargo":
+                camScale += 1
                 menu.clicked()
             case "stop",
                  "start":
                 menu.stop()
+                player.head.circle = !player.head.circle
                 stopped = !stopped
             case "mine":
                 //TODO: start mining
@@ -309,6 +321,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             case "pause":
                 //TODO: need to actually pause the game
                 gameIsPaused = true
+                camScale -= 1
                 menu.clicked()
                 musicPlayer.skip()
             case "capsule":
@@ -325,6 +338,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             touchedButton = false
         }
         if !touchedButton{
+            player.head.circle = false
             player.head.changeAngleTo(point: pos)
         }
 
@@ -357,6 +371,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     /// UPDATE
+    
+    // TODO: I wanna be able to zoom in and out on the screen
+    // I also wanna be able to slow down and speed up
+    
+    // You might wanna slow down if you're in an area with too many other ships
+    // Maybe certain areas will be "Stellar No-Wake Zones" where cops swarm you if you're caught speeding
+    // or carrying illegal contraband 
 
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
@@ -373,6 +394,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if !stopped {
             player.update(by: delta)
         }
+        
+        
+        storageBar.update()
+        storageBar.move(to: CGPoint(x: cam.position.x - 150, y: cam.position.y))
         
         
         // we could maybe do this in one bigger for-loop, looping through all children
@@ -402,8 +427,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func updateCamera() {
         cam.xScale = camScale
         cam.yScale = camScale
-        cam.position = player.head.sprite.position
-        
+        if !player.head.circle {
+            cam.position = player.head.sprite.position
+        } 
     }
     
     @objc func spawnDebris() {

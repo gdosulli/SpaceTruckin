@@ -50,7 +50,9 @@ class Debris : SpaceObject {
         if !destroyed {
             destroyed = true
             explode()
+        
             let duration = Double.random(in: 0.7...1.3)
+            expand(amount: 0.2, duration: duration/3)
             let removeDate = Date().addingTimeInterval(duration)
             let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
             RunLoop.main.add(timer, forMode: .common)

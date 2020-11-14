@@ -83,8 +83,9 @@ class SpaceObject : Movable {
         fatalError("Subclasses need to implement the `onDestroy()` method.")
     }
     
-    
-
+    func expand(amount: CGFloat, duration: TimeInterval) {
+        // code for expanding
+    }
     
     func explode(){
         sprite.run(SKAction.animate(with: SpaceObject.explosionAnimation, timePerFrame: 0.1, resize: false, restore: false))
