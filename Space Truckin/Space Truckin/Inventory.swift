@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SpriteKit
 
 enum ItemType : Int, CaseIterable {
         case Scrap,
@@ -72,6 +73,75 @@ class Inventory {
 
     func getAll() -> [ItemType:Int] {
         return items
+    }
+}
+
+struct SelectedInventory {
+    var inventory: Inventory
+    var capsule: SKSpriteNode
+    var invTypes: [ItemType:SKSpriteNode]
+    var invLabels: [ItemType:SKLabelNode]
+    var baseOpacity: CGFloat
+    var fadeInterval: TimeInterval
+    var fadeTime: TimeInterval
+    var frameWidth: CGFloat
+    var frameHeight: CGFloat
+    
+    var lastFade: TimeInterval = 0
+    var capsuleClicked = false
+    var faded = false
+    
+    mutating func update(_ currentTime: TimeInterval) {
+        refreshLabels()
+        
+        if capsuleClicked {
+            capsuleClicked = false
+            lastFade = currentTime
+        } else if currentTime - lastFade >= fadeInterval && !faded {
+            fadeOpacity()
+            lastFade = currentTime
+        }
+    }
+    
+    func move(to position: CGPoint) {
+        var pos = position
+        
+        capsule.position = position
+        pos.y = pos.y - frameHeight / 8
+        for type in ItemType.allCases {
+            invTypes[type]?.position = pos
+            invLabels[type]?.position.x = pos.x + frameWidth / 15
+            invLabels[type]?.position.y = pos.y - invLabels[type]!.fontSize
+            
+            pos.y = pos.y - frameHeight / 7
+            invTypes[type]?.
+        }
+    }
+    
+    func refreshLabels() {
+        for type in ItemType.allCases {
+            invLabels[type]?.text = "\(String(describing: inventory.items[type]!)) / \(String(describing: inventory.maxCapacities[type]!))"
+        }
+    }
+    
+    mutating func fadeOpacity() {
+        let fadeAction = SKAction.fadeAlpha(to: baseOpacity, duration: fadeTime)
+        capsule.run(fadeAction)
+        for type in ItemType.allCases {
+            invTypes[type]?.run(fadeAction)
+            invLabels[type]?.run(fadeAction)
+        }
+        faded = true
+    }
+    
+    mutating func resetOpacity() {
+        capsule.alpha = 1
+        for type in ItemType.allCases {
+            invTypes[type]?.alpha = 1
+            invLabels[type]?.alpha = 1
+        }
+        capsuleClicked = true
+        faded = false
     }
 }
 
