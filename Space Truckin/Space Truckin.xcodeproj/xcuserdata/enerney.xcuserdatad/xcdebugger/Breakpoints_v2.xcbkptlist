@@ -14,9 +14,9 @@
             filePath = "Space Truckin/Truck.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
-            landmarkName = "onImpact(with:_:)"
+            startingLineNumber = "224"
+            endingLineNumber = "224"
+            landmarkName = "getChildren()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

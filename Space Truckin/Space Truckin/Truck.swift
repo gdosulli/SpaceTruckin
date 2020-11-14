@@ -20,6 +20,7 @@ class TruckPiece: SpaceObject {
     var lost = false
     var releashing = false
     var isHead = false
+    var circle = false
     
     convenience init(sprite s1: SKSpriteNode) {
         self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, 0)
@@ -65,6 +66,7 @@ class TruckPiece: SpaceObject {
         thruster.position = sprite.position
         
         sprite.name = "capsule"
+
     }
     
     
@@ -117,6 +119,12 @@ class TruckPiece: SpaceObject {
                     deltaMod = deltaMod * speedupMod
                     turnMod = 180
                 }
+            }
+            
+            if circle {
+                targetAngle = sprite.zRotation - CGFloat(Double.pi / 8)
+                turn(by: delta * 10)
+                deltaMod *= 0.8
             }
             
             if !angleLocked {
@@ -299,6 +307,7 @@ class TruckChain {
     }
     
     func updateFollowers() {
+        head.update()
         for p in truckPieces {
             p.update()
             if let target = p.targetPiece{
