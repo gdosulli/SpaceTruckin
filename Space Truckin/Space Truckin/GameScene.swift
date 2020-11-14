@@ -462,11 +462,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if !stopped {
             player.update(by: delta)
         }
-        
-        
+        //TEMP STORAGE BAR STUFF
+        storageBar.updatePercentage(p: player.head.targetAngle/3.14)
         storageBar.update()
-        storageBar.move(to: CGPoint(x: cam.position.x - 150, y: cam.position.y))
-        
+        storageBar.move(to: CGPoint(x: cam.position.x - 150, y: cam.position.y - 300.0))
+
         
         // we could maybe do this in one bigger for-loop, looping through all children
         // in the scene, and executing move(by: delta) on every movable we encounter

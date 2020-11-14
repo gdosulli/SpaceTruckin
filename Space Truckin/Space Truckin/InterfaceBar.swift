@@ -16,6 +16,7 @@ class InterfaceBar {
     var percentage: CGFloat
     var maxWidth: CGFloat
     var height: CGFloat
+    var leftAligned = true
     
     init(emptyBar e: SKSpriteNode, fullBar f: SKSpriteNode, colors c: (UIColor, UIColor), maxWidth m: CGFloat, height h: CGFloat) {
         emptyBar = e
@@ -32,18 +33,27 @@ class InterfaceBar {
     
     
     func updatePercentage(p: CGFloat) {
-        percentage = p
+        if p > 1 {
+            percentage = 1.0
+        } else if p < 0 {
+            percentage = 0
+        } else {
+            percentage = p
+        }
     }
     
     func move(to pos: CGPoint) {
         emptyBar.position = pos
-        fullBar.position = pos
+        if leftAligned {
+            fullBar.position.x = pos.x - maxWidth/2 + fullBar.size.width / 2
+            fullBar.position.y = pos.y
+        } else {
+            fullBar.position = pos
+        }
     }
     
     func update() {
         fullBar.size.width = maxWidth * percentage
-
-
         // color gradient stuff
     }
     
