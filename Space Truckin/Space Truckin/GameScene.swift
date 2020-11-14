@@ -101,74 +101,6 @@ struct DropDownMenu {
     
 }
 
-struct SelectedInventory {
-    var inventory: Inventory
-    var capsule: SKSpriteNode
-    var invTypes: [ItemType:SKSpriteNode]
-    var invLabels: [ItemType:SKLabelNode]
-    var baseOpacity: CGFloat
-    var fadeInterval: TimeInterval
-    var fadeTime: TimeInterval
-    var frameWidth: CGFloat
-    var frameHeight: CGFloat
-    
-    var lastFade: TimeInterval = 0
-    var capsuleClicked = false
-    var faded = false
-    
-    mutating func update(_ currentTime: TimeInterval) {
-        refreshLabels()
-        
-        if capsuleClicked {
-            capsuleClicked = false
-            lastFade = currentTime
-        } else if currentTime - lastFade >= fadeInterval && !faded {
-            fadeOpacity()
-            lastFade = currentTime
-        }
-    }
-    
-    func move(to position: CGPoint) {
-        var pos = position
-        
-        capsule.position = position
-        pos.y = pos.y - frameHeight / 8
-        for type in ItemType.allCases {
-            invTypes[type]?.position = pos
-            invLabels[type]?.position.x = pos.x + frameWidth / 15
-            invLabels[type]?.position.y = pos.y - invLabels[type]!.fontSize
-            
-            pos.y = pos.y - frameHeight / 7
-        }
-    }
-    
-    func refreshLabels() {
-        for type in ItemType.allCases {
-            invLabels[type]?.text = "\(String(describing: inventory.items[type]!)) / \(String(describing: inventory.maxCapacities[type]!))"
-        }
-    }
-    
-    mutating func fadeOpacity() {
-        let fadeAction = SKAction.fadeAlpha(to: baseOpacity, duration: fadeTime)
-        capsule.run(fadeAction)
-        for type in ItemType.allCases {
-            invTypes[type]?.run(fadeAction)
-            invLabels[type]?.run(fadeAction)
-        }
-        faded = true
-    }
-    
-    mutating func resetOpacity() {
-        capsule.alpha = 1
-        for type in ItemType.allCases {
-            invTypes[type]?.alpha = 1
-            invLabels[type]?.alpha = 1
-        }
-        capsuleClicked = true
-        faded = false
-    }
-}
-
 
 
 
@@ -284,7 +216,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         var invTypes = [ItemType:SKSpriteNode]()
-        var invLabels = [ItemType:SKLabelNode]()
+        var invBars = [ItemType:InterfaceBar]()
         
         let capsule = SKSpriteNode(imageNamed: "space_truck_cab")
         capsule.setScale(0.75)
@@ -299,36 +231,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             item.isUserInteractionEnabled = false
             item.anchorPoint = CGPoint(x: 1, y: 1)
             item.size = CGSize(width: frameWidth/8, height: frameWidth/8)
+            self.addChild(item)
             
-            let label = SKLabelNode(fontNamed: "AvenirNext-Bold")
-            label.zPosition = 100
-            label.fontColor = UIColor.white
-            label.verticalAlignmentMode = SKLabelVerticalAlignmentMode.top
-            label.fontSize = frameWidth / 25
+            let bar = createStorageBar(size: CGSize(width: frameWidth * 0.2,
+                                                    height: frameHeight * 0.05))
+            for child in bar.getChildren() {
+                child.zPosition = 100
+                self.addChild(child)
+            }
             
             invTypes[type] = item
-            invLabels[type] = label
-            self.addChild(item)
-            self.addChild(label)
+            invBars[type] = bar
         }
         
         selectedInventory = SelectedInventory(inventory: player.head.inventory,
                                               capsule: capsule,
                                               invTypes: invTypes,
-                                              invLabels: invLabels,
+                                              invBars: invBars,
                                               baseOpacity: 0.5,
                                               fadeInterval: 3,
                                               fadeTime: 1.5,
                                               frameWidth: frameWidth,
                                               frameHeight: frameHeight)
-        
-        
-        // bar stuff
-        storageBar = createStorageBar(size: CGSize(width: self.frame.width * 0.2, height: 25.0))
-        
-        for child in storageBar.getChildren() {
-            self.addChild(child)
-        }
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
@@ -462,11 +386,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if !stopped {
             player.update(by: delta)
         }
-        //TEMP STORAGE BAR STUFF
-        storageBar.updatePercentage(p: player.head.targetAngle/3.14)
-        storageBar.update()
-        storageBar.move(to: CGPoint(x: cam.position.x - 150, y: cam.position.y - 300.0))
-
+        
+        
+        
         
         // we could maybe do this in one bigger for-loop, looping through all children
         // in the scene, and executing move(by: delta) on every movable we encounter
