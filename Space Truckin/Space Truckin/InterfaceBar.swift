@@ -25,6 +25,7 @@ class InterfaceBar {
         percentage = 0
         maxWidth = m
         emptyBar.size.width = maxWidth
+        fullBar.size.width = 0
         height = h
         emptyBar.size.height = height
         fullBar.size.height = height
@@ -41,7 +42,7 @@ class InterfaceBar {
             percentage = p
         }
     }
-    
+       
     func move(to pos: CGPoint) {
         emptyBar.position = pos
         if leftAligned {
@@ -53,7 +54,13 @@ class InterfaceBar {
     }
     
     func update() {
-        fullBar.size.width = maxWidth * percentage
+        let currWidth = fullBar.size.width
+        let newWidth = maxWidth * percentage
+        if currWidth != newWidth {
+            fullBar.run(SKAction.resize(toWidth: newWidth, duration: 0.5))
+        }
+
+
         // color gradient stuff
     }
     
