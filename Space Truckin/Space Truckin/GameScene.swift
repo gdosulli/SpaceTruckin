@@ -27,11 +27,26 @@ struct Player {
         return nil
     }
     
+    func setBoost(b: Bool) {
+        for p in chain.getAllPieces() {
+            p.setBoost(b: false)
+        }
+        
+        var truckPiece: TruckPiece?
+        truckPiece = head
+        while truckPiece != nil {
+            truckPiece?.setBoost(b: b)
+            truckPiece = truckPiece?.followingPiece
+        }
+    
+    }
+    
     
     func update(by delta: CGFloat) {
 //        head.move(by: delta)
 //        chain.movePieces(by: delta)
         chain.updateFollowers()
+        chain.checkForDestroyed()
     }
 }
 extension Player {
@@ -307,9 +322,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 stopped = !stopped
             case "mine":
                 //TODO: start mining
-                menu.clicked()
+                //menu.clicked()
                 //musicPlayer.interrupt(withMood: Mood.DARK)
-                player.chain.mine(for: 1.5)
+                //player.chain.mine(for: 1.5)
+                player.setBoost(b: true)
             case "pause":
                 //TODO: need to actually pause the game
                 gameIsPaused = true
@@ -339,11 +355,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func touchMoved(toPoint pos : CGPoint) {
         if !touchedButton{
             player.head.changeAngleTo(point: pos)
+            if player.head.boosted {
+                player.setBoost(b: false)
+            }
         }
     }
     
     func touchUp(atPoint pos : CGPoint) {
         //player.chain.dash(angle: 0)
+        print("up")
+        if player.head.boosted {
+            player.setBoost(b: false)
+        }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

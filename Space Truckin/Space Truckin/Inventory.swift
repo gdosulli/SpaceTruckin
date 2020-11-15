@@ -71,6 +71,8 @@ class Inventory {
         return nil
     }
     
+    
+    
     func getPercentFull(for type: ItemType) -> CGFloat {
         if maxCapacities[type]! != 0 {
             return CGFloat(items[type]!) / CGFloat(maxCapacities[type]!)

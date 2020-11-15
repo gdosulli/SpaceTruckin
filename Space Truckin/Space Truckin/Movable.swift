@@ -20,6 +20,8 @@ class Movable {
     var boostSpeed: CGFloat
     var normalSpeed: CGFloat
     var outsideForces: CGVector
+    var boosted = false
+    
     
     init(speed: CGFloat, rotation: CGFloat, angleInRadians: CGFloat, sprite: SKSpriteNode, boostSpeed: CGFloat) {
         self.speed = speed

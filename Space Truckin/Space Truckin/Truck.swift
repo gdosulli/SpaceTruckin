@@ -21,6 +21,7 @@ class TruckPiece: SpaceObject {
     var releashing = false
     var isHead = false
     var circle = false
+    var invincible = false
     
     convenience init(sprite s1: SKSpriteNode) {
         self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, 0)
@@ -91,6 +92,15 @@ class TruckPiece: SpaceObject {
         // deltaMod adjusts the delta to 'accelerate' and 'decelerate' to maintain follow distance of trucks
 
         super.moveForward(by: delta * 0.4)
+    }
+    
+    func setBoost(b: Bool) {
+        boosted = b
+        if b {
+            speed = boostSpeed
+        } else {
+            speed = normalSpeed
+        }
     }
     
     //Currently contains semi-hardcoded values for leashing truck pieces
@@ -208,6 +218,11 @@ class TruckPiece: SpaceObject {
         if obj.collisionCategory ==  CollisionCategories.ASTEROID_CATEGORY || obj.collisionCategory ==  CollisionCategories.SPACE_JUNK_CATEGORY {
             let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
             self.addForce(vec: newNormal)
+            durability -= obj.impactDamage
+            print("oof ouch \(durability)")
+            if durability <= 0 {
+                onDestroy()
+            }
         } else if obj.collisionCategory == CollisionCategories.LOST_CAPSULE_CATEGORY {
             let newNormal = CGVector(dx: -1 * contact.contactNormal.dx, dy: -1 * contact.contactNormal.dy)
             self.addForce(vec: newNormal)
@@ -216,7 +231,26 @@ class TruckPiece: SpaceObject {
     }
     
     override func onDestroy() {
-        print("Truck should be destroyed but i didnt code this whoops my bad sorry team")
+        //print("Truck should be destroyed but i didnt code this whoops my bad sorry team")
+        print("pop")
+        if !invincible {
+            destroyed = true
+            explode()
+        }
+//        let duration = Double.random(in: 0.4...0.7)
+//        let removeDate = Date().addingTimeInterval(duration)
+//        let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
+//        RunLoop.main.add(timer, forMode: .common)
+    }
+    
+    @objc func deleteSelf() {
+        dropItems(at: self.sprite.position)
+        self.sprite.removeFromParent()
+        self.thruster.removeFromParent()
+    }
+    
+    func dropItems(at: CGPoint) {
+        
     }
     
     override func getChildren() -> [SKNode?] {
@@ -249,10 +283,13 @@ class TruckChain {
     var dashIndex = 0
     var dashAngle: CGFloat = 0
     var maxLeashLength: CGFloat = 250
+    var destroyedIndices = [Int]()
+    var destroyedPieces = [TruckPiece]()
 
     init(head h: TruckPiece) {
         head = h
         head.isHead = true
+        head.invincible = true
         tail = head
         truckPieces = []
         offset = head.sprite.size.height
@@ -327,7 +364,7 @@ class TruckChain {
         var followPiece: TruckPiece? = piece
         while let p = followPiece {
             p.collisionCategory = CollisionCategories.LOST_CAPSULE_CATEGORY
-            p.testCategory = CollisionCategories.TRUCK_CATEGORY
+            p.testCategory = CollisionCategories.ASTEROID_CATEGORY
             p.sprite.physicsBody?.categoryBitMask = p.collisionCategory
             p.sprite.physicsBody?.contactTestBitMask = p.testCategory
             followPiece = p.followingPiece
@@ -340,6 +377,30 @@ class TruckChain {
         } else {
             self.greatDistance = false
         }
+    }
+    
+// TODO delay deletion so explosion play (i know how to do this)
+    func checkForDestroyed() {
+        if head.destroyed {
+            // game over
+        }
+        
+        for i in 0..<truckPieces.count {
+            if truckPieces[i].destroyed {
+                destroyedIndices.append(i)
+            }
+        }
+        
+        for i in destroyedIndices.reversed() {
+            let piece = truckPieces[i]
+            breakChain(at: piece)
+            for child in piece.getChildren() {
+                child?.removeFromParent()
+            }
+            truckPieces.remove(at: i)
+        }
+        
+        destroyedIndices.removeAll()
     }
     
     
