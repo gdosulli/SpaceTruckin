@@ -43,6 +43,7 @@
 		E373A3CA2557798800D04135 /* spacejazz.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E373A3C92557798000D04135 /* spacejazz.m4a */; };
 		E3899076255CB6350037B507 /* DroppedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3899075255CB6350037B507 /* DroppedItem.swift */; };
 		E3C95F76256071740009E84E /* InterfaceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C95F75256071740009E84E /* InterfaceBar.swift */; };
+		E3C9603C256469DE0009E84E /* EffectBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C9603B256469DE0009E84E /* EffectBubbles.swift */; };
 		E3FF20F4253B96A0002EC9C0 /* Stars.sks in Resources */ = {isa = PBXBuildFile; fileRef = E3FF20F2253B96A0002EC9C0 /* Stars.sks */; };
 		E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */; };
 /* End PBXBuildFile section */
@@ -107,6 +108,7 @@
 		E373A3C92557798000D04135 /* spacejazz.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = spacejazz.m4a; sourceTree = "<group>"; };
 		E3899075255CB6350037B507 /* DroppedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroppedItem.swift; sourceTree = "<group>"; };
 		E3C95F75256071740009E84E /* InterfaceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceBar.swift; sourceTree = "<group>"; };
+		E3C9603B256469DE0009E84E /* EffectBubbles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectBubbles.swift; sourceTree = "<group>"; };
 		E3FF20F2253B96A0002EC9C0 /* Stars.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Stars.sks; sourceTree = "<group>"; };
 		E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxyEmitter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -189,6 +191,7 @@
 				E373A3AE25549E1E00D04135 /* MusicPlayer.swift */,
 				E3899075255CB6350037B507 /* DroppedItem.swift */,
 				E3C95F75256071740009E84E /* InterfaceBar.swift */,
+				E3C9603B256469DE0009E84E /* EffectBubbles.swift */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -392,6 +395,7 @@
 				E34AB9C1252BAE6D007AF254 /* GameViewController.swift in Sources */,
 				E3C95F76256071740009E84E /* InterfaceBar.swift in Sources */,
 				82723AE825422E5B002A1E53 /* Asteroid.swift in Sources */,
+				E3C9603C256469DE0009E84E /* EffectBubbles.swift in Sources */,
 				E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */,
 				7F5C093C255324B80028F808 /* MenuViewController.swift in Sources */,
 				E34A4756254BDF8B00479EFB /* Debris.swift in Sources */,

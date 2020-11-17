@@ -349,7 +349,7 @@ class TruckChain {
             p.update()
             if let target = p.targetPiece{
                 if p.getGapSize(nextPiece: target) > maxLeashLength && !p.releashing{
-                    print("SNAP")
+                    //print("SNAP")
                     breakChain(at: p)
                 }
             }
@@ -357,9 +357,13 @@ class TruckChain {
     }
     
     func breakChain(at piece: TruckPiece){
+        let pos = piece.targetPiece?.sprite.position
         piece.targetPiece?.followingPiece = nil
         piece.targetPiece = nil
         piece.lost = true
+        let snap = EffectBubble(type: .SNAP, duration: 0.5)
+        piece.sprite.parent?.addChild(snap.getChildren()[0]!)
+        snap.spawn(at: pos!)
         
         var followPiece: TruckPiece? = piece
         while let p = followPiece {
