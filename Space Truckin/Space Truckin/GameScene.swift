@@ -329,7 +329,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             case "pause":
                 //TODO: need to actually pause the game
                 gameIsPaused = true
-                camScale -= 1
                 menu.clicked()
                 musicPlayer.skip()
             case "capsule":

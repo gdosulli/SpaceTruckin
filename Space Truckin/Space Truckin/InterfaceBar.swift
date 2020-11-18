@@ -9,6 +9,31 @@
 import Foundation
 import SpriteKit
 
+
+extension UIColor {
+    var rgba: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+        return (red, green, blue, alpha)
+    }
+    
+    func toColor(color c: UIColor, percentage p: CGFloat) -> UIColor {
+        let rgba1 = self.rgba
+        let rgba2 = c.rgba
+
+        let dr = rgba2.red - rgba1.red
+        let dg = rgba2.green - rgba1.green
+        let db = rgba2.blue - rgba1.blue
+
+        return UIColor(displayP3Red: rgba1.red + dr * p, green: rgba1.green + dg * p, blue: rgba1.blue + db * p, alpha: rgba1.alpha)
+        
+    }
+}
+
 class InterfaceBar {
     var emptyBar: SKSpriteNode
     var fullBar: SKSpriteNode
@@ -62,6 +87,7 @@ class InterfaceBar {
 
 
         // color gradient stuff
+        fullBar.color = colors.0.toColor(color: colors.1, percentage: percentage)
     }
     
     func getChildren() -> [SKNode] {
