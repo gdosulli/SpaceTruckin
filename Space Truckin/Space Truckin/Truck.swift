@@ -363,7 +363,9 @@ class TruckChain {
         piece.lost = true
         let snap = EffectBubble(type: .SNAP, duration: 0.5)
         piece.sprite.parent?.addChild(snap.getChildren()[0]!)
-        snap.spawn(at: pos!)
+        if let p = pos {
+            snap.spawn(at: p)
+        }
         
         var followPiece: TruckPiece? = piece
         while let p = followPiece {
