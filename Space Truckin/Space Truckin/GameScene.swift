@@ -160,6 +160,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var swarm = false
     
     var storageBar: InterfaceBar!
+    
+    var muteSound = false
 
 
     override func didMove(to view: SKView) {
@@ -311,6 +313,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 menu.clicked()
             case "map":
                 //TODO: switch to map view
+                muteSound = !muteSound
+                if muteSound {
+                    musicPlayer.mute()
+                } else {
+                    musicPlayer.unmute()
+                }
                 menu.clicked()
             case "cargo":
                 camScale += 1
