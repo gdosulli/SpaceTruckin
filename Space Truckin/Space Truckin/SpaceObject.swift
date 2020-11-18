@@ -11,12 +11,15 @@ import SpriteKit
 import GameplayKit
 
 
+//TODO: REMOVE COLLISIONCATEGORIES (FOR THE MOST PART) SUCH THAT ALL SPACEOBJECTS HAVE THE SAME CATEGORY
 struct CollisionCategories {
     static let TRUCK_CATEGORY: UInt32 = 0x1 << 0
     static let ASTEROID_CATEGORY: UInt32 = 0x1 << 1
     static let SPACE_JUNK_CATEGORY: UInt32 = 0x1 << 2
     static let LOST_CAPSULE_CATEGORY: UInt32 = 0x1 << 3
     static let ITEM_CATEGORY: UInt32 = 0x1 << 4
+    static let SPACE_STATION_CATEGORY: UInt32 = 0x1 << 5
+    
 }
 
 

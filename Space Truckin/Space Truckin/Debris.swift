@@ -63,7 +63,7 @@ class Debris : SpaceObject {
         let numItems = Int.random(in: 2...4)
         let quantity = 20
         let point = self.sprite.position
-        let spaceJunkItemTypes = [ItemType.Precious, ItemType.Scrap, ItemType.Nuclear]
+        let spaceJunkItemTypes = [ItemType.Scrap, ItemType.Oxygen, ItemType.Water]
 
         let item = Item(type: spaceJunkItemTypes.randomElement()!, value: 20)
         for i in 0..<numItems {

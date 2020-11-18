@@ -96,8 +96,9 @@ class InterfaceBar {
 }
 
 func createStorageBar(size: CGSize) -> InterfaceBar {
-    let color1 = UIColor.green
     let color2 = UIColor.red
+    let color1 = UIColor.green.toColor(color: color2, percentage: -0.2)
+
     let sprite1 = SKSpriteNode(color: UIColor.white, size: size)
     let sprite2 = SKSpriteNode(color: color1, size: size)
     

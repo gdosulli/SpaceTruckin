@@ -202,6 +202,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(c.thruster)
         }
         
+        let station = SpaceStation()
+        station.spawn(at: CGPoint(x: player.head.sprite.position.x + 3000, y: player.head.sprite.position.y))
+        for child in station.getChildren() {
+            self.addChild(child!)
+        }
             
         
         background = SKEmitterNode(fileNamed: "StarryBackground")
@@ -462,7 +467,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         self.addChild(debrisSprite)
         
-        let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, speed)
+        let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle, CollisionCategories.SPACE_JUNK_CATEGORY, CollisionCategories.TRUCK_CATEGORY, speed)
         
         let spawnPoint = getRandPos(for: debrisSprite)
         debris.spawn(at: spawnPoint)
