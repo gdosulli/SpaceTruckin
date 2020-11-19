@@ -296,8 +296,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                               fadeTime: 1.5,
                                               frameWidth: frameWidth,
                                               frameHeight: frameHeight)
-        
+        // sets the map
         let testMap = Map(sizeOf: (4, 4), threat: 3, maxObjects: 1, named: "test Area", frame: CGSize(width: frameWidth, height: frameHeight))
+        
+        // comment out testMap above and uncomment this to use the original map
+        //let testMap = Map(with: [["1/A2/D8/"]], sizeOf: (1, 1), threat: 3, starting: (0, 0), named: "test Area", frame: CGSize(width: frameWidth, height: frameHeight))
         menu.setMap(with: testMap, on: self)
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!

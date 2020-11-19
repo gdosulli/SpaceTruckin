@@ -110,6 +110,7 @@ class Map {
     }
     
     func printMap() {
+        print(map)
         print(currentLocation)
         for row in map {
             print(row)
