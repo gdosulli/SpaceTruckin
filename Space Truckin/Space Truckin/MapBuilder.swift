@@ -126,9 +126,9 @@ class Map {
             sector.isHidden = !sector.isHidden
             if sector.name == currSector {
                 if sector.size.height < sector.size.width {
-                    playerLabel.fontSize = sector.size.height/6
+                    playerLabel.fontSize = sector.size.height/8
                 } else {
-                    playerLabel.fontSize = sector.size.width/12
+                    playerLabel.fontSize = sector.size.width/16
                 }
                 playerLabel.position = CGPoint(x: sector.size.width/2, y: 0 - sector.size.height/12 - sector.size.height/2 - playerLabel.fontSize)
                 playerLabel.name = sector.name
@@ -170,9 +170,11 @@ class Map {
         let jumpButton = SKSpriteNode(imageNamed: "jump")
         jumpButton.name = "jump"
         jumpButton.position = CGPoint(x: infoScreen.size.width/4, y: 0 - infoScreen.size.height/4)
+        jumpButton.size = CGSize(width: infoScreen.size.width/5, height: infoScreen.size.height/5)
         let returnButton = SKSpriteNode(imageNamed: "return")
         returnButton.name = "return"
         returnButton.position = CGPoint(x: 0 - infoScreen.size.width/4, y: 0 - infoScreen.size.height/4)
+        returnButton.size = jumpButton.size
         infoScreen.addChild(returnButton)
         infoScreen.addChild(jumpButton)
         
@@ -211,9 +213,9 @@ class Map {
                 let label = SKLabelNode(fontNamed: FONT)
                 label.text = "Sector " + String(i) + "-" + String(j)
                 if sector.size.height < sector.size.width {
-                    label.fontSize = sector.size.height/4
+                    label.fontSize = sector.size.height/5
                 } else {
-                    label.fontSize = sector.size.width/8
+                    label.fontSize = sector.size.width/10
                 }
                 
                 label.fontColor = SKColor.black
