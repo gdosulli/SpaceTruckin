@@ -28,7 +28,7 @@ class TruckPiece: SpaceObject {
     }
     
     convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
-        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, piece.boostSpeed * 0.95)
+        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, piece.boostSpeed)
         piece.followingPiece = self
 
     }
@@ -125,6 +125,9 @@ class TruckPiece: SpaceObject {
                 } else if releashing {
                     deltaMod = deltaMod * releashingMod
                     turnMod = 240
+                } else if boosted && distToNext > gapMin {
+                    deltaMod = deltaMod * 1.2 //TODO make this a var
+                    turnMod = 120
                 } else if distToNext > gapMax{
                     deltaMod = deltaMod * speedupMod
                     turnMod = 180
@@ -474,7 +477,6 @@ class TruckChain {
         let newPos = CGPoint(x: lastPos.x - (cos(lastAngle) * offset), y: lastPos.y - (sin(lastAngle) * offset))
         
 
-        print(lastPiece.speed)
         piece.sprite.zPosition = lastPiece.sprite.zPosition-1
         piece.sprite.position = newPos
         piece.changeTargetAngle(to: lastAngle)

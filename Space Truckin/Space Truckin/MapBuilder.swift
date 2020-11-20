@@ -25,7 +25,7 @@ class Map {
     var infoScreen: SKSpriteNode!
     var sectorViews: [SKSpriteNode] = []
     var labels: [SKLabelNode] = []
-    let FONT = "Chalkduster"
+    let FONT = "Futura-CondensedMedium" //chalkduster
     
     var danger: Int = 0 // what objects are allowed to spawn
     var risk: Int = 15 // how fast they spawn
@@ -144,7 +144,7 @@ class Map {
         travelScreen.isHidden = true
         offsetX = frameSize.width/80
         offsetY = frameSize.height/80
-        let grayBox = UIColor(cgColor: CGColor(red: 0.57, green: 0.57, blue: 0.57, alpha: 1))
+        let grayBox = UIColor(displayP3Red: 0.57, green: 0.57, blue: 0.57, alpha: 1)
         
         let mapBackground = SKSpriteNode(imageNamed: "ComputerFrameXL")
         mapBackground.position = CGPoint(x: 0, y: 0)

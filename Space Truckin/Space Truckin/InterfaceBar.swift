@@ -49,7 +49,7 @@ class InterfaceBar {
         colors = c
         percentage = 0
         maxWidth = m
-        emptyBar.size.width = maxWidth
+        emptyBar.size.width = CGFloat(Int(maxWidth))
         fullBar.size.width = 0
         height = h
         emptyBar.size.height = height
@@ -79,12 +79,14 @@ class InterfaceBar {
     }
     
     func update() {
-        let currWidth = fullBar.size.width
-        let newWidth = maxWidth * percentage
-        if currWidth != newWidth {
-            fullBar.run(SKAction.resize(toWidth: newWidth, duration: 0.5))
+        var currWidth = fullBar.size.width
+        let newWidth = CGFloat(Int(maxWidth * percentage))
+        if currWidth < newWidth {
+            currWidth += 3 //Changes bar raising speed
+        } else if currWidth > newWidth {
+            currWidth -= 2 //Changes bar lowering speed
         }
-
+        fullBar.size.width = currWidth
 
         // color gradient stuff
         fullBar.color = colors.0.toColor(color: colors.1, percentage: percentage)

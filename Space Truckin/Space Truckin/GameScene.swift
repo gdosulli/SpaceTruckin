@@ -219,6 +219,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.chain.getLastPiece()))
             player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
             player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.chain.getLastPiece()))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
         }
         
         
@@ -251,6 +255,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         menuConroller.anchorPoint = CGPoint(x: 1, y: 1)
         menuConroller.size = CGSize(width: frameWidth/5, height: frameHeight/5)
         menu = DropDownMenu(controller: menuConroller, buttons: [], offset: 0)
+        
         
         menu.add(SKSpriteNode(imageNamed: "Mine"), called: "mine")
         menu.add(SKSpriteNode(imageNamed: "Map_button"), called: "map")
