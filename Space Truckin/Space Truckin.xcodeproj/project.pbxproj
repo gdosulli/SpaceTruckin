@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		7F5C093C255324B80028F808 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5C093B255324B80028F808 /* MenuViewController.swift */; };
 		7F5C094B2553B4B40028F808 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9BE252BAE6D007AF254 /* GameScene.swift */; };
+		7F75732F2566A9AB00C36CA5 /* MapBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F75732E2566A9AB00C36CA5 /* MapBuilder.swift */; };
+		7F7E297F255500ED00202B56 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F7E297E255500EC00202B56 /* Assets.xcassets */; };
 		8270C0B8254B73F700424235 /* StarryBackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8270C0B7254B73F700424235 /* StarryBackground.sks */; };
 		82723AE3254228D5002A1E53 /* SpaceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82723AE2254228D5002A1E53 /* SpaceObject.swift */; };
 		82723AE825422E5B002A1E53 /* Asteroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82723AE725422E5B002A1E53 /* Asteroid.swift */; };
@@ -67,6 +69,8 @@
 /* Begin PBXFileReference section */
 		7F5C0936255323C00028F808 /* Menu.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Menu.storyboard; sourceTree = "<group>"; };
 		7F5C093B255324B80028F808 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		7F75732E2566A9AB00C36CA5 /* MapBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapBuilder.swift; sourceTree = "<group>"; };
+		7F7E297E255500EC00202B56 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8270C0B7254B73F700424235 /* StarryBackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StarryBackground.sks; sourceTree = "<group>"; };
 		82723AE2254228D5002A1E53 /* SpaceObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceObject.swift; sourceTree = "<group>"; };
 		82723AE725422E5B002A1E53 /* Asteroid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asteroid.swift; sourceTree = "<group>"; };
@@ -189,6 +193,7 @@
 				E3899075255CB6350037B507 /* DroppedItem.swift */,
 				E3C95F75256071740009E84E /* InterfaceBar.swift */,
 				E3C9603B256469DE0009E84E /* EffectBubbles.swift */,
+				7F75732E2566A9AB00C36CA5 /* MapBuilder.swift */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -394,6 +399,7 @@
 				E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */,
 				7F5C093C255324B80028F808 /* MenuViewController.swift in Sources */,
 				E35AE45F25659891003DCE34 /* SpaceStation.swift in Sources */,
+				7F75732F2566A9AB00C36CA5 /* MapBuilder.swift in Sources */,
 				E34A4756254BDF8B00479EFB /* Debris.swift in Sources */,
 				E373A3B82554B44B00D04135 /* TruckScene.swift in Sources */,
 				82723AE3254228D5002A1E53 /* SpaceObject.swift in Sources */,

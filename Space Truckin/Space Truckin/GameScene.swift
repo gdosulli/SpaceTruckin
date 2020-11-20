@@ -65,7 +65,10 @@ struct DropDownMenu {
     var offset: CGFloat
     var menuIsOpen = false
     
-    func move(to position: CGPoint){
+    var map: Map!
+    var viewingSector: String!
+    
+    func move(menu position: CGPoint, map center: CGPoint, on scene: SKScene){
         controller.position = position
         
         for i in 0...buttons.count-1{
@@ -74,6 +77,7 @@ struct DropDownMenu {
             buttons[i].position.y = controller.position.y - dif
         }
         
+        map.moveMap(to: center)
     }
     
     func getButtons() -> [SKSpriteNode] {
@@ -114,6 +118,30 @@ struct DropDownMenu {
         }
     }
     
+    mutating func setMap(with newMap: Map, on scene: SKScene) {
+        if map != nil {
+            map.removeMap()
+        }
+        map = newMap
+        scene.addChild(map.mapView)
+        scene.addChild(map.infoScreen)
+        for sector in map.sectorViews {
+            scene.addChild(sector)
+        }
+        scene.addChild(map.travelScreen)
+    }
+    
+    mutating func viewSector(named name: String) {
+        viewingSector = name
+        map.showInfo(about: name)
+    }
+    
+    func travel() -> [String : Double] {
+        map.showMap()
+        map.travel(to: viewingSector)
+        return map.getSpawnTimes()
+    }
+    
 }
 
 
@@ -149,7 +177,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var asteroids = ["asteroid_normal", "asteroid_precious", "asteroid_radioactive"]
     var debris = ["satellite_1", "cell_tower1"]
     
-    var asteroidTimer : Timer!
+    var timers: [String: Timer] = [:]
     var gameIsPaused = false
     
     var musicPlayer: MusicPlayer!
@@ -275,6 +303,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                               fadeTime: 1.5,
                                               frameWidth: frameWidth,
                                               frameHeight: frameHeight)
+        // sets the map
+        let testMap = Map(sizeOf: (4, 4), threat: 3, maxObjects: 1, named: "test Area", frame: CGSize(width: frameWidth, height: frameHeight))
+        
+        // comment out testMap above and uncomment this to use the original map
+        //let testMap = Map(with: [["1/A2/D8/"]], sizeOf: (1, 1), threat: 3, starting: (0, 0), named: "test Area", frame: CGSize(width: frameWidth, height: frameHeight))
+        menu.setMap(with: testMap, on: self)
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
@@ -286,13 +320,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // timer for asteroids
 
         // also what if there were only a set number of mineable asteroids in any one area, forcing players to navigate elsewhere, as the player destroys more asteroids, more junk and smaller debris clutters the map
-        asteroidTimer = Timer.scheduledTimer(timeInterval: 2.0,
+        timers["Asteroids"] = Timer.scheduledTimer(timeInterval: 2.0,
                                              target: self,
                                              selector: #selector(spawnAsteroid),
                                              userInfo: nil,
                                              repeats: true)
         
-        asteroidTimer = Timer.scheduledTimer(timeInterval: 8.0,
+        timers["Debris"] = Timer.scheduledTimer(timeInterval: 8.0,
                                              target: self,
                                              selector: #selector(spawnDebris),
                                              userInfo: nil,
@@ -307,24 +341,53 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         musicPlayer = MusicPlayer(mood: Mood.PRESENT, setting: Setting.ALL)
     }
     
+    func setTimer(using mapTimers: [String: Double]) {
+        for timer in timers {
+            timer.value.invalidate()
+        }
+        if let asteroidDelay = mapTimers["Asteroids"] {
+            print("Asteroids every: ", asteroidDelay)
+            timers["Asteroids"] = Timer.scheduledTimer(timeInterval: asteroidDelay,
+                                                 target: self,
+                                                 selector: #selector(spawnAsteroid),
+                                                 userInfo: nil,
+                                                 repeats: true)
+        }
+        if let debrisDelay = mapTimers["Debris"] {
+            print("Debris every: ", debrisDelay)
+            timers["Debris"] = Timer.scheduledTimer(timeInterval: debrisDelay,
+                                                 target: self,
+                                                 selector: #selector(spawnDebris),
+                                                 userInfo: nil,
+                                                 repeats: true)
+        }
+        // clears scene of previous objects
+        for a in objectsInScene {
+            if let name = a.value.sprite.name {
+                if name.contains("local") {
+                    a.value.sprite.removeFromParent()
+                    objectsInScene.removeValue(forKey: a.key)
+                }
+            }
+        }
+    }
+    
     
     func touchDown(atPoint pos : CGPoint) {
         let touchedNode = self.atPoint(pos)
         // checks which node was touched and preforms that action
         if let name = touchedNode.name {
+            var realName = name
+            if name.contains("Sector ") {
+                realName =  "sector page"
+            }
             touchedButton = true
-            switch name {
+            switch realName {
             case "action menu":
                 menu.clicked()
             case "map":
                 //TODO: switch to map view
-                muteSound = !muteSound
-                if muteSound {
-                    musicPlayer.mute()
-                } else {
-                    musicPlayer.unmute()
-                }
-                menu.clicked()
+                menu.map.showMap()
             case "cargo":
                 camScale += 1
                 menu.clicked()
@@ -345,12 +408,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 menu.clicked()
                 musicPlayer.skip()
             case "capsule":
+                touchedButton = false
                 print("tapped capsule")
                 if let selectedPiece = player.getClickedPiece(from: touchedNode as! SKSpriteNode) {
                     selectedInventory.inventory = selectedPiece.inventory
                     selectedInventory.capsule.texture = selectedPiece.sprite.texture
                     selectedInventory.resetOpacity()
                 }
+            case "sector page":
+                menu.viewSector(named: name)
+            case "jump":
+                setTimer(using: menu.travel())
+                menu.clicked()
+                menu.map.animateTravel(on: self, with: self.frame.size)
+            case "return" :
+                menu.map.hideInfoScreen()
             default:
                 touchedButton = false
             }
@@ -441,10 +513,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         background.particlePosition = player.head.sprite.position
         updateCamera()
         
-        menu.move(to: CGPoint(x: cam.position.x + frameWidth - frameWidth/10, y:  cam.position.y + frameHeight))
+        
         selectedInventory.move(to: CGPoint(x: cam.position.x - frameWidth + frameWidth/5,
                                            y:  cam.position.y + frameHeight - frameHeight/10))
         selectedInventory.update(currentTime)
+        
+        menu.move(menu: CGPoint(x: cam.position.x + frameWidth - frameWidth/10, y:  cam.position.y + frameHeight), map: cam.position, on: self)
         
         musicPlayer.update()
         
@@ -471,6 +545,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let spawnPoint = getRandPos(for: debrisSprite)
         debris.spawn(at: spawnPoint)
+        
+        if let name = debris.sprite.name {
+            debris.sprite.name = "local" + name
+        }
+        
         objectsInScene[debris.sprite] = debris
     }
     
@@ -499,6 +578,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                            CollisionCategories.TRUCK_CATEGORY, speed)
         
         ast.spawn(at: spawnPoint)
+        
+        if let name = ast.sprite.name {
+            ast.sprite.name = "local" + name
+        }
         
         // add asteroid to asteroids
         objectsInScene[ast.sprite] = ast
