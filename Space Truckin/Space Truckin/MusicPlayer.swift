@@ -192,6 +192,14 @@ class MusicPlayer {
                       print(error.localizedDescription)
                   }
     }
+    
+    func mute() {
+        song?.setVolume(0, fadeDuration: 0.2)
+    }
+    
+    func unmute() {
+        song?.setVolume(globalVolume * currentSong!.relativeVolume, fadeDuration: 1)
+    }
 
     
     func update() {

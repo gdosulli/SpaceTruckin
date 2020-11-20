@@ -9,6 +9,31 @@
 import Foundation
 import SpriteKit
 
+
+extension UIColor {
+    var rgba: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+        return (red, green, blue, alpha)
+    }
+    
+    func toColor(color c: UIColor, percentage p: CGFloat) -> UIColor {
+        let rgba1 = self.rgba
+        let rgba2 = c.rgba
+
+        let dr = rgba2.red - rgba1.red
+        let dg = rgba2.green - rgba1.green
+        let db = rgba2.blue - rgba1.blue
+
+        return UIColor(displayP3Red: rgba1.red + dr * p, green: rgba1.green + dg * p, blue: rgba1.blue + db * p, alpha: rgba1.alpha)
+        
+    }
+}
+
 class InterfaceBar {
     var emptyBar: SKSpriteNode
     var fullBar: SKSpriteNode
@@ -24,7 +49,7 @@ class InterfaceBar {
         colors = c
         percentage = 0
         maxWidth = m
-        emptyBar.size.width = maxWidth
+        emptyBar.size.width = CGFloat(Int(maxWidth))
         fullBar.size.width = 0
         height = h
         emptyBar.size.height = height
@@ -54,14 +79,17 @@ class InterfaceBar {
     }
     
     func update() {
-        let currWidth = fullBar.size.width
-        let newWidth = maxWidth * percentage
-        if currWidth != newWidth {
-            fullBar.run(SKAction.resize(toWidth: newWidth, duration: 0.5))
+        var currWidth = fullBar.size.width
+        let newWidth = CGFloat(Int(maxWidth * percentage))
+        if currWidth < newWidth {
+            currWidth += 3 //Changes bar raising speed
+        } else if currWidth > newWidth {
+            currWidth -= 2 //Changes bar lowering speed
         }
-
+        fullBar.size.width = currWidth
 
         // color gradient stuff
+        fullBar.color = colors.0.toColor(color: colors.1, percentage: percentage)
     }
     
     func getChildren() -> [SKNode] {
@@ -70,8 +98,9 @@ class InterfaceBar {
 }
 
 func createStorageBar(size: CGSize) -> InterfaceBar {
-    let color1 = UIColor.green
     let color2 = UIColor.red
+    let color1 = UIColor.green.toColor(color: color2, percentage: -0.2)
+
     let sprite1 = SKSpriteNode(color: UIColor.white, size: size)
     let sprite2 = SKSpriteNode(color: color1, size: size)
     

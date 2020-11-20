@@ -28,7 +28,7 @@ class TruckPiece: SpaceObject {
     }
     
     convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
-        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, piece.boostSpeed * 0.95)
+        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, piece.boostSpeed)
         piece.followingPiece = self
 
     }
@@ -129,6 +129,9 @@ class TruckPiece: SpaceObject {
                 } else if releashing {
                     deltaMod = deltaMod * releashingMod
                     turnMod = 240
+                } else if boosted && distToNext > gapMin {
+                    deltaMod = deltaMod * 1.2 //TODO make this a var
+                    turnMod = 120
                 } else if distToNext > gapMax{
                     deltaMod = deltaMod * speedupMod
                     turnMod = 180
@@ -353,7 +356,7 @@ class TruckChain {
             p.update()
             if let target = p.targetPiece{
                 if p.getGapSize(nextPiece: target) > maxLeashLength && !p.releashing{
-                    print("SNAP")
+                    //print("SNAP")
                     breakChain(at: p)
                 }
             }
@@ -361,9 +364,15 @@ class TruckChain {
     }
     
     func breakChain(at piece: TruckPiece){
+        let pos = piece.targetPiece?.sprite.position
         piece.targetPiece?.followingPiece = nil
         piece.targetPiece = nil
         piece.lost = true
+        let snap = EffectBubble(type: .SNAP, duration: 0.5)
+        piece.sprite.parent?.addChild(snap.getChildren()[0]!)
+        if let p = pos {
+            snap.spawn(at: p)
+        }
         
         var followPiece: TruckPiece? = piece
         while let p = followPiece {
@@ -472,7 +481,6 @@ class TruckChain {
         let newPos = CGPoint(x: lastPos.x - (cos(lastAngle) * offset), y: lastPos.y - (sin(lastAngle) * offset))
         
 
-        print(lastPiece.speed)
         piece.sprite.zPosition = lastPiece.sprite.zPosition-1
         piece.sprite.position = newPos
         piece.changeTargetAngle(to: lastAngle)
