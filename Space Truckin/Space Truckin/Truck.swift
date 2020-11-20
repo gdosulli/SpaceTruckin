@@ -66,7 +66,11 @@ class TruckPiece: SpaceObject {
         thruster.zPosition = sprite.zPosition - 2
         thruster.position = sprite.position
         
-        sprite.name = "capsule"
+        if let name = sprite.name{
+            sprite.name = "capsule"+name
+        } else {
+            sprite.name = "capsule-"
+        }
 
     }
     
