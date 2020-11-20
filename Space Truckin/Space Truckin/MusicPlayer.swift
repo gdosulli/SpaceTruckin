@@ -10,7 +10,7 @@ import Foundation
 import AVFoundation
 
 enum Mood {case DARK, BRIGHT, CALM, INTERRUPTION, PRESENT}
-enum Setting {case TITLE_SCREEN, SPACE, STATION, CREDITS, ALL}
+enum Setting {case TITLE_SCREEN, SPACE, STATION, JUMP, CREDITS, ALL}
 
 class Song {
     let filename: String
@@ -66,6 +66,7 @@ struct MySongs {
     static let BRIGHT_SONG = Song(filename: "bright song", moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.CREDITS, Setting.ALL], volume: 0.4)
     static let VIBING = Song(filename: "vibing",moods: [Mood.CALM, Mood.BRIGHT], settings: [Setting.STATION, Setting.ALL], volume: 0.3)
     static let SPACEJAZZ = Song(filename: "spacejazz", moods: [Mood.CALM, Mood.PRESENT], settings: [Setting.SPACE, Setting.ALL])
+    static let JUMP = Song(filename: "warp sound", moods: [Mood.DARK], settings: [Setting.JUMP], volume: 0.5)
     
     // interruptions
     static let INTERRUPT1 = Song(filename: "interrupt1", moods: [Mood.INTERRUPTION, Mood.DARK], settings: [Setting.ALL], volume: 0.4)
@@ -84,7 +85,7 @@ class MusicPlayer {
     var currentSong: Song?
     var currentPlaylist: [Song] = []
     var globalVolume: Float = 2.0
-    
+    var muted = true
 
     
     
@@ -177,10 +178,11 @@ class MusicPlayer {
 
                       /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
                       song = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.m4a.rawValue)
-                song?.setVolume(0, fadeDuration: 0)
-                song?.setVolume(globalVolume * currentSong!.relativeVolume, fadeDuration: 3)
-
-                      /* iOS 10 and earlier require the following line:
+                    song?.setVolume(0, fadeDuration: 0) 
+                    if !muted {
+                            song?.setVolume(globalVolume * currentSong!.relativeVolume, fadeDuration: 3)
+                    }
+                          /* iOS 10 and earlier require the following line:
                       player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
 
                       guard let song = song else { return }
@@ -211,6 +213,11 @@ class MusicPlayer {
             }
             
         }
+    }
+    
+    func playSong(_ song: Song) {
+        currentSong = song
+        playSong()
     }
     
     func setLooping(loop: Bool) {

@@ -424,7 +424,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 menu.viewSector(named: name)
             case "jump":
                 setTimer(using: menu.travel())
-                menu.clicked()
+                musicPlayer.muted = false
+                musicPlayer.unmute()
+                musicPlayer.playSong(MySongs.JUMP)
+                musicPlayer.getPlaylist()
+                
                 menu.map.animateTravel(on: self, with: self.frame.size)
             case "return" :
                 menu.map.hideInfoScreen()
