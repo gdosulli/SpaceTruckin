@@ -198,7 +198,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var storageBar: InterfaceBar!
     
     var muteSound = false
-
+    
+    var boostLocked = false
 
     override func didMove(to view: SKView) {
         // Initialize screen height and width
@@ -454,14 +455,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc func handleDoubleTap(gesture: UITapGestureRecognizer) {
         print("double touch")
         player.setBoost(b: true)
+        boostLocked = true
+        let duration = 0.5
+        let unlockDate = Date().addingTimeInterval(duration)
+        let timer = Timer(fireAt: unlockDate, interval: 0, target: self, selector: #selector(unlockBoost), userInfo: nil, repeats: false)
+        RunLoop.main.add(timer, forMode: .common)
+
     }
     
+    @objc func unlockBoost() {
+        boostLocked = false
+        print("unlocked")
+    }
+    
+
     func touchMoved(toPoint pos : CGPoint) {
         if !touchedButton{
             player.head.changeAngleTo(point: pos)
-            if player.head.boosted {
-                player.setBoost(b: false)
-            }
         }
     }
     
@@ -469,7 +479,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //player.chain.dash(angle: 0)
         print("up")
         if player.head.boosted {
-            //player.setBoost(b: false)
+            if !boostLocked {
+                player.setBoost(b: false)
+            }
         }
         
     }
