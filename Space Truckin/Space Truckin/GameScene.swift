@@ -28,6 +28,14 @@ struct Player {
     }
     
     func setBoost(b: Bool) {
+        if b {
+            let size = head.sprite.size
+            head.sprite.texture = SKTexture(imageNamed: "second_drill")
+            head.sprite.size = size
+        } else {
+            head.sprite.texture = SKTexture(imageNamed: "space_truck_cab")
+        }
+            
         for p in chain.getAllPieces() {
             p.setBoost(b: false)
         }
@@ -256,8 +264,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         menuConroller.size = CGSize(width: frameWidth/5, height: frameHeight/5)
         menu = DropDownMenu(controller: menuConroller, buttons: [], offset: 0)
         
-        
-        menu.add(SKSpriteNode(imageNamed: "Mine"), called: "mine")
         menu.add(SKSpriteNode(imageNamed: "Map_button"), called: "map")
         menu.add(SKSpriteNode(imageNamed: "Cargo_button"), called: "cargo")
         menu.add(SKSpriteNode(imageNamed: "Stop"), called: "stop")
@@ -344,6 +350,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                              repeats: true)
         
         musicPlayer = MusicPlayer(mood: Mood.PRESENT, setting: Setting.ALL)
+        
+        // double tap stuff
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(gesture:)))
+        doubleTap.numberOfTapsRequired = 2
+        
+        self.scene?.view?.addGestureRecognizer(doubleTap)
     }
     
     func setTimer(using mapTimers: [String: Double]) {
@@ -401,12 +413,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 menu.stop()
                 player.head.circle = !player.head.circle
                 stopped = !stopped
-            case "mine":
-                //TODO: start mining
-                //menu.clicked()
-                //musicPlayer.interrupt(withMood: Mood.DARK)
-                //player.chain.mine(for: 1.5)
-                player.setBoost(b: true)
             case "pause":
                 //TODO: need to actually pause the game
                 gameIsPaused = true
@@ -445,6 +451,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     }
     
+    @objc func handleDoubleTap(gesture: UITapGestureRecognizer) {
+        print("double touch")
+        player.setBoost(b: true)
+    }
+    
     func touchMoved(toPoint pos : CGPoint) {
         if !touchedButton{
             player.head.changeAngleTo(point: pos)
@@ -458,7 +469,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //player.chain.dash(angle: 0)
         print("up")
         if player.head.boosted {
-            player.setBoost(b: false)
+            //player.setBoost(b: false)
         }
         
     }
