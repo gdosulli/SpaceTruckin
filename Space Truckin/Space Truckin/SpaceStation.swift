@@ -26,10 +26,10 @@ class SpaceStation: SpaceObject {
         
 
     }
-    required init(instance: SpaceObject) {
-        armSprite = SKSpriteNode(imageNamed: "space_station_arm_1")
-         super.init(instance: instance)
-     }
+//    required init(instance: SpaceObject) {
+//        armSprite = SKSpriteNode(imageNamed: "space_station_arm_1")
+//         super.init(instance: instance)
+//     }
      
     
     override func spawn(at spawnPoint: CGPoint) {

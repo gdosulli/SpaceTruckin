@@ -25,12 +25,12 @@ class EffectBubble: SpaceObject {
         super.init(0, SKSpriteNode(imageNamed: spriteName),(50,50),(50,50),NO_INVENTORY,0, 10, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.SPACE_JUNK_CATEGORY, 10.0)
     }
     
-    required init(instance: SpaceObject) {
-        let effect = instance as! EffectBubble
-        self.duration = effect.duration
-        
-        super.init(instance: instance)
-    }
+//    required init(instance: SpaceObject) {
+//        let effect = instance as! EffectBubble
+//        self.duration = effect.duration
+//        
+//        super.init(instance: instance)
+//    }
     
     
     override func spawn(at spawnPoint: CGPoint) {

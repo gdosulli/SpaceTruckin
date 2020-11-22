@@ -12,6 +12,7 @@ import GameplayKit
 struct SpawnRate {
     var obj: SpaceObject
     var rate: TimeInterval
+    var maxNum: Int?
 }
 
 class Area {
@@ -68,10 +69,9 @@ class Area {
     
     @objc func spawnObject(timer: Timer) {
         guard let context = timer.userInfo as? [String: SpaceObject] else { return }
-        let obj = context["obj"]?.copy()
-        print(obj?.sprite.name)
-        let spawnPoint = getRandPos(for: player.head, radius: 1000)
-        let speed = CGFloat.random(in: 25...75)
+        let obj = (context["obj"] as? Asteroid)?.copy()
+        let spawnPoint = getRandPos(for: player.head, radius: 2000)
+        let speed = CGFloat.random(in: 35...400)
         let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
         let rotation = Bool.random() ? -1 * CGFloat.pi : 1 * CGFloat.pi
         obj?.speed = speed
@@ -94,38 +94,8 @@ class Area {
         return CGPoint(x: x, y: y)
     }
     
-//    func getRandPos(for object: SpaceObject) -> CGPoint {
-//        var x : CGFloat
-//        var y : CGFloat
-//
-//        // pick x or y for object randomly
-//        let pickRandWidth = Bool.random()
-//        let center = CGPoint(x: player.head.sprite.position.x,
-//                             y: player.head.sprite.position.y)
-//
-//        if pickRandWidth {
-//            // get random x coordinate
-//            //let distr = GKRandomDistribution(lowestValue: Int(center.x - (self.frame.width / 2) * scene.camScale),
-//                                             highestValue: Int(center.x + (self.frame.width / 2) * scene.camScale))
-//            x = CGFloat(distr.nextInt())
-//
-//            // select top/bottom for y
-//            //y = center.y + self.frame.height / 2 * scene.camScale + object.size.height * 2
-//            y = Bool.random() ? y * -1 : y
-//        } else {
-//            // get random y coordinate
-//            //let distr = GKRandomDistribution(lowestValue: Int(center.y - (self.frame.height / 2) * scene.camScale),
-//                                             highestValue: Int(center.y + (self.frame.height / 2) * scene.camScale))
-//            y = CGFloat(distr.nextInt())
-//
-//            // select left/right for x
-//            //x = center.x + self.frame.width / 2 * scene.camScale + object.size.width * 2
-//            x = Bool.random() ? x * -1 : x
-//        }
-//
-//        return CGPoint(x: x, y: y)
-//    }
-    
+
+
     func setTimer() {
         for rate in spawnRates {
             let context = ["obj": rate.obj]
@@ -226,6 +196,7 @@ class Area {
     func update(by delta: CGFloat) {
         // update background
         // update objects
+        player.update(by: delta)
         
         for object in objectsInArea {
             object.value?.move(by: delta)
@@ -280,9 +251,9 @@ func generateTestArea(withScene scene: AreaScene) -> Area {
     let radAst = Asteroid(1, SKSpriteNode(imageNamed: "asteroid_radioactive"), (150, 350), (150, 350), radInv)
     let remAst = Asteroid(1, SKSpriteNode(imageNamed: "asteroid_precious"), (100, 275), (100, 275), remInv)
     
-    let stoneRate = SpawnRate(obj: stoneAst, rate: 3)
-    let radRate = SpawnRate(obj: radAst, rate: 5)
-    let remRate = SpawnRate(obj: remAst, rate: 9)
+    let stoneRate = SpawnRate(obj: stoneAst, rate: 1)
+    let radRate = SpawnRate(obj: radAst, rate: 3)
+    let remRate = SpawnRate(obj: remAst, rate: 6)
     
     let spawnRate = [stoneRate, radRate, remRate]
     

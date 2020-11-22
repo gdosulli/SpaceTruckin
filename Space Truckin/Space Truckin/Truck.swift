@@ -69,10 +69,10 @@ class TruckPiece: SpaceObject {
         sprite.name = "capsule"
 
     }
-    
-    required init(instance: SpaceObject) {
-         super.init(instance: instance)
-     }
+//    
+//    required init(instance: SpaceObject) {
+//         super.init(instance: instance)
+//     }
      
     
     override func translate(by vector: CGPoint) {

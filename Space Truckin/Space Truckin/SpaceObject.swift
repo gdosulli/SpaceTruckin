@@ -23,7 +23,7 @@ struct CollisionCategories {
 }
 
 
-class SpaceObject : Movable, Copyable {
+class SpaceObject : Movable {
 
     
     var durability: Int
@@ -77,23 +77,24 @@ class SpaceObject : Movable, Copyable {
         self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
     }
     
-    required init(instance: SpaceObject) {
-        self.durability = instance.durability
-        self.xRange = instance.xRange
-        self.yRange = instance.yRange
-        self.inventory = instance.inventory
-        self.collisionCategory = instance.collisionCategory
-        self.testCategory = instance.testCategory
-        
-        let sprite = instance.sprite.copy() as! SKSpriteNode
-        sprite.name = "\(SpaceObject.objectCount)"
-        
-        super.init(speed: instance.speed, rotation: instance.rotation, angleInRadians: instance.targetAngle, sprite: sprite, boostSpeed: instance.boostSpeed)
-
-    }
+//    required init(instance: SpaceObject) {
+//        self.durability = instance.durability
+//        self.xRange = instance.xRange
+//        self.yRange = instance.yRange
+//        self.inventory = instance.inventory
+//        self.collisionCategory = instance.collisionCategory
+//        self.testCategory = instance.testCategory
+//
+//        let sprite = instance.sprite.copy() as! SKSpriteNode
+//        sprite.name = "\(SpaceObject.objectCount)"
+//
+//        super.init(speed: instance.speed, rotation: instance.rotation, angleInRadians: instance.targetAngle, sprite: sprite, boostSpeed: instance.boostSpeed)
+//
+//    }
     
     func spawn(at spawnPoint: CGPoint) {
         //fatalError("Subclasses need to implement the `spawn()` method.")
+        print("incorrect spawn")
     }
     
     func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {

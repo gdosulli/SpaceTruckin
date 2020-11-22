@@ -10,7 +10,41 @@ import Foundation
 import SpriteKit
 import GameplayKit
 
-class Asteroid : SpaceObject {
+class Asteroid : SpaceObject, Copyable {
+    
+    
+    required init(instance: Asteroid) {
+        let sprite = instance.sprite.copy() as? SKSpriteNode
+        if let name = sprite?.name {
+            sprite?.name = name + "c"
+        }
+        
+        super.init(instance.durability, sprite!, instance.xRange, instance.yRange, instance.inventory, instance.speed, instance.rotation, instance.targetAngle, instance.collisionCategory, instance.testCategory, instance.boostSpeed)
+    }
+
+    
+    // convenience for non-moving objects
+    convenience init (_ durability: Int,
+                      _ sprite: SKSpriteNode,
+                      _ xRange: (CGFloat, CGFloat),
+                      _ yRange: (CGFloat, CGFloat),
+                      _ inventory: Inventory) {
+        self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
+    }
+    
+    override init (_ durability: Int,
+          _ sprite: SKSpriteNode,
+          _ xRange: (CGFloat, CGFloat),
+          _ yRange: (CGFloat, CGFloat),
+          _ inventory: Inventory,
+          _ speed: CGFloat,
+          _ rotation: CGFloat,
+          _ targetAngle: CGFloat,
+          _ collisionCategory: UInt32,
+          _ testCategory: UInt32,
+          _ boostSpeed: CGFloat) {
+        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory, boostSpeed)
+    }
     
     override func spawn(at spawnPoint: CGPoint) {
         // set random asteroid size
@@ -63,20 +97,29 @@ class Asteroid : SpaceObject {
     }
     
     func dropItems(at point: CGPoint) {
-        let numItems = Int.random(in: 2...4)
-        let quantity = 20
+        let numItems = Int.random(in: 1...4)
+        
         let point = self.sprite.position
-        //TODO
-        let asteroidItemTypes = [ItemType.Precious, ItemType.Nuclear, ItemType.Stone]
+        
+        let s = sprite.parent as? AreaScene
+        if let scene = s {
+        
+            for i in 0..<numItems {
+                for k in inventory.items.keys {
+                    if let q = inventory.items[k] {
+                        if q > 0 {
+                            let item = Item(type: k, value: q)
+                            let drop = DroppedItem(sprite: SKSpriteNode(imageNamed: DroppedItem.filenames[item.type.rawValue]), item: item, speed: 120, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
 
-        let item = Item(type: asteroidItemTypes.randomElement()!, value: 20)
-        for i in 0..<numItems {
-            let drop = DroppedItem(sprite: SKSpriteNode(imageNamed: DroppedItem.filenames[item.type.rawValue]), item: item, speed: 120, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
-
-            drop.spawn(at: CGPoint(x: point.x + 10 * CGFloat(i), y: point.y + 10 * CGFloat(i)))
-            (self.sprite.parent as? GameScene)!.objectsInScene[drop.sprite] = drop
-            self.sprite.parent!.addChild(drop.sprite)
+                            drop.spawn(at: CGPoint(x: point.x + 10 * CGFloat(i), y: point.y + 10 * CGFloat(i)))
+                            
+                            scene.currentArea.addObject(obj: drop)
+                        }
+                    }
+                }
+            }
         }
+        
     }
     
     @objc func deleteSelf () {
