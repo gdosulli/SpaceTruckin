@@ -120,6 +120,27 @@ class SpaceObject : Movable {
     func update(by delta: CGFloat) {
         
     }
+    
+    
+    func dropItem(at point: CGPoint) {
+    let s = sprite.parent as? AreaScene
+        if let scene = s {
+
+            for k in inventory.items.keys {
+                if let q = inventory.items[k] {
+                    if q > 0 {
+                        let item = Item(type: k, value: q)
+                        let drop = DroppedItem(sprite: SKSpriteNode(imageNamed: DroppedItem.filenames[item.type.rawValue]), item: item, speed: 120, direction: CGFloat(Int.random(in: 0...4)) * CGFloat(Double.pi) / 2)
+                        
+                        drop.spawn(at: CGPoint(x: point.x + 10, y: point.y + 10))
+                        
+                        scene.currentArea.addObject(obj: drop)
+                    }
+                }
+            }
+        }
+    }
+        
 }
 
 

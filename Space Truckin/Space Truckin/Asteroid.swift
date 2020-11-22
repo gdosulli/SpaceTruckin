@@ -96,34 +96,12 @@ class Asteroid : SpaceObject, Copyable {
         
     }
     
-    func dropItems(at point: CGPoint) {
-        let numItems = Int.random(in: 1...4)
-        
-        let point = self.sprite.position
-        
-        let s = sprite.parent as? AreaScene
-        if let scene = s {
-        
-            for i in 0..<numItems {
-                for k in inventory.items.keys {
-                    if let q = inventory.items[k] {
-                        if q > 0 {
-                            let item = Item(type: k, value: q)
-                            let drop = DroppedItem(sprite: SKSpriteNode(imageNamed: DroppedItem.filenames[item.type.rawValue]), item: item, speed: 120, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
-
-                            drop.spawn(at: CGPoint(x: point.x + 10 * CGFloat(i), y: point.y + 10 * CGFloat(i)))
-                            
-                            scene.currentArea.addObject(obj: drop)
-                        }
-                    }
-                }
-            }
-        }
-        
-    }
     
     @objc func deleteSelf () {
-        dropItems(at: self.sprite.position)
+        let rnum: Int = Int.random(in: 0...3)
+        for _ in 0...rnum {
+            dropItem(at: self.sprite.position)
+        }
         self.sprite.removeFromParent()
     }
 }

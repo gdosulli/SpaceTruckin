@@ -41,6 +41,8 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
     var muteSound = false
     
     var currentArea: Area!
+    
+    var boostLocked = false
 
 
     override func didMove(to view: SKView) {
@@ -153,6 +155,14 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
 
         musicPlayer = MusicPlayer(mood: Mood.PRESENT, setting: Setting.ALL)
         
+        
+        // double tap stuff
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(gesture:)))
+        doubleTap.numberOfTapsRequired = 2
+        
+        self.scene?.view?.addGestureRecognizer(doubleTap)
+        
+        
         currentArea.loadArea()
     }
     
@@ -225,19 +235,35 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
 
     }
     
+    @objc func handleDoubleTap(gesture: UITapGestureRecognizer) {
+        print("double touch")
+        currentArea.player.setBoost(b: true)
+        boostLocked = true
+        let duration = 0.05
+        let unlockDate = Date().addingTimeInterval(duration)
+        let timer = Timer(fireAt: unlockDate, interval: 0, target: self, selector: #selector(unlockBoost), userInfo: nil, repeats: false)
+        RunLoop.main.add(timer, forMode: .common)
+
+    }
+    
+    @objc func unlockBoost() {
+        boostLocked = false
+        print("unlocked")
+    }
+    
+    
     func touchMoved(toPoint pos : CGPoint) {
         if !touchedButton{
             currentArea.player.head.changeAngleTo(point: pos)
-            if currentArea.player.head.boosted {
-                currentArea.player.setBoost(b: false)
-            }
         }
     }
     
     func touchUp(atPoint pos : CGPoint) {
         //player.chain.dash(angle: 0)
         if currentArea.player.head.boosted {
-            currentArea.player.setBoost(b: false)
+            if !boostLocked {
+                currentArea.player.setBoost(b: false)
+            }
         }
         
     }

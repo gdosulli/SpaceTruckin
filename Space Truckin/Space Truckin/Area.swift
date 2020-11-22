@@ -195,6 +195,13 @@ class Area {
 
     func update(by delta: CGFloat) {
         // update background
+        
+        for n in backgroundItems {
+            if let e = n as? SKEmitterNode {
+                e.particlePosition = player.head.sprite.position
+            }
+        }
+        
         // update objects
         player.update(by: delta)
         

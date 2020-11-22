@@ -73,7 +73,7 @@ class DroppedItem: SpaceObject {
             
             var nextPiece: TruckPiece? = truckPiece.getFirst()
             while let p = nextPiece {
-                if p.inventory.addItem(item: item) {
+                if p.inventory.addItem(item: item).0 {
                     collected = true
                     // TODO add animation from current position to capsule
                     let duration : TimeInterval = 0.2

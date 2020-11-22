@@ -241,6 +241,7 @@ class TruckPiece: SpaceObject {
         //print("Truck should be destroyed but i didnt code this whoops my bad sorry team")
         print("pop")
         if !invincible {
+            dropItem(at: sprite.position)
             destroyed = true
             explode()
         }
@@ -251,15 +252,12 @@ class TruckPiece: SpaceObject {
     }
     
     @objc func deleteSelf() {
-        dropItems(at: self.sprite.position)
+        dropItem(at: self.sprite.position)
         self.sprite.removeFromParent()
         self.thruster.removeFromParent()
     }
     
-    func dropItems(at: CGPoint) {
-        
-    }
-    
+
     override func getChildren() -> [SKNode?] {
         return super.getChildren() + [thruster]
     }

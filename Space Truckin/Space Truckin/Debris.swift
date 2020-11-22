@@ -59,24 +59,24 @@ class Debris : SpaceObject {
         }
     }
     
-    func dropItems(at point: CGPoint) {
-        let numItems = Int.random(in: 2...4)
-        let quantity = 20
-        let point = self.sprite.position
-        let spaceJunkItemTypes = [ItemType.Scrap, ItemType.Oxygen, ItemType.Water]
-
-        let item = Item(type: spaceJunkItemTypes.randomElement()!, value: 20)
-        for i in 0..<numItems {
-            let drop = DroppedItem(sprite: SKSpriteNode(imageNamed: DroppedItem.filenames[item.type.rawValue]), item: item, speed: 120, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
-
-            drop.spawn(at: CGPoint(x: point.x + 10 * CGFloat(i), y: point.y + 10 * CGFloat(i)))
-            (self.sprite.parent as? GameScene)!.objectsInScene[drop.sprite] = drop
-            self.sprite.parent!.addChild(drop.sprite)
-        }
-    }
+//    func dropItems(at point: CGPoint) {
+//        let numItems = Int.random(in: 2...4)
+//        let quantity = 20
+//        let point = self.sprite.position
+//        let spaceJunkItemTypes = [ItemType.Scrap, ItemType.Oxygen, ItemType.Water]
+//
+//        let item = Item(type: spaceJunkItemTypes.randomElement()!, value: 20)
+//        for i in 0..<numItems {
+//            let drop = DroppedItem(sprite: SKSpriteNode(imageNamed: DroppedItem.filenames[item.type.rawValue]), item: item, speed: 120, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
+//
+//            drop.spawn(at: CGPoint(x: point.x + 10 * CGFloat(i), y: point.y + 10 * CGFloat(i)))
+//            (self.sprite.parent as? GameScene)!.objectsInScene[drop.sprite] = drop
+//            self.sprite.parent!.addChild(drop.sprite)
+//        }
+//    }
     
     @objc func deleteSelf() {
-        dropItems(at: sprite.position)
+        dropItem(at: sprite.position)
         self.sprite.removeFromParent()
     }
 }
