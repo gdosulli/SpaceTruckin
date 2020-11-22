@@ -73,7 +73,7 @@ class Area {
         let spawnPoint = getRandPos(for: player.head, radius: 2000)
         let speed = CGFloat.random(in: 35...400)
         let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
-        let rotation = Bool.random() ? -1 * CGFloat.pi : 1 * CGFloat.pi
+        let rotation = Bool.random() ? -2 * CGFloat.pi : 2 * CGFloat.pi
         obj?.speed = speed
         obj?.targetAngle = targetAngle
         obj?.rotation = rotation
@@ -126,7 +126,6 @@ class Area {
     }
 
     func playerWarp() {
-        print("warping")
         // spawn the head, add it to the area
         player.head.followingPiece = nil
         for piece in player.chain.truckPieces {
@@ -134,10 +133,11 @@ class Area {
             piece.followingPiece = nil
         }
         
+        player.head.spawn(at: CGPoint.zero)
         addObject(obj: player.head)
         
         // start a timer that spawns in each successive truck piece (after a short delay)
-        timers["capsule"] =  Timer.scheduledTimer(timeInterval: 0.25,
+        timers["capsule"] =  Timer.scheduledTimer(timeInterval: 0.5,
                    target: self,
                    selector: #selector(warpPiece),
                    userInfo: nil,
@@ -160,7 +160,7 @@ class Area {
             let target = player.head.getLastPiece()
             newPiece.targetPiece = target
             target.followingPiece = newPiece
-            
+            newPiece.spawn(at: CGPoint(x:target.sprite.position.x - 160, y:0))
             addObject(obj: newPiece)
         } else {
             timers["capsule"]?.invalidate()
@@ -176,10 +176,13 @@ class Area {
         
         // add object to objectsInArea
         // add object to scene
-        if obj.sprite.parent == nil {
-            objectsInArea[obj.sprite] = obj
-            scene?.addChild(obj.sprite)
+        for n in obj.getChildren() {
+            if n?.parent == nil {
+                scene?.addChild(n!)
+            }
         }
+        
+        objectsInArea[obj.sprite] = obj
     }
     
     func unloadArea() {

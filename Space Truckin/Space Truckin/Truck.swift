@@ -171,6 +171,8 @@ class TruckPiece: SpaceObject {
     }
     
     override func spawn(at spawnPoint: CGPoint) {
+        sprite.position = spawnPoint
+        sprite.zRotation = targetAngle - CGFloat(Double.pi/2)
         
     }
     
