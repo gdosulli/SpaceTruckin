@@ -26,6 +26,11 @@ class SpaceStation: SpaceObject {
         
 
     }
+    required init(instance: SpaceObject) {
+        armSprite = SKSpriteNode(imageNamed: "space_station_arm_1")
+         super.init(instance: instance)
+     }
+     
     
     override func spawn(at spawnPoint: CGPoint) {
         let dimension = CGFloat.random(in: xRange.0...xRange.1)
@@ -53,7 +58,7 @@ class SpaceStation: SpaceObject {
         moveForward(by: delta)
     }
     
-    override func update() {
+    override func update(by delta: CGFloat) {
         armSprite.position = sprite.position
     }
     

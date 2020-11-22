@@ -456,7 +456,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         print("double touch")
         player.setBoost(b: true)
         boostLocked = true
-        let duration = 0.5
+        let duration = 0.05
         let unlockDate = Date().addingTimeInterval(duration)
         let timer = Timer(fireAt: unlockDate, interval: 0, target: self, selector: #selector(unlockBoost), userInfo: nil, repeats: false)
         RunLoop.main.add(timer, forMode: .common)
@@ -535,7 +535,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         for object in objectsInScene {
             object.value.move(by: delta)
-            object.value.update()
+            object.value.update(by: delta)
             if object.value.destroyed {
                 destroyedNodes.insert(object.value.sprite)
             }

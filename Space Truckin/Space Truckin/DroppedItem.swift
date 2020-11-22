@@ -10,6 +10,7 @@ import Foundation
 import SpriteKit
 
 
+let defaultItem = Item(type: .Oxygen, value: 0)
 
 class DroppedItem: SpaceObject {
     var item: Item
@@ -22,6 +23,12 @@ class DroppedItem: SpaceObject {
         self.item = i1
         super.init(1, s1, (200,50), (200,50), Inventory(), speed, 3.14, direction, CollisionCategories.ITEM_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
     }
+    
+    required init(instance: SpaceObject) {
+        self.item = defaultItem
+        super.init(instance: instance)
+     }
+     
     
     
     override func spawn(at spawnPoint: CGPoint) {
@@ -48,7 +55,7 @@ class DroppedItem: SpaceObject {
         
     }
     
-    func update(by delta: CGFloat) {
+    override func update(by delta: CGFloat) {
         lifeSpan -= TimeInterval(delta)
         if lifeSpan < 0.0 {
             // Item disappears

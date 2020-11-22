@@ -23,7 +23,9 @@ struct CollisionCategories {
 }
 
 
-class SpaceObject : Movable {
+class SpaceObject : Movable, Copyable {
+
+    
     var durability: Int
     var xRange: (CGFloat, CGFloat)
     var yRange: (CGFloat, CGFloat)
@@ -33,6 +35,8 @@ class SpaceObject : Movable {
     var destroyed = false
     var impactDamage = 1
     static var objectCount = 0
+    
+    var isImportant = false
     
     static let explosionAnimation = [SKTexture(imageNamed: "explosion1"), SKTexture(imageNamed: "explosion2"), SKTexture(imageNamed: "explosion3"), SKTexture(imageNamed: "explosion4"),]
     
@@ -73,9 +77,23 @@ class SpaceObject : Movable {
         self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
     }
     
+    required init(instance: SpaceObject) {
+        self.durability = instance.durability
+        self.xRange = instance.xRange
+        self.yRange = instance.yRange
+        self.inventory = instance.inventory
+        self.collisionCategory = instance.collisionCategory
+        self.testCategory = instance.testCategory
+        
+        let sprite = instance.sprite.copy() as! SKSpriteNode
+        sprite.name = "\(SpaceObject.objectCount)"
+        
+        super.init(speed: instance.speed, rotation: instance.rotation, angleInRadians: instance.targetAngle, sprite: sprite, boostSpeed: instance.boostSpeed)
+
+    }
     
     func spawn(at spawnPoint: CGPoint) {
-        fatalError("Subclasses need to implement the `spawn()` method.")
+        //fatalError("Subclasses need to implement the `spawn()` method.")
     }
     
     func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
@@ -98,7 +116,18 @@ class SpaceObject : Movable {
         return [sprite]
     }
     
-    func update() {
+    func update(by delta: CGFloat) {
         
+    }
+}
+
+
+protocol Copyable {
+    init(instance: Self)
+}
+
+extension Copyable {
+    func copy() -> Self {
+        return Self.init(instance: self)
     }
 }

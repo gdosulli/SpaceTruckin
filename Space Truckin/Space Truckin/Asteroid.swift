@@ -12,10 +12,6 @@ import GameplayKit
 
 class Asteroid : SpaceObject {
     
-    // setup physics detection
-    let asteroidCategory : UInt32 = 0x1 << 1
-    let truckCategory : UInt32 = 0x1 << 0
-    
     override func spawn(at spawnPoint: CGPoint) {
         // set random asteroid size
         let dimension = CGFloat.random(in: xRange.0...xRange.1)

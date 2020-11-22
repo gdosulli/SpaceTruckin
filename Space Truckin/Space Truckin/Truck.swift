@@ -70,6 +70,10 @@ class TruckPiece: SpaceObject {
 
     }
     
+    required init(instance: SpaceObject) {
+         super.init(instance: instance)
+     }
+     
     
     override func translate(by vector: CGPoint) {
         super.translate(by: vector)
@@ -77,7 +81,7 @@ class TruckPiece: SpaceObject {
     }
     
     
-    override func update() {
+    override func update(by delta: CGFloat) {
         if let piece = targetPiece {
             changeAngleTo(point: piece.sprite.position)
         }
@@ -347,9 +351,9 @@ class TruckChain {
     }
     
     func updateFollowers() {
-        head.update()
+        head.update(by: 0)
         for p in truckPieces {
-            p.update()
+            p.update(by: 0)
             if let target = p.targetPiece{
                 if p.getGapSize(nextPiece: target) > maxLeashLength && !p.releashing{
                     //print("SNAP")
