@@ -73,7 +73,11 @@ class TruckPiece: SpaceObject {
         }
 
     }
-    
+//    
+//    required init(instance: SpaceObject) {
+//         super.init(instance: instance)
+//     }
+     
     
     override func translate(by vector: CGPoint) {
         super.translate(by: vector)
@@ -81,7 +85,7 @@ class TruckPiece: SpaceObject {
     }
     
     
-    override func update() {
+    override func update(by delta: CGFloat) {
         if let piece = targetPiece {
             changeAngleTo(point: piece.sprite.position)
         }
@@ -171,6 +175,8 @@ class TruckPiece: SpaceObject {
     }
     
     override func spawn(at spawnPoint: CGPoint) {
+        sprite.position = spawnPoint
+        sprite.zRotation = targetAngle - CGFloat(Double.pi/2)
         
     }
     
@@ -205,10 +211,21 @@ class TruckPiece: SpaceObject {
         while let p = followPiece {
             p.releashing = true
             print("reattaching\(String(describing: p.sprite.name))")
-            p.collisionCategory = CollisionCategories.TRUCK_CATEGORY
-            p.testCategory = CollisionCategories.ASTEROID_CATEGORY
+            p.collisionCategory = self.collisionCategory
+            p.testCategory = self.testCategory
             p.sprite.physicsBody?.categoryBitMask = self.collisionCategory
             p.sprite.physicsBody?.contactTestBitMask = self.testCategory
+            
+            if p.sprite.name == "rival_capsule" && self.sprite.name == "capsule" {
+                p.sprite.name = "capsule"
+            } else if p.sprite.name == "capsule" && self.sprite.name == "rival_capsule" {
+                p.sprite.name = "rival_capsule"
+            }
+            // rival to normal
+            // if normal to rival
+            
+            print(self.sprite.name!)
+            
             followPiece = p.followingPiece
             let date = Date().addingTimeInterval(3.0) //releashing timer
             let timer = Timer(fireAt: date, interval: 0, target: p, selector: #selector(endReleashing), userInfo: nil, repeats: false)
@@ -231,9 +248,16 @@ class TruckPiece: SpaceObject {
                 onDestroy()
             }
         } else if obj.collisionCategory == CollisionCategories.LOST_CAPSULE_CATEGORY {
-            let newNormal = CGVector(dx: -1 * contact.contactNormal.dx, dy: -1 * contact.contactNormal.dy)
-            self.addForce(vec: newNormal)
             reattach(at: (obj as? TruckPiece)!)
+        } else if obj.collisionCategory == CollisionCategories.SPACE_STATION_CATEGORY {
+            // contact w space station
+            if obj.sprite.name == "station_arm" {
+                // trigger entry
+                print("trigger entry w normal \(contact.contactNormal) at point \(contact.contactPoint)")
+            } else {
+                // bump
+                print("bump")
+            }
         }
     }
     
@@ -241,6 +265,7 @@ class TruckPiece: SpaceObject {
         //print("Truck should be destroyed but i didnt code this whoops my bad sorry team")
         print("pop")
         if !invincible {
+            dropItem(at: sprite.position)
             destroyed = true
             explode()
         }
@@ -251,15 +276,12 @@ class TruckPiece: SpaceObject {
     }
     
     @objc func deleteSelf() {
-        dropItems(at: self.sprite.position)
+        dropItem(at: self.sprite.position)
         self.sprite.removeFromParent()
         self.thruster.removeFromParent()
     }
     
-    func dropItems(at: CGPoint) {
-        
-    }
-    
+
     override func getChildren() -> [SKNode?] {
         return super.getChildren() + [thruster]
     }
@@ -351,9 +373,9 @@ class TruckChain {
     }
     
     func updateFollowers() {
-        head.update()
+        head.update(by: 0)
         for p in truckPieces {
-            p.update()
+            p.update(by: 0)
             if let target = p.targetPiece{
                 if p.getGapSize(nextPiece: target) > maxLeashLength && !p.releashing{
                     //print("SNAP")

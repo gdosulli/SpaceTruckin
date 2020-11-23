@@ -28,6 +28,14 @@ struct Player {
     }
     
     func setBoost(b: Bool) {
+        if b {
+            let size = head.sprite.size
+            head.sprite.texture = SKTexture(imageNamed: "second_drill")
+            head.sprite.size = size
+        } else {
+            head.sprite.texture = SKTexture(imageNamed: "space_truck_cab")
+        }
+            
         for p in chain.getAllPieces() {
             p.setBoost(b: false)
         }
@@ -190,7 +198,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var storageBar: InterfaceBar!
     
     var muteSound = false
-
+    
+    var boostLocked = false
 
     override func didMove(to view: SKView) {
         // Initialize screen height and width
@@ -256,8 +265,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         menuConroller.size = CGSize(width: frameWidth/5, height: frameHeight/5)
         menu = DropDownMenu(controller: menuConroller, buttons: [], offset: 0)
         
-        
-        menu.add(SKSpriteNode(imageNamed: "Mine"), called: "mine")
         menu.add(SKSpriteNode(imageNamed: "Map_button"), called: "map")
         menu.add(SKSpriteNode(imageNamed: "Cargo_button"), called: "cargo")
         menu.add(SKSpriteNode(imageNamed: "Stop"), called: "stop")
@@ -344,6 +351,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                              repeats: true)
         
         musicPlayer = MusicPlayer(mood: Mood.PRESENT, setting: Setting.ALL)
+        
+        // double tap stuff
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(gesture:)))
+        doubleTap.numberOfTapsRequired = 2
+        
+        self.scene?.view?.addGestureRecognizer(doubleTap)
     }
     
     func setTimer(using mapTimers: [String: Double]) {
@@ -401,12 +414,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 menu.stop()
                 player.head.circle = !player.head.circle
                 stopped = !stopped
-            case "mine":
-                //TODO: start mining
-                //menu.clicked()
-                //musicPlayer.interrupt(withMood: Mood.DARK)
-                //player.chain.mine(for: 1.5)
-                player.setBoost(b: true)
             case "pause":
                 //TODO: need to actually pause the game
                 gameIsPaused = true
@@ -424,7 +431,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 menu.viewSector(named: name)
             case "jump":
                 setTimer(using: menu.travel())
-                menu.clicked()
+                musicPlayer.muted = false
+                musicPlayer.unmute()
+                musicPlayer.playSong(MySongs.JUMP)
+                musicPlayer.getPlaylist()
+                
                 menu.map.animateTravel(on: self, with: self.frame.size)
             case "return" :
                 menu.map.hideInfoScreen()
@@ -441,12 +452,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     }
     
+    @objc func handleDoubleTap(gesture: UITapGestureRecognizer) {
+        print("double touch")
+        player.setBoost(b: true)
+        boostLocked = true
+        let duration = 0.05
+        let unlockDate = Date().addingTimeInterval(duration)
+        let timer = Timer(fireAt: unlockDate, interval: 0, target: self, selector: #selector(unlockBoost), userInfo: nil, repeats: false)
+        RunLoop.main.add(timer, forMode: .common)
+
+    }
+    
+    @objc func unlockBoost() {
+        boostLocked = false
+        print("unlocked")
+    }
+    
+
     func touchMoved(toPoint pos : CGPoint) {
         if !touchedButton{
             player.head.changeAngleTo(point: pos)
-            if player.head.boosted {
-                player.setBoost(b: false)
-            }
         }
     }
     
@@ -454,7 +479,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //player.chain.dash(angle: 0)
         print("up")
         if player.head.boosted {
-            player.setBoost(b: false)
+            if !boostLocked {
+                player.setBoost(b: false)
+            }
         }
         
     }
@@ -508,7 +535,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         for object in objectsInScene {
             object.value.move(by: delta)
-            object.value.update()
+            object.value.update(by: delta)
             if object.value.destroyed {
                 destroyedNodes.insert(object.value.sprite)
             }

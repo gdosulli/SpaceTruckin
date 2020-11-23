@@ -127,5 +127,3 @@ class Movable {
 // a specified time
 
 
-// Also TODO: make it so ships can only move forwards, and rotate towards a targetPoint over time
-

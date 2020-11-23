@@ -50,14 +50,21 @@ class Inventory {
         return maxCapacities[type]! - items[type]!
     }
     
-    func addItem(item: Item) -> Bool {
+    func addItem(item: Item) -> (Bool, Item?) {
         let remainingCapacity = maxCapacities[item.type]! - items[item.type]!
-        if item.value > remainingCapacity {
-            return false
+        if remainingCapacity <= 0 {
+            return (false, item)
+        } else if item.value > remainingCapacity {
+            let inVal = remainingCapacity
+            let outVal = item.value - inVal
+            
+            items[item.type] = items[item.type]! + inVal
+            
+            return (true, Item(type: item.type, value: outVal))
         }
         
         items[item.type] = items[item.type]! + item.value
-        return true
+        return (true, nil)
     }
     
     func remove(from type: ItemType, quantity: Int) -> Item? {
