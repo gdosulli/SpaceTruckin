@@ -36,7 +36,7 @@ class RivalTruckPiece: TruckPiece {
         
         super.update(by: delta)
         if let target = targetPiece {
-            if getGapSize(nextPiece: target) > 300{
+            if getGapSize(nextPiece: target) > 250{
                 breakChain(at: self)
             }
         }
@@ -65,7 +65,12 @@ class RivalTruckPiece: TruckPiece {
     
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
         if (obj.sprite.name?.starts(with: "capsule"))! {
-            let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+            var newNormal : CGVector
+            if self.isHead{
+                newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+            } else {
+                newNormal = CGVector(dx: 10 * contact.contactNormal.dx, dy: 10 * contact.contactNormal.dy)
+            }
             self.addForce(vec: newNormal)
         }
     }
