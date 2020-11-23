@@ -19,6 +19,7 @@ struct CollisionCategories {
     static let LOST_CAPSULE_CATEGORY: UInt32 = 0x1 << 3
     static let ITEM_CATEGORY: UInt32 = 0x1 << 4
     static let SPACE_STATION_CATEGORY: UInt32 = 0x1 << 5
+    static let RIVAL_TRUCK_CATEGORY: UInt32 = 0x1 << 6
     
 }
 

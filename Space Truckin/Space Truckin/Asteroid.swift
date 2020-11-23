@@ -12,7 +12,6 @@ import GameplayKit
 
 class Asteroid : SpaceObject, Copyable {
     
-    
     required init(instance: Asteroid) {
         let sprite = instance.sprite.copy() as? SKSpriteNode
         if let name = sprite?.name {

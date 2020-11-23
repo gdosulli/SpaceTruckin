@@ -357,7 +357,6 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         if let sprite = secondBody.node as? SKSpriteNode{
             secondObject = currentArea.objectsInArea[sprite] as? SpaceObject
         }
-
         //print("obj1: \(firstObject)")
         //print("obj2: \(secondObject)")
 

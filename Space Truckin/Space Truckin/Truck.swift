@@ -207,10 +207,21 @@ class TruckPiece: SpaceObject {
         while let p = followPiece {
             p.releashing = true
             print("reattaching\(String(describing: p.sprite.name))")
-            p.collisionCategory = CollisionCategories.TRUCK_CATEGORY
-            p.testCategory = CollisionCategories.ASTEROID_CATEGORY
+            p.collisionCategory = self.collisionCategory
+            p.testCategory = self.testCategory
             p.sprite.physicsBody?.categoryBitMask = self.collisionCategory
             p.sprite.physicsBody?.contactTestBitMask = self.testCategory
+            
+            if p.sprite.name == "rival_capsule" && self.sprite.name == "capsule" {
+                p.sprite.name = "capsule"
+            } else if p.sprite.name == "capsule" && self.sprite.name == "rival_capsule" {
+                p.sprite.name = "rival_capsule"
+            }
+            // rival to normal
+            // if normal to rival
+            
+            print(self.sprite.name!)
+            
             followPiece = p.followingPiece
             let date = Date().addingTimeInterval(3.0) //releashing timer
             let timer = Timer(fireAt: date, interval: 0, target: p, selector: #selector(endReleashing), userInfo: nil, repeats: false)
@@ -233,9 +244,16 @@ class TruckPiece: SpaceObject {
                 onDestroy()
             }
         } else if obj.collisionCategory == CollisionCategories.LOST_CAPSULE_CATEGORY {
-            let newNormal = CGVector(dx: -1 * contact.contactNormal.dx, dy: -1 * contact.contactNormal.dy)
-            self.addForce(vec: newNormal)
             reattach(at: (obj as? TruckPiece)!)
+        } else if obj.collisionCategory == CollisionCategories.SPACE_STATION_CATEGORY {
+            // contact w space station
+            if obj.sprite.name == "station_arm" {
+                // trigger entry
+                print("trigger entry w normal \(contact.contactNormal) at point \(contact.contactPoint)")
+            } else {
+                // bump
+                print("bump")
+            }
         }
     }
     

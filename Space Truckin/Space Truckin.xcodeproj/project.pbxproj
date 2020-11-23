@@ -33,6 +33,8 @@
 		E35AE46325685AF1003DCE34 /* Area.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35AE46225685AF1003DCE34 /* Area.swift */; };
 		E35AE46725686227003DCE34 /* warp sound.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E35AE466256861FA003DCE34 /* warp sound.m4a */; };
 		E35AE46B256A577A003DCE34 /* AreaScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35AE46A256A577A003DCE34 /* AreaScene.swift */; };
+		E35AE46D256BA082003DCE34 /* RivalTruck.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35AE46C256BA082003DCE34 /* RivalTruck.swift */; };
+		E35AE46F256BD3F6003DCE34 /* SpaceMine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E35AE46E256BD3F6003DCE34 /* SpaceMine.swift */; };
 		E373A3AF25549E1E00D04135 /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E373A3AE25549E1E00D04135 /* MusicPlayer.swift */; };
 		E373A3B22554AC7500D04135 /* dark_space.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E373A3B02554A50800D04135 /* dark_space.m4a */; };
 		E373A3B82554B44B00D04135 /* TruckScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E373A3B62554B44B00D04135 /* TruckScene.swift */; };
@@ -101,6 +103,8 @@
 		E35AE46225685AF1003DCE34 /* Area.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Area.swift; sourceTree = "<group>"; };
 		E35AE466256861FA003DCE34 /* warp sound.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "warp sound.m4a"; sourceTree = "<group>"; };
 		E35AE46A256A577A003DCE34 /* AreaScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AreaScene.swift; sourceTree = "<group>"; };
+		E35AE46C256BA082003DCE34 /* RivalTruck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RivalTruck.swift; sourceTree = "<group>"; };
+		E35AE46E256BD3F6003DCE34 /* SpaceMine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceMine.swift; sourceTree = "<group>"; };
 		E373A3AE25549E1E00D04135 /* MusicPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
 		E373A3B02554A50800D04135 /* dark_space.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = dark_space.m4a; sourceTree = "<group>"; };
 		E373A3B62554B44B00D04135 /* TruckScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TruckScene.swift; sourceTree = "<group>"; };
@@ -169,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				E373A3B72554B44B00D04135 /* Truck.swift */,
+				E35AE46C256BA082003DCE34 /* RivalTruck.swift */,
 				E373A3B62554B44B00D04135 /* TruckScene.swift */,
 				E35AE45E25659891003DCE34 /* SpaceStation.swift */,
 				E373A3B12554AB5C00D04135 /* sounds */,
@@ -200,6 +205,7 @@
 				7F75732E2566A9AB00C36CA5 /* MapBuilder.swift */,
 				E35AE46225685AF1003DCE34 /* Area.swift */,
 				E35AE46A256A577A003DCE34 /* AreaScene.swift */,
+				E35AE46E256BD3F6003DCE34 /* SpaceMine.swift */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -409,9 +415,11 @@
 				E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */,
 				7F5C093C255324B80028F808 /* MenuViewController.swift in Sources */,
 				E35AE45F25659891003DCE34 /* SpaceStation.swift in Sources */,
+				E35AE46D256BA082003DCE34 /* RivalTruck.swift in Sources */,
 				7F75732F2566A9AB00C36CA5 /* MapBuilder.swift in Sources */,
 				E34A4756254BDF8B00479EFB /* Debris.swift in Sources */,
 				E373A3B82554B44B00D04135 /* TruckScene.swift in Sources */,
+				E35AE46F256BD3F6003DCE34 /* SpaceMine.swift in Sources */,
 				82723AE3254228D5002A1E53 /* SpaceObject.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

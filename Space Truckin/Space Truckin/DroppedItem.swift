@@ -73,19 +73,27 @@ class DroppedItem: SpaceObject {
             
             var nextPiece: TruckPiece? = truckPiece.getFirst()
             while let p = nextPiece {
-                if p.inventory.addItem(item: item).0 {
-                    collected = true
-                    // TODO add animation from current position to capsule
-                    let duration : TimeInterval = 0.2
-                    var action  = [SKAction]()
-                    action.append(SKAction.move(to: CGPoint(x: p.sprite.position.x,
-                                                            y: p.sprite.position.y),
-                                                duration: duration))
-                    
-                    action.append(SKAction.removeFromParent())
-                    sprite.run(SKAction.sequence(action))
-                    
-                    
+                let add = p.inventory.addItem(item: item)
+                if  add.0 {
+                    //set current item to p.inventory.addItem().1
+                    if let reducedItem = add.1 {
+                        self.item = reducedItem
+                        print("\(item.value) \(item.type) left after snaggin")
+                    } else {
+                        collected = true
+                       // TODO add animation from current position to capsule
+                       let duration : TimeInterval = 0.2
+                       var action  = [SKAction]()
+                       action.append(SKAction.move(to: CGPoint(x: p.sprite.position.x,
+                                                               y: p.sprite.position.y),
+                                                   duration: duration))
+                       
+                       action.append(SKAction.removeFromParent())
+                       sprite.run(SKAction.sequence(action))
+                       
+                                           
+                    }
+                   
                     print("\(item.value) \(item.type) added to capsule")
                     return
                 }

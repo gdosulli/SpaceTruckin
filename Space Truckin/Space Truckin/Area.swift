@@ -8,7 +8,6 @@
 
 import SpriteKit
 import GameplayKit
-
 struct SpawnRate {
     var obj: SpaceObject
     var rate: TimeInterval
@@ -32,7 +31,7 @@ class Area {
     var objectsInArea: [SKSpriteNode? : SpaceObject?] = [:]
     
     var destroyedNodes = [SKSpriteNode]()
-    
+
         
     // player object
     var player: Player!
@@ -60,11 +59,12 @@ class Area {
             }
         }
         
+        
         // start spawn timers
         setTimer()
         
         // reintroduce player
-        playerWarp()
+        warp(truckList: player.chain.getAllPieces(), at: CGPoint(x: 0,y: 0))
     }
     
     @objc func spawnObject(timer: Timer) {
@@ -124,46 +124,58 @@ class Area {
         spawnRates = rates
 
     }
-
-    func playerWarp() {
-        // spawn the head, add it to the area
-        player.head.followingPiece = nil
-        for piece in player.chain.truckPieces {
+    
+    //Warps the given list of truckpieces in at the given point, with a slight delay between each piece appearing.
+    func warp(truckList: [TruckPiece], at point: CGPoint) {
+        let context = ["pieces": truckList, "point": point] as [String : Any]
+        
+        var head: TruckPiece?
+        for piece in truckList {
+            if piece.isHead {
+                head = piece
+            }
             piece.targetPiece = nil
             piece.followingPiece = nil
+            piece.sprite.position = point
         }
         
-        player.head.spawn(at: CGPoint.zero)
-        addObject(obj: player.head)
+        head!.spawn(at: point)
+        addObject(obj: head!)
         
-        // start a timer that spawns in each successive truck piece (after a short delay)
-        timers["capsule"] =  Timer.scheduledTimer(timeInterval: 0.5,
-                   target: self,
-                   selector: #selector(warpPiece),
-                   userInfo: nil,
-                   repeats: true)
+        timers[head!.sprite.name!] =  Timer.scheduledTimer(timeInterval: 0.5,
+        target: self,
+        selector: #selector(warpPiece),
+        userInfo: context,
+        repeats: true)
     }
     
-    @objc func warpPiece() {
-        // gets the first piece in the followers array that doesn't have a target
+    // activate releashing on pieces
+    @objc func warpPiece(timer: Timer) {
+        guard let context = timer.userInfo as? [String: Any] else { return }
+        let truckList: [TruckPiece] = (context["pieces"]) as! [TruckPiece]
+        let point: CGPoint = (context["point"]) as! CGPoint
+        
+        // gets the first piece in the array that doesn't have a target
         var nextPieceOpt: TruckPiece?
-        for p in player.chain.truckPieces {
-            if p.targetPiece == nil {
+        var head: TruckPiece?
+        for p in truckList {
+            if !p.isHead && p.targetPiece == nil {
                 nextPieceOpt = p
                 break
+            } else if p.isHead {
+                head = p
             }
         }
         
         // set that piece's target to head.getLastPiece() (the last piece in the connected chain)
         // add that piece to the area
         if let newPiece = nextPieceOpt {
-            let target = player.head.getLastPiece()
-            newPiece.targetPiece = target
-            target.followingPiece = newPiece
-            newPiece.spawn(at: CGPoint(x:target.sprite.position.x - 160, y:0))
+            let target = head!.getLastPiece()
+            target.reattach(at: newPiece)
+            newPiece.spawn(at: point)
             addObject(obj: newPiece)
         } else {
-            timers["capsule"]?.invalidate()
+            timers[head!.sprite.name!]?.invalidate()
         }
 
     }
@@ -229,8 +241,6 @@ class Area {
             objectsInArea.removeValue(forKey: objectsInArea[i]??.sprite)
         }
         
-       
-        
         // remove asteroids and deris that are too far from player
         let playerX = player.head.sprite.position.x
         let playerY = player.head.sprite.position.y
@@ -250,7 +260,7 @@ class Area {
 
 
 func generateTestArea(withScene scene: AreaScene) -> Area {
-    var a = Area(scene: scene)
+    let a = Area(scene: scene)
     
     
     let stoneInv = Inventory([.Stone: 15], [.Stone: 15])
@@ -268,7 +278,15 @@ func generateTestArea(withScene scene: AreaScene) -> Area {
     let spawnRate = [stoneRate, radRate, remRate]
     
     a.spawnRates = spawnRate
-    a.uniqueItems = [SpaceStation()]
+    
+    let ss = SpaceStation()
+    ss.spawn(at: CGPoint(x: CGFloat(Int.random(in: -300...300)), y: CGFloat(Int.random(in: 500...1000))))//TODO change random ranges
+    let enemyChain: [TruckPiece] = RivalTruckPiece.generateChain(with: 5, holding: [.Nuclear])
+    
+    a.warp(truckList: enemyChain, at: CGPoint(x: 400, y: -500))
+    
+    //a.uniqueItems = [ss]
+    a.initialItems = a.uniqueItems
     
     let background = SKEmitterNode(fileNamed: "StarryBackground")
     background?.advanceSimulationTime(30)
