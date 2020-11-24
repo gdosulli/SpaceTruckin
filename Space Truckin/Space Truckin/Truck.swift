@@ -259,7 +259,7 @@ class TruckPiece: SpaceObject {
     
     //NOTE: onImpact force unwraps sprite names, shouldn't be a problem though
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
-        print(obj.sprite.name)
+        print(obj.sprite.name ?? "nameless")
         if (obj.sprite.name?.starts(with: "asteroid"))! || (obj.sprite.name?.starts(with: "debris"))! {
             let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
             self.addForce(vec: newNormal)

@@ -20,7 +20,7 @@ class RivalTruckPiece: TruckPiece {
         head.isHead = true
         var truckList = [head]
         for i in 0..<numFollowers{
-            let piece = RivalTruckPiece.init(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), xRange: (1.0,1.0), yRange: (1.0,1.0), speed: 250, rotation: 0)//M
+            let piece = RivalTruckPiece.init(sprite: SKSpriteNode(imageNamed: "rival_truck_capsule1"), xRange: (1.0,1.0), yRange: (1.0,1.0), speed: 250, rotation: 0)//M
             piece.addToChain(adding: truckList[i])
             
             if let chosenItemType = itemList.randomElement(){
