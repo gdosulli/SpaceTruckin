@@ -33,7 +33,7 @@ class Movable {
         self.boostSpeed = boostSpeed
         self.outsideForces = CGVector(dx: 0, dy: 0)
     }
-
+    
     func translate(by vector: CGPoint) {
         sprite.position.x += vector.x + outsideForces.dx
         sprite.position.y += vector.y + outsideForces.dy
@@ -48,19 +48,19 @@ class Movable {
         let sine = atan2(unitVec.y, unitVec.x)
         changeTargetAngle(to: sine)
     }
-       
+    
     func changeTargetAngle(to angle: CGFloat) {
            targetAngle = angle
     }
-       
+    
     func changeTargetAngle(by angle: CGFloat) {
            targetAngle += angle
     }
-       
+    
     func changeSpeed(to: CGFloat) {
            speed = to
     }
-       
+    
     func changeSpeed(by: CGFloat) {
            speed += by
     }
@@ -71,7 +71,7 @@ class Movable {
         
         outsideForces = CGVector(dx: x, dy: y)
     }
-       
+    
     func move(by delta: CGFloat) {
         let translateVector = CGPoint(x: cos(targetAngle) * self.speed * delta, y:  sin(targetAngle) * self.speed * delta)
         self.translate(by: translateVector)
@@ -82,7 +82,6 @@ class Movable {
         let translateVector = CGPoint(x: cos(angleCorrector()) * self.speed * delta, y:  sin(angleCorrector()) * self.speed * delta)
         self.translate(by: translateVector)
     }
-    
     
     // Adjusts angular velocity of truckpiece depending on angle to target
     func turn(by delta: CGFloat) {

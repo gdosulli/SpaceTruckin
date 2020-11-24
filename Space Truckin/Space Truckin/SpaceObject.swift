@@ -35,6 +35,7 @@ class SpaceObject : Movable {
     var testCategory: UInt32
     var destroyed = false
     var impactDamage = 1
+    var OBJECT_ID = 0
     static var objectCount = 0
     
     var isImportant = false
@@ -65,6 +66,7 @@ class SpaceObject : Movable {
                    sprite: sprite, boostSpeed: boostSpeed)
         
         self.sprite.name = "\(SpaceObject.objectCount)"
+        self.OBJECT_ID = SpaceObject.objectCount
         SpaceObject.objectCount += 1
         
     }

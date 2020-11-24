@@ -11,15 +11,14 @@ import GameplayKit
 
 struct Player {
     var head: TruckPiece
-    var chain: TruckChain
     let cam = SKCameraNode()
     
     func getChildren() -> [SKNode?] {
-        return chain.getChildren()
+        return head.getAllChainedChildren()
     }
     
     func getClickedPiece(from node: SKSpriteNode) -> TruckPiece? {
-        for piece in chain.getAllPieces() {
+        for piece in head.getAllPieces() {
             if piece.sprite === node {
                 return piece
             }
@@ -36,7 +35,7 @@ struct Player {
             head.sprite.texture = SKTexture(imageNamed: "space_truck_cab")
         }
             
-        for p in chain.getAllPieces() {
+        for p in head.getAllPieces() {
             p.setBoost(b: false)
         }
         
@@ -46,24 +45,21 @@ struct Player {
             truckPiece?.setBoost(b: b)
             truckPiece = truckPiece?.followingPiece
         }
-    
     }
     
     
-    func update(by delta: CGFloat) {
+    //func update(by delta: CGFloat) {
 //        head.move(by: delta)
 //        chain.movePieces(by: delta)
-        chain.updateFollowers()
-        chain.checkForDestroyed()
-    }
+    //    .updateFollowers()
+    //    chain.checkForDestroyed()
+    //}
 }
 extension Player {
     init(_ head: TruckPiece) {
         self.head = head
-        self.chain = TruckChain(head: head)
+        head.isHead = true
     }
-    
-    
 }
 
 struct DropDownMenu {
@@ -193,7 +189,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var explosions: [SKTexture]! //TODO: consider moving this to a better home
     var destroyedNodes: (Set<SKSpriteNode?>) = []
     var destroyTimer: Timer!
-    var swarm = false
     
     var storageBar: InterfaceBar!
     
@@ -215,27 +210,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let sprite = SKSpriteNode(imageNamed: "space_truck_cab")
 
         
-        if swarm {
-            player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.head))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head))
-            
-        } else {
-            player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.chain.getLastPiece()))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.chain.getLastPiece()))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
-        }
+
+        player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
         
         
-        for c in player.chain.getAllPieces() {
+        for c in player.head.getAllPieces() {
             
             objectsInScene[c.sprite] = c
             
@@ -524,7 +511,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         if !stopped {
-            player.update(by: delta)
+            //player.update(by: delta) // Deprecated
         }
         
         

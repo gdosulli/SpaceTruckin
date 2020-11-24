@@ -71,14 +71,14 @@ class DroppedItem: SpaceObject {
         
         if !collected, let truckPiece = obj as? TruckPiece {
             
-            var nextPiece: TruckPiece? = truckPiece.getFirst()
+            var nextPiece: TruckPiece? = truckPiece.getFirstPiece()
             while let p = nextPiece {
                 let add = p.inventory.addItem(item: item)
                 if  add.0 {
                     //set current item to p.inventory.addItem().1
                     if let reducedItem = add.1 {
                         self.item = reducedItem
-                        print("\(item.value) \(item.type) left after snaggin")
+                        //print("\(item.value) \(item.type) left after snaggin")
                     } else {
                         collected = true
                        // TODO add animation from current position to capsule
@@ -94,7 +94,7 @@ class DroppedItem: SpaceObject {
                                            
                     }
                    
-                    print("\(item.value) \(item.type) added to capsule")
+                    //print("\(item.value) \(item.type) added to capsule")
                     return
                 }
                 

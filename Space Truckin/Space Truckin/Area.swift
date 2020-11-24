@@ -64,7 +64,7 @@ class Area {
         setTimer()
         
         // reintroduce player
-        warp(truckList: player.chain.getAllPieces(), at: CGPoint(x: 0,y: 0))
+        warp(truckList: player.head.getAllPieces(), at: CGPoint(x: 0,y: 0))
     }
     
     @objc func spawnObject(timer: Timer) {
@@ -171,7 +171,7 @@ class Area {
         // add that piece to the area
         if let newPiece = nextPieceOpt {
             let target = head!.getLastPiece()
-            target.reattach(at: newPiece)
+            target.addToChain(adding: newPiece)
             newPiece.spawn(at: point)
             addObject(obj: newPiece)
         } else {
@@ -218,8 +218,6 @@ class Area {
         }
         
         // update objects
-        player.update(by: delta)
-        
         for object in objectsInArea {
             object.value?.move(by: delta)
             object.value?.update(by: delta)
@@ -280,12 +278,12 @@ func generateTestArea(withScene scene: AreaScene) -> Area {
     a.spawnRates = spawnRate
     
     let ss = SpaceStation()
-    ss.spawn(at: CGPoint(x: CGFloat(Int.random(in: -300...300)), y: CGFloat(Int.random(in: 500...1000))))//TODO change random ranges
+    ss.spawn(at: CGPoint(x: CGFloat(Int.random(in: -300...300)), y: CGFloat(Int.random(in: 1000...1500))))//TODO change random ranges
     let enemyChain: [TruckPiece] = RivalTruckPiece.generateChain(with: 5, holding: [.Nuclear])
     
     a.warp(truckList: enemyChain, at: CGPoint(x: 400, y: -500))
     
-    //a.uniqueItems = [ss]
+    a.uniqueItems = [ss]
     a.initialItems = a.uniqueItems
     
     let background = SKEmitterNode(fileNamed: "StarryBackground")
