@@ -233,9 +233,9 @@ class TruckPiece: SpaceObject {
             
             //TODO: make a function that clones attributes from a given truckpiece onto the
             
-            if p.sprite.name == "rival_capsule" && self.sprite.name == "capsule" {
+            if self.sprite.name == "capsule" {
                 p.sprite.name = "capsule"
-            } else if p.sprite.name == "capsule" && self.sprite.name == "rival_capsule" {
+            } else if self.sprite.name == "rival_capsule" {
                 p.sprite.name = "rival_capsule"
             }
             

@@ -382,6 +382,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let touchedNode = self.atPoint(pos)
         // checks which node was touched and preforms that action
         if let name = touchedNode.name {
+            print(name)
             var realName = name
             if name.contains("Sector ") {
                 realName =  "sector page"
