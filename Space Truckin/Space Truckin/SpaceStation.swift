@@ -33,15 +33,13 @@ class SpaceStation: SpaceObject {
         sprite.zPosition = 10
         armSprite.zPosition = sprite.zPosition - 1
         
-        
-        
         armSprite.physicsBody?.isDynamic = false
         armSprite.physicsBody?.categoryBitMask = collisionCategory
         armSprite.physicsBody?.contactTestBitMask = testCategory
         armSprite.physicsBody?.collisionBitMask = 0
         
         super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory, boostSpeed)
-        
+        sprite.name = "station"
         sprite.physicsBody?.isDynamic = false
     }
 

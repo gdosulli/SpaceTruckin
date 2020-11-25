@@ -32,6 +32,7 @@ class DroppedItem: SpaceObject {
     
     
     override func spawn(at spawnPoint: CGPoint) {
+        sprite.name = "item"
         sprite.size = CGSize(width: xRange.0, height: yRange.0)
         
         let margin: CGFloat = 0.5
@@ -90,14 +91,10 @@ class DroppedItem: SpaceObject {
                        
                        action.append(SKAction.removeFromParent())
                        sprite.run(SKAction.sequence(action))
-                       
-                                           
                     }
-                   
                     //print("\(item.value) \(item.type) added to capsule")
                     return
                 }
-                
                 nextPiece = p.followingPiece
             }
         }

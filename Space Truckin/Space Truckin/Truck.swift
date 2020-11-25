@@ -9,7 +9,8 @@ import Foundation
 import SpriteKit
 import CoreGraphics
 
-
+//Note: add thermo-stellar truckpiece for destroying wayward planets (to be used sparingly)
+//Note: add wayward planets that need to be corrected with thermo-stellar device
 
 class TruckPiece: SpaceObject {
     let thruster: SKEmitterNode = SKEmitterNode(fileNamed: "sparkEmitter")!
@@ -68,7 +69,6 @@ class TruckPiece: SpaceObject {
         thruster.position = sprite.position
         
         sprite.name = "capsule"
-
     }
     //
     //    required init(instance: SpaceObject) {
@@ -94,7 +94,6 @@ class TruckPiece: SpaceObject {
                 breakChain()
             }
         }
-        
         thruster.position = sprite.position
         thruster.zRotation = sprite.zRotation
         
@@ -208,9 +207,12 @@ class TruckPiece: SpaceObject {
         return firstPiece
     }
     
-    //Attaches target piece into the
+    //Attaches target piece into the chain
     func addToChain(adding piece: TruckPiece) {
         piece.lost = false
+        //if let remainingChain = piece.followingPiece {
+        //    piece.followingPiece?.breakChain()
+        //}
         
         piece.targetPiece?.followingPiece = nil
         piece.targetPiece = getLastPiece()
@@ -233,17 +235,11 @@ class TruckPiece: SpaceObject {
             
             //TODO: make a function that clones attributes from a given truckpiece onto the
             
-            if p.sprite.name == "rival_capsule" && self.sprite.name == "capsule" {
-                p.sprite.name = "capsule"
-            } else if p.sprite.name == "capsule" && self.sprite.name == "rival_capsule" {
-                p.sprite.name = "rival_capsule"
-            }
+            p.sprite.name = self.sprite.name
             
             // rival to normal
             // if normal to rival
-            
-            print(self.sprite.name!)
-            
+                        
             followPiece = p.followingPiece
             let date = Date().addingTimeInterval(3.0) //releashing timer
             let timer = Timer(fireAt: date, interval: 0, target: p, selector: #selector(endReleashing), userInfo: nil, repeats: false)
@@ -260,17 +256,26 @@ class TruckPiece: SpaceObject {
     //NOTE: onImpact force unwraps sprite names, shouldn't be a problem though
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
         print(obj.sprite.name)
+        
+        
+        //Capsule vs Asteroid and Debris collision
         if (obj.sprite.name?.starts(with: "asteroid"))! || (obj.sprite.name?.starts(with: "debris"))! {
             let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
-            print("oof ouch \(durability)")
+            print("OOF ouch! \(durability) hull remaining.")
             if durability <= 0 {
                 onDestroy()
             }
-        } else if obj.collisionCategory == CollisionCategories.LOST_CAPSULE_CATEGORY {
+            
+            
+        //Capsule vs Lost Capsule collision
+        } else if obj.sprite.name == "lost_capsule" {
             addToChain(adding: (obj as? TruckPiece)!)
-        } else if obj.collisionCategory == CollisionCategories.SPACE_STATION_CATEGORY {
+            
+            
+        //Capsule vs SpaceStation Collision
+        } else if obj.sprite.name == "station_arm"{
             // contact w space station
             if obj.sprite.name == "station_arm" {
                 // trigger entry
@@ -285,6 +290,10 @@ class TruckPiece: SpaceObject {
     override func onDestroy() {
         //print("Truck should be destroyed but i didnt code this whoops my bad sorry team")
         print("pop")
+        //change name to destroyed_capsule?
+        breakChain()
+        self.followingPiece?.breakChain()
+        
         if !invincible {
             dropItem(at: sprite.position)
             destroyed = true
@@ -327,11 +336,12 @@ class TruckPiece: SpaceObject {
         return nodes
     }
     
-    //Breaks the chain
+    //Seperates from targetPiece, creates snap sprite, turns all pieces in chain into lost_capsules
     func breakChain(){
         let pos = self.targetPiece?.sprite.position
         self.targetPiece?.followingPiece = nil
         self.targetPiece = nil
+        
         self.lost = true
         let snap = EffectBubble(type: .SNAP, duration: 0.5)
         self.sprite.parent?.addChild(snap.getChildren()[0]!)
@@ -339,14 +349,12 @@ class TruckPiece: SpaceObject {
             snap.spawn(at: p)
         }
         
-        var followPiece: TruckPiece? = self
-        while let p = followPiece {
-            p.collisionCategory = CollisionCategories.LOST_CAPSULE_CATEGORY
-            p.testCategory = CollisionCategories.ASTEROID_CATEGORY
-            p.sprite.name = "lost_capsule"
-            p.sprite.physicsBody?.categoryBitMask = p.collisionCategory
-            p.sprite.physicsBody?.contactTestBitMask = p.testCategory
-            followPiece = p.followingPiece
+        for piece in getAllPieces() {
+            piece.collisionCategory = CollisionCategories.LOST_CAPSULE_CATEGORY
+            piece.testCategory = CollisionCategories.ASTEROID_CATEGORY
+            piece.sprite.name = "lost_capsule"
+            piece.sprite.physicsBody?.categoryBitMask = piece.collisionCategory
+            piece.sprite.physicsBody?.contactTestBitMask = piece.testCategory
         }
     }
     
@@ -354,13 +362,13 @@ class TruckPiece: SpaceObject {
         let distancex = sprite.position.x - nextPiece.sprite.position.x
         let distancey = sprite.position.y - nextPiece.sprite.position.y
         let distance = sqrt(distancex * distancex + distancey * distancey)
-        
         return distance
     }
 }
-//
-//// TODO: implement barrel-roll/dash/burst on swipe
-////=====================================================================
+
+
+// TODO: implement barrel-roll/dash/burst on swipe
+//=====================================================================
 //class TruckChain {
 //    let head: TruckPiece!
 //    var tail: TruckPiece!
@@ -474,7 +482,7 @@ class TruckPiece: SpaceObject {
 //        }
 //    }
 //
-//// TODO delay deletion so explosion play (i know how to do this)
+// TODO delay deletion so explosion play (i know how to do this)
 //    func checkForDestroyed() {
 //        if head.destroyed {
 //            // game over

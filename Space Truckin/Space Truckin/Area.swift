@@ -177,7 +177,6 @@ class Area {
         } else {
             timers[head!.sprite.name!]?.invalidate()
         }
-
     }
     
     func addObject(obj: SpaceObject) {
@@ -209,21 +208,23 @@ class Area {
     
 
     func update(by delta: CGFloat) {
-        // update background
-        
-        for n in backgroundItems {
-            if let e = n as? SKEmitterNode {
-                e.particlePosition = player.head.sprite.position
+        if !gameIsPaused{
+            
+            // update background
+            for n in backgroundItems {
+                if let e = n as? SKEmitterNode {
+                    e.particlePosition = player.head.sprite.position
+                }
             }
-        }
-        
-        // update objects
-        for object in objectsInArea {
-            object.value?.move(by: delta)
-            object.value?.update(by: delta)
-//            if object.value.destroyed {
-//                destroyedNodes.inse
-//            }
+            
+            // update objects
+            for object in objectsInArea {
+                object.value?.move(by: delta)
+                object.value?.update(by: delta)
+    //            if object.value.destroyed {
+    //                destroyedNodes.inse
+    //            }
+            }
         }
     }
     
@@ -278,7 +279,9 @@ func generateTestArea(withScene scene: AreaScene) -> Area {
     a.spawnRates = spawnRate
     
     let ss = SpaceStation()
-    ss.spawn(at: CGPoint(x: CGFloat(Int.random(in: -300...300)), y: CGFloat(Int.random(in: 1000...1500))))//TODO change random ranges
+    //ss.spawn(at: CGPoint(x: CGFloat(Int.random(in: -300...300)), y: CGFloat(Int.random(in: 1000...1500))))//TODO change random ranges
+    ss.spawn(at: CGPoint(x: 0, y: 1200))//Spawns such that player appears from the arm
+
     let enemyChain: [TruckPiece] = RivalTruckPiece.generateChain(with: 5, holding: [.Nuclear])
     
     a.warp(truckList: enemyChain, at: CGPoint(x: 400, y: -500))

@@ -11,6 +11,7 @@ import GameplayKit
 class Debris : SpaceObject {
     
     override func spawn(at spawnPoint: CGPoint) {
+        sprite.name = "debris"
         // set random asteroid size
         let dimension = CGFloat.random(in: xRange.0...xRange.1)
         sprite.size = CGSize(width: dimension, height: dimension)
