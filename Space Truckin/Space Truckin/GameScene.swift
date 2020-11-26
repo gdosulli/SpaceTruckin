@@ -27,14 +27,6 @@ struct Player {
     }
     
     func setBoost(b: Bool) {
-        if b {
-            let size = head.sprite.size
-            head.sprite.texture = SKTexture(imageNamed: "second_drill")
-            head.sprite.size = size
-        } else {
-            head.sprite.texture = SKTexture(imageNamed: "space_truck_cab")
-        }
-            
         for p in head.getAllPieces() {
             p.setBoost(b: false)
         }
@@ -302,6 +294,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                               fadeTime: 1.5,
                                               frameWidth: frameWidth,
                                               frameHeight: frameHeight)
+        
         // sets the map
         let testMap = Map(sizeOf: (4, 4), threat: 3, maxObjects: 1, named: "test Area", frame: CGSize(width: frameWidth, height: frameHeight))
         
@@ -382,6 +375,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let touchedNode = self.atPoint(pos)
         // checks which node was touched and preforms that action
         if let name = touchedNode.name {
+            print(name)
             var realName = name
             if name.contains("Sector ") {
                 realName =  "sector page"
