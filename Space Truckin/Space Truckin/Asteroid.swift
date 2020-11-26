@@ -18,7 +18,7 @@ class Asteroid : SpaceObject, Copyable {
             sprite?.name = name + "c"
         }
         
-        super.init(instance.durability, sprite!, instance.xRange, instance.yRange, instance.inventory, instance.speed, instance.rotation, instance.targetAngle, instance.collisionCategory, instance.testCategory, instance.boostSpeed)
+        super.init(instance.durability, sprite!, instance.xRange, instance.yRange, instance.inventory, instance.speed, instance.rotation, instance.targetAngle, instance.boostSpeed)
     }
 
     
@@ -28,7 +28,7 @@ class Asteroid : SpaceObject, Copyable {
                       _ xRange: (CGFloat, CGFloat),
                       _ yRange: (CGFloat, CGFloat),
                       _ inventory: Inventory) {
-        self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
+        self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, 0)
     }
     
     override init (_ durability: Int,
@@ -39,10 +39,8 @@ class Asteroid : SpaceObject, Copyable {
           _ speed: CGFloat,
           _ rotation: CGFloat,
           _ targetAngle: CGFloat,
-          _ collisionCategory: UInt32,
-          _ testCategory: UInt32,
           _ boostSpeed: CGFloat) {
-        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory, boostSpeed)
+        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, boostSpeed)
     }
     
     override func spawn(at spawnPoint: CGPoint) {

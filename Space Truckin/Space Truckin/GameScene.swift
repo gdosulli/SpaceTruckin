@@ -560,7 +560,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         self.addChild(debrisSprite)
         
-        let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle, CollisionCategories.SPACE_JUNK_CATEGORY, CollisionCategories.TRUCK_CATEGORY, speed)
+        let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle, speed)
         
         let spawnPoint = getRandPos(for: debrisSprite)
         debris.spawn(at: spawnPoint)
@@ -592,9 +592,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                            Inventory(),
                            speed,
                            rotation,
-                           targetAngle,
-                           CollisionCategories.ASTEROID_CATEGORY,
-                           CollisionCategories.TRUCK_CATEGORY, speed)
+                           targetAngle, speed)
         
         ast.spawn(at: spawnPoint)
         

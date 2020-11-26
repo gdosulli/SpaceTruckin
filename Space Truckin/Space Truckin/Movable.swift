@@ -21,6 +21,8 @@ class Movable {
     var normalSpeed: CGFloat
     var outsideForces: CGVector
     var boosted = false
+    var outsideForcesDecay = CGFloat(0.9)
+    var collisionWeight = CGFloat(10)
     
     
     init(speed: CGFloat, rotation: CGFloat, angleInRadians: CGFloat, sprite: SKSpriteNode, boostSpeed: CGFloat) {
@@ -33,12 +35,12 @@ class Movable {
         self.boostSpeed = boostSpeed
         self.outsideForces = CGVector(dx: 0, dy: 0)
     }
-    
+        
     func translate(by vector: CGPoint) {
         sprite.position.x += vector.x + outsideForces.dx
         sprite.position.y += vector.y + outsideForces.dy
-        outsideForces.dx *= 0.9
-        outsideForces.dy *= 0.9
+        outsideForces.dx *= outsideForcesDecay
+        outsideForces.dy *= outsideForcesDecay
     }
     
     func changeAngleTo(point pos: CGPoint) {

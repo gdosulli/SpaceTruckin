@@ -22,7 +22,7 @@ class EffectBubble: SpaceObject {
             spriteName = ""
         }
         self.duration = duration
-        super.init(0, SKSpriteNode(imageNamed: spriteName),(50,50),(50,50),NO_INVENTORY,0, 10, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.SPACE_JUNK_CATEGORY, 10.0)
+        super.init(0, SKSpriteNode(imageNamed: spriteName),(50,50),(50,50),NO_INVENTORY,0, 10, 0, 10.0)
     }
     
 //    required init(instance: SpaceObject) {

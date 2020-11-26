@@ -66,7 +66,7 @@ import SpriteKit
 class RivalTruckPiece: TruckPiece {
     init(sprite: SKSpriteNode, xRange: (CGFloat, CGFloat), yRange: (CGFloat, CGFloat), speed: CGFloat, rotation: CGFloat) {
         
-        super.init(3, sprite, nil, xRange, yRange, Inventory(), speed, rotation, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.TRUCK_CATEGORY, speed)
+        super.init(3, sprite, nil, xRange, yRange, Inventory(), speed, rotation, 0, speed)
         sprite.name = "rival_capsule"
     }
     
@@ -96,20 +96,22 @@ class RivalTruckPiece: TruckPiece {
     
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
         
+        var collisionVector = contact.contactNormal
+//        if self.sprite === contact.bodyB.node{
+//            print("FLIP RIVAL")
+//            collisionVector.dx *= -1
+//            collisionVector.dy *= -1
+//        }
+        
         //Rival Capsule vs Capsule collision
         if (obj.sprite.name?.starts(with: "capsule"))! {
-            var newNormal : CGVector
-            if self.isHead{
-                newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
-            } else {
-                newNormal = CGVector(dx: 10 * contact.contactNormal.dx, dy: 10 * contact.contactNormal.dy)
-            }
+            var newNormal = CGVector(dx: 10 * collisionVector.dx, dy: 10 * collisionVector.dy)
             self.addForce(vec: newNormal)
         
         
         //Rival Capsule vs Asteroid and Debris collision
         } else if (obj.sprite.name?.starts(with: "asteroid"))! || (obj.sprite.name?.starts(with: "debris"))! {
-            let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+            let newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
             print("oof ouch \(durability)")
@@ -121,7 +123,6 @@ class RivalTruckPiece: TruckPiece {
         //Rival Capsule vs Lost Capsule collision
         } else if obj.sprite.name == "lost_capsule" {
             addToChain(adding: (obj as? TruckPiece)!)
-            
             
         //Capsule vs SpaceStation Collision --- needed or not?
         }

@@ -26,18 +26,18 @@ class TruckPiece: SpaceObject {
     var maxLeashLength = CGFloat(250)
     
     convenience init(sprite s1: SKSpriteNode) {
-        self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, 0)
+        self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(), 100, 1, 0, 0)
     }
     
     convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
-        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, piece.boostSpeed)
+        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, piece.boostSpeed)
         piece.followingPiece = self
 
     }
  
     convenience init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat, boostedSpeed: CGFloat) {
 
-        self.init(durability, s1, nil, (size,size), (size,size), Inventory(), speed, 10, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, boostedSpeed)
+        self.init(durability, s1, nil, (size,size), (size,size), Inventory(), speed, 10, 0, boostedSpeed)
     }
     
     init(_ durability: Int,
@@ -49,13 +49,11 @@ class TruckPiece: SpaceObject {
     _ speed: CGFloat,
     _ rotation: CGFloat,
     _ targetAngle: CGFloat,
-    _ collisionCategory: UInt32,
-    _ testCategory: UInt32,
     _ boostSpeed: CGFloat) {
         
         
 
-        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory, boostSpeed)
+        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, boostSpeed)
         
         self.targetPiece = targetPiece
         
@@ -250,17 +248,25 @@ class TruckPiece: SpaceObject {
     //Releashing should work by setting a timestamp for the releashing to be ended at, this would avoid releashings conflicting
     @objc func endReleashing() {
         releashing = false
-        print("Releashing ended")
+        //print("Releashing ended")
     }
     
     //NOTE: onImpact force unwraps sprite names, shouldn't be a problem though
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
-        print(obj.sprite.name)
-        
+        //print("A",contact.bodyA.node?.name)
+        //print("B",contact.bodyB.node?.name)
+        var collisionVector = contact.contactNormal
+//        if self.sprite === contact.bodyB.node{
+//            print("FLIP CAPSULE")
+//            collisionVector.dx *= -1
+//            collisionVector.dy *= -1
+//        }
+        //print(obj.sprite.name)
+        //print("Vector:",collisionVector)
         
         //Capsule vs Asteroid and Debris collision
-        if (obj.sprite.name?.starts(with: "asteroid"))! || (obj.sprite.name?.starts(with: "debris"))! {
-            let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+        if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
+            let newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
             print("OOF ouch! \(durability) hull remaining.")
@@ -271,8 +277,9 @@ class TruckPiece: SpaceObject {
             
         //Capsule vs Lost Capsule collision
         } else if obj.sprite.name == "lost_capsule" {
-            addToChain(adding: (obj as? TruckPiece)!)
-            
+            if self.sprite.name != "lost_capsule" || self.sprite != contact.bodyA { //This should ensure too lost capsules never connect to each other at the same time
+                addToChain(adding: (obj as? TruckPiece)!)
+            }
             
         //Capsule vs SpaceStation Collision
         } else if obj.sprite.name == "station_arm"{
@@ -284,12 +291,11 @@ class TruckPiece: SpaceObject {
                 // bump
                 print("bump")
             }
-        }
-        
-        
+            
+            
         //Capsule vs Rival Capsule collision
-        if (obj.sprite.name?.starts(with: "rival_capsule"))!{
-            let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+        } else if obj.sprite.name == "rival_capsule"{
+            var newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
             self.addForce(vec: newNormal)
             //durability -= obj.impactDamage
             //print("OOF ouch! \(durability) hull remaining.")
@@ -297,9 +303,8 @@ class TruckPiece: SpaceObject {
             //    onDestroy()
             //}
         }
-            
     }
-    
+        
     override func onDestroy() {
         //print("Truck should be destroyed but i didnt code this whoops my bad sorry team")
         print("pop")
@@ -363,8 +368,7 @@ class TruckPiece: SpaceObject {
         }
         
         for piece in getAllPieces() {
-            piece.collisionCategory = CollisionCategories.LOST_CAPSULE_CATEGORY
-            piece.testCategory = CollisionCategories.ASTEROID_CATEGORY
+            self.setBoost(b: false)
             piece.sprite.name = "lost_capsule"
             piece.sprite.physicsBody?.categoryBitMask = piece.collisionCategory
             piece.sprite.physicsBody?.contactTestBitMask = piece.testCategory

@@ -13,26 +13,18 @@ import GameplayKit
 
 //TODO: REMOVE COLLISIONCATEGORIES (FOR THE MOST PART) SUCH THAT ALL SPACEOBJECTS HAVE THE SAME CATEGORY
 struct CollisionCategories {
-    static let TRUCK_CATEGORY: UInt32 = 0x1 << 0
-    static let ASTEROID_CATEGORY: UInt32 = 0x1 << 1
-    static let SPACE_JUNK_CATEGORY: UInt32 = 0x1 << 2
-    static let LOST_CAPSULE_CATEGORY: UInt32 = 0x1 << 3
-    static let ITEM_CATEGORY: UInt32 = 0x1 << 4
-    static let SPACE_STATION_CATEGORY: UInt32 = 0x1 << 5
-    static let RIVAL_TRUCK_CATEGORY: UInt32 = 0x1 << 6
-    
+    static let SPACEOBJECT: UInt32 = 0x1 << 0
+    static let MISC: UInt32 = 0x1 << 1
 }
 
 
 class SpaceObject : Movable {
-
-    
     var durability: Int
     var xRange: (CGFloat, CGFloat)
     var yRange: (CGFloat, CGFloat)
     var inventory: Inventory
-    var collisionCategory: UInt32
-    var testCategory: UInt32
+    var collisionCategory = CollisionCategories.SPACEOBJECT
+    var testCategory = CollisionCategories.SPACEOBJECT
     var destroyed = false
     var impactDamage = 1
     var OBJECT_ID = 0
@@ -50,15 +42,11 @@ class SpaceObject : Movable {
           _ speed: CGFloat,
           _ rotation: CGFloat,
           _ targetAngle: CGFloat,
-          _ collisionCategory: UInt32,
-          _ testCategory: UInt32,
           _ boostSpeed: CGFloat) {
         self.durability = durability
         self.xRange = xRange
         self.yRange = yRange
         self.inventory = inventory
-        self.collisionCategory = collisionCategory
-        self.testCategory = testCategory
 
         super.init(speed: speed,
                    rotation: rotation,
@@ -77,7 +65,7 @@ class SpaceObject : Movable {
                       _ xRange: (CGFloat, CGFloat),
                       _ yRange: (CGFloat, CGFloat),
                       _ inventory: Inventory) {
-        self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
+        self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, 0)
     }
     
 //    required init(instance: SpaceObject) {
