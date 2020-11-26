@@ -13,6 +13,9 @@
 		8270C0B8254B73F700424235 /* StarryBackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8270C0B7254B73F700424235 /* StarryBackground.sks */; };
 		82723AE3254228D5002A1E53 /* SpaceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82723AE2254228D5002A1E53 /* SpaceObject.swift */; };
 		82723AE825422E5B002A1E53 /* Asteroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82723AE725422E5B002A1E53 /* Asteroid.swift */; };
+		E3248BDE256DB36300974CF6 /* Spawner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3248BDD256DB36300974CF6 /* Spawner.swift */; };
+		E3248BE0256DB43500974CF6 /* Shield.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3248BDF256DB43500974CF6 /* Shield.swift */; };
+		E3248BE2256E314100974CF6 /* EffectField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3248BE1256E314100974CF6 /* EffectField.swift */; };
 		E33F6147254221C9005BAB37 /* Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33F6146254221C9005BAB37 /* Inventory.swift */; };
 		E33F614925422EC4005BAB37 /* Movable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33F614825422EC4005BAB37 /* Movable.swift */; };
 		E34A4754254BC42000479EFB /* GalaxyBackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34A4753254BC42000479EFB /* GalaxyBackground.sks */; };
@@ -76,6 +79,9 @@
 		8270C0B7254B73F700424235 /* StarryBackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StarryBackground.sks; sourceTree = "<group>"; };
 		82723AE2254228D5002A1E53 /* SpaceObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceObject.swift; sourceTree = "<group>"; };
 		82723AE725422E5B002A1E53 /* Asteroid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asteroid.swift; sourceTree = "<group>"; };
+		E3248BDD256DB36300974CF6 /* Spawner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spawner.swift; sourceTree = "<group>"; };
+		E3248BDF256DB43500974CF6 /* Shield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shield.swift; sourceTree = "<group>"; };
+		E3248BE1256E314100974CF6 /* EffectField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectField.swift; sourceTree = "<group>"; };
 		E33F6146254221C9005BAB37 /* Inventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inventory.swift; sourceTree = "<group>"; };
 		E33F614825422EC4005BAB37 /* Movable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movable.swift; sourceTree = "<group>"; };
 		E34A4753254BC42000479EFB /* GalaxyBackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GalaxyBackground.sks; sourceTree = "<group>"; };
@@ -203,6 +209,9 @@
 				E35AE46225685AF1003DCE34 /* Area.swift */,
 				E35AE46A256A577A003DCE34 /* AreaScene.swift */,
 				E35AE46E256BD3F6003DCE34 /* SpaceMine.swift */,
+				E3248BDD256DB36300974CF6 /* Spawner.swift */,
+				E3248BDF256DB43500974CF6 /* Shield.swift */,
+				E3248BE1256E314100974CF6 /* EffectField.swift */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -397,9 +406,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E35AE46325685AF1003DCE34 /* Area.swift in Sources */,
+				E3248BE0256DB43500974CF6 /* Shield.swift in Sources */,
 				E35AE46B256A577A003DCE34 /* AreaScene.swift in Sources */,
 				E373A3AF25549E1E00D04135 /* MusicPlayer.swift in Sources */,
 				E34AB9BF252BAE6D007AF254 /* GameScene.swift in Sources */,
+				E3248BDE256DB36300974CF6 /* Spawner.swift in Sources */,
 				E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */,
 				E3899076255CB6350037B507 /* DroppedItem.swift in Sources */,
 				E33F6147254221C9005BAB37 /* Inventory.swift in Sources */,
@@ -407,6 +418,7 @@
 				E33F614925422EC4005BAB37 /* Movable.swift in Sources */,
 				E34AB9C1252BAE6D007AF254 /* GameViewController.swift in Sources */,
 				E3C95F76256071740009E84E /* InterfaceBar.swift in Sources */,
+				E3248BE2256E314100974CF6 /* EffectField.swift in Sources */,
 				82723AE825422E5B002A1E53 /* Asteroid.swift in Sources */,
 				E3C9603C256469DE0009E84E /* EffectBubbles.swift in Sources */,
 				E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */,

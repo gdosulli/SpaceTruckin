@@ -20,11 +20,12 @@ struct CollisionCategories {
     static let ITEM_CATEGORY: UInt32 = 0x1 << 4
     static let SPACE_STATION_CATEGORY: UInt32 = 0x1 << 5
     static let RIVAL_TRUCK_CATEGORY: UInt32 = 0x1 << 6
+    static let EFFECT_FIELD_CATEGORY: UInt32 = 0x1 << 7
     
 }
 
 
-class SpaceObject : Movable {
+class SpaceObject : Movable, Copyable {
 
     
     var durability: Int
@@ -35,6 +36,8 @@ class SpaceObject : Movable {
     var testCategory: UInt32
     var destroyed = false
     var impactDamage = 1
+    
+    
     var OBJECT_ID = 0
     static var objectCount = 0
     
@@ -80,20 +83,20 @@ class SpaceObject : Movable {
         self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
     }
     
-//    required init(instance: SpaceObject) {
-//        self.durability = instance.durability
-//        self.xRange = instance.xRange
-//        self.yRange = instance.yRange
-//        self.inventory = instance.inventory
-//        self.collisionCategory = instance.collisionCategory
-//        self.testCategory = instance.testCategory
-//
-//        let sprite = instance.sprite.copy() as! SKSpriteNode
-//        sprite.name = "\(SpaceObject.objectCount)"
-//
-//        super.init(speed: instance.speed, rotation: instance.rotation, angleInRadians: instance.targetAngle, sprite: sprite, boostSpeed: instance.boostSpeed)
-//
-//    }
+    required init(instance: SpaceObject) {
+        self.durability = instance.durability
+        self.xRange = instance.xRange
+        self.yRange = instance.yRange
+        self.inventory = instance.inventory
+        self.collisionCategory = instance.collisionCategory
+        self.testCategory = instance.testCategory
+
+        let sprite = instance.sprite.copy() as! SKSpriteNode
+        sprite.name = "\(SpaceObject.objectCount)"
+
+        super.init(speed: instance.speed, rotation: instance.rotation, angleInRadians: instance.targetAngle, sprite: sprite, boostSpeed: instance.boostSpeed)
+
+    }
     
     func spawn(at spawnPoint: CGPoint) {
         //fatalError("Subclasses need to implement the `spawn()` method.")
@@ -110,6 +113,10 @@ class SpaceObject : Movable {
     
     func expand(amount: CGFloat, duration: TimeInterval) {
         // code for expanding
+    }
+    
+    func getImpactDamage() -> CGFloat {
+        return CGFloat(impactDamage)
     }
     
     func explode(){
@@ -152,7 +159,7 @@ protocol Copyable {
 }
 
 extension Copyable {
-    func copy() -> Self {
+    func copy() -> Self? {
         return Self.init(instance: self)
     }
 }

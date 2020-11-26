@@ -15,6 +15,10 @@ class RivalTruckPiece: TruckPiece {
         sprite.name = "rival_capsule"
     }
     
+    required init(instance: SpaceObject) {
+        fatalError("init(instance:) has not been implemented")
+    }
+    
     static func generateChain(with numFollowers: Int, holding itemList: [ItemType]) -> [RivalTruckPiece]{
         let head = RivalTruckPiece.init(sprite: SKSpriteNode(imageNamed: "rival_truck_cab"), xRange: (1.0,1.0), yRange: (1.0,1.0), speed: 250, rotation: 0)//M
         head.isHead = true

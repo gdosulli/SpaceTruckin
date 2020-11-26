@@ -70,6 +70,10 @@ class TruckPiece: SpaceObject {
         sprite.name = "capsule"
 
     }
+    
+    required init(instance: SpaceObject) {
+        fatalError("init(instance:) has not been implemented")
+    }
     //
     //    required init(instance: SpaceObject) {
     //         super.init(instance: instance)

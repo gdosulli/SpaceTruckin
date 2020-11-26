@@ -24,6 +24,10 @@ class DroppedItem: SpaceObject {
         super.init(1, s1, (200,50), (200,50), Inventory(), speed, 3.14, direction, CollisionCategories.ITEM_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
     }
     
+    required init(instance: SpaceObject) {
+        fatalError("init(instance:) has not been implemented")
+    }
+    
 //    required init(instance: SpaceObject) {
 //        self.item = defaultItem
 //        super.init(instance: instance)
