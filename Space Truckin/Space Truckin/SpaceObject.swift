@@ -37,6 +37,7 @@ class SpaceObject : Movable, Copyable {
     var destroyed = false
     var impactDamage = 1
     
+    var shield: Shield?
     
     var OBJECT_ID = 0
     static var objectCount = 0
