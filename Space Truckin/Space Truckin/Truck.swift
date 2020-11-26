@@ -370,8 +370,6 @@ class TruckPiece: SpaceObject {
         for piece in getAllPieces() {
             self.setBoost(b: false)
             piece.sprite.name = "lost_capsule"
-            piece.sprite.physicsBody?.categoryBitMask = piece.collisionCategory
-            piece.sprite.physicsBody?.contactTestBitMask = piece.testCategory
         }
     }
     
