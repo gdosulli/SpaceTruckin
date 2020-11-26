@@ -285,6 +285,19 @@ class TruckPiece: SpaceObject {
                 print("bump")
             }
         }
+        
+        
+        //Capsule vs Rival Capsule collision
+        if (obj.sprite.name?.starts(with: "rival_capsule"))!{
+            let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+            self.addForce(vec: newNormal)
+            //durability -= obj.impactDamage
+            //print("OOF ouch! \(durability) hull remaining.")
+            //if durability <= 0 {
+            //    onDestroy()
+            //}
+        }
+            
     }
     
     override func onDestroy() {
