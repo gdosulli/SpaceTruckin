@@ -142,7 +142,7 @@ class Area {
         head!.spawn(at: point)
         addObject(obj: head!)
         
-        timers[head!.sprite.name!] =  Timer.scheduledTimer(timeInterval: 0.5,
+        timers[head!.sprite.name!] =  Timer.scheduledTimer(timeInterval: 0.5 * Double(head!.xRange.0),
         target: self,
         selector: #selector(warpPiece),
         userInfo: context,

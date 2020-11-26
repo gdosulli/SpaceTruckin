@@ -25,7 +25,7 @@ class TruckPiece: SpaceObject {
     var maxLeashLength = CGFloat(250)
     
     convenience init(sprite s1: SKSpriteNode) {
-        self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, 0)
+        self.init(2, s1, nil, (1.3,1.0), (1.3,1.0), Inventory(), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, 0)
     }
     
     convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
@@ -187,6 +187,7 @@ class TruckPiece: SpaceObject {
     
     //TODO: Note that the angle at spawn is hardcoded.
     override func spawn(at spawnPoint: CGPoint) {
+        sprite.size = CGSize(width: xRange.0 * sprite.size.width, height: yRange.0 * sprite.size.height)
         sprite.position = spawnPoint
         sprite.zRotation = targetAngle - CGFloat(Double.pi/2)
         
