@@ -74,6 +74,10 @@ class Inventory {
         return maxCapacities[type]!
     }
     
+    func getCurrentCapacity(for type: ItemType) -> Int {
+        return items[type]!
+    }
+    
     func addItem(item: Item) -> Bool {
         let remainingCapacity = maxCapacities[item.type]! - items[item.type]!
         if item.value > remainingCapacity {
