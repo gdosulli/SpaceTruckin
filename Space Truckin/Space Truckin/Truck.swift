@@ -27,15 +27,20 @@ class TruckPiece: SpaceObject {
         self.init(2, s1, nil, (1.0,1.0), (1.0,1.0), Inventory(), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, 0)
     }
     
-    convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
-        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, piece.boostSpeed * 0.95)
+    convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece, inventory: Inventory) {
+        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), inventory, piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, piece.boostSpeed * 0.95)
         piece.followingPiece = self
 
     }
  
-    convenience init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat, boostedSpeed: CGFloat) {
+    convenience init(sprite s1: SKSpriteNode,
+                     durability: Int,
+                     size: CGFloat,
+                     speed: CGFloat,
+                     boostedSpeed: CGFloat,
+                     inventory: Inventory) {
 
-        self.init(durability, s1, nil, (size,size), (size,size), Inventory(), speed, 10, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, boostedSpeed)
+        self.init(durability, s1, nil, (size,size), (size,size), inventory, speed, 10, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, boostedSpeed)
     }
     
     init(_ durability: Int,

@@ -46,8 +46,32 @@ class Inventory {
         self.items = items
     }
     
+    init(for itemType: ItemType, max: Int, starting current: Int) {
+        maxCapacities = [ItemType:Int]()
+        items = [ItemType:Int]()
+        
+        for type in ItemType.allCases {
+            if type == itemType {
+                maxCapacities[type] = max
+                items[type] = current
+            } else {
+                maxCapacities[type] = 0
+                items[type] = 0
+            }
+        }
+    }
+    
+    convenience init(max: Int, starting current: Int) {
+        let possibleTypes: [ItemType] = [.Nuclear, .Precious, .Scrap, .Stone]
+        self.init(for: possibleTypes.randomElement()!, max: max, starting: current)
+    }
+    
     func getRemainingCapacity(for type: ItemType) -> Int {
         return maxCapacities[type]! - items[type]!
+    }
+    
+    func getMaxCapacity(for type: ItemType) -> Int {
+        return maxCapacities[type]!
     }
     
     func addItem(item: Item) -> Bool {
@@ -119,11 +143,23 @@ struct SelectedInventory {
         capsule.position = position
         pos.y = pos.y - frameHeight / 8
         for type in ItemType.allCases {
-            invTypes[type]?.position = pos
-            invBars[type]?.move(to: CGPoint(x: pos.x + invTypes[type]!.size.width/1.5,
-                                            y: pos.y - invTypes[type]!.size.height/2))
-            
-            pos.y = pos.y - frameHeight / 8
+            if inventory.getMaxCapacity(for: type) > 0 {
+                invTypes[type]?.isHidden = false
+                for child in invBars[type]!.getChildren() {
+                    child.isHidden = false
+                }
+                
+                invTypes[type]?.position = pos
+                invBars[type]?.move(to: CGPoint(x: pos.x + invTypes[type]!.size.width/1.5,
+                                                y: pos.y - invTypes[type]!.size.height/2))
+                
+                pos.y = pos.y - frameHeight / 8
+            } else {
+                invTypes[type]?.isHidden = true
+                for child in invBars[type]!.getChildren() {
+                    child.isHidden = true
+                }
+            }
         }
     }
     
@@ -131,9 +167,6 @@ struct SelectedInventory {
         for type in ItemType.allCases {
             invBars[type]?.updatePercentage(p: inventory.getPercentFull(for: type))
             invBars[type]?.update()
-            if (inventory.items[type]! > 0) {
-                //print("\(type) percent full: \(invBars[type]!.percentage)%")
-            }
         }
     }
     

@@ -48,6 +48,10 @@ struct Player {
         chain.updateFollowers()
         chain.checkForDestroyed()
     }
+    
+    func getInventory() {
+        
+    }
 }
 extension Player {
     init(_ head: TruckPiece) {
@@ -205,18 +209,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         
         if swarm {
-            player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.head))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head))
+            player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500, inventory: Inventory(for: .Oxygen, max: 100, starting: 100)))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head, inventory: Inventory(max: 100, starting: 0)))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.head, inventory: Inventory(max: 100, starting: 0)))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head, inventory: Inventory(max: 100, starting: 0)))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head, inventory: Inventory(max: 100, starting: 0)))
             
         } else {
-            player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.chain.getLastPiece()))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.chain.getLastPiece()))
+            player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500, inventory: Inventory(for: .Oxygen, max: 100, starting: 100)))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"),
+                                               target: player.chain.getLastPiece(), inventory: Inventory(max: 100, starting: 0)))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"),
+                                               target: player.chain.getLastPiece(), inventory: Inventory(max: 100, starting: 0)))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"),
+                                               target: player.chain.getLastPiece(), inventory: Inventory(max: 100, starting: 0)))
+            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"),
+                                               target: player.chain.getLastPiece(), inventory: Inventory(max: 100, starting: 0)))
         }
         
         
