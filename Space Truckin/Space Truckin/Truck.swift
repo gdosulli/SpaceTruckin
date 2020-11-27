@@ -66,6 +66,7 @@ class TruckPiece: SpaceObject {
         sprite.physicsBody?.collisionBitMask = 0
         thruster.zPosition = sprite.zPosition - 2
         thruster.position = sprite.position
+    
         
         sprite.name = "capsule"
 
@@ -99,10 +100,12 @@ class TruckPiece: SpaceObject {
             }
         }
         
+        thruster.targetNode = sprite.parent
         thruster.position = sprite.position
-        thruster.zRotation = sprite.zRotation
         
         currentAngle = sprite.zRotation - 3.14/2
+        thruster.emissionAngle = currentAngle
+
     }
     
     //Behavior for lost pieces
@@ -117,8 +120,16 @@ class TruckPiece: SpaceObject {
         boosted = b
         if b {
             speed = boostSpeed
+            thruster.particleBirthRate = 5000
+//            thruster.particleLifetime = 1.4
+            thruster.particleScaleSpeed = -0.2
         } else {
             speed = normalSpeed
+            thruster.particleBirthRate = 2000
+//            thruster.particleLifetime = 0.6
+            thruster.particleScaleSpeed = -0.4
+
+
         }
     }
     
@@ -352,6 +363,7 @@ class TruckPiece: SpaceObject {
             p.sprite.physicsBody?.categoryBitMask = p.collisionCategory
             p.sprite.physicsBody?.contactTestBitMask = p.testCategory
             followPiece = p.followingPiece
+            p.setBoost(b: false)
         }
     }
     
