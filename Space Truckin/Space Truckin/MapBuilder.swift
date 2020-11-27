@@ -305,9 +305,9 @@ class Map {
         
         var fontSize: CGFloat
         if infoScreen.size.height < infoScreen.size.width {
-            fontSize = infoScreen.size.height/CGFloat(Double(info.count) * 2.5)
+            fontSize = infoScreen.size.height/CGFloat(Double(info.count + 1) * 2.5)
         } else {
-            fontSize = infoScreen.size.width/CGFloat(Double(info.count) * 2.5)
+            fontSize = infoScreen.size.width/CGFloat(Double(info.count + 1) * 2.5)
         }
         
         var label = SKLabelNode(fontNamed: FONT)
