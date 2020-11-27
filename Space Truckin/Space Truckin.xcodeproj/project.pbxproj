@@ -50,6 +50,10 @@
 		E373A3C82556A42F00D04135 /* interrupt2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E373A3C62556A39E00D04135 /* interrupt2.m4a */; };
 		E373A3CA2557798800D04135 /* spacejazz.m4a in Resources */ = {isa = PBXBuildFile; fileRef = E373A3C92557798000D04135 /* spacejazz.m4a */; };
 		E3899076255CB6350037B507 /* DroppedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3899075255CB6350037B507 /* DroppedItem.swift */; };
+		E392DF4825719BEA00D3CA4A /* boostEmitter1.sks in Resources */ = {isa = PBXBuildFile; fileRef = E392DF4725719BEA00D3CA4A /* boostEmitter1.sks */; };
+		E392DF4A25719D2800D3CA4A /* boostEmitter2.sks in Resources */ = {isa = PBXBuildFile; fileRef = E392DF4925719D2800D3CA4A /* boostEmitter2.sks */; };
+		E392DF4C25719DD500D3CA4A /* boostEmitter3.sks in Resources */ = {isa = PBXBuildFile; fileRef = E392DF4B25719DD500D3CA4A /* boostEmitter3.sks */; };
+		E392DF4E2571B67000D3CA4A /* radioactiveDecay.sks in Resources */ = {isa = PBXBuildFile; fileRef = E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */; };
 		E3C95F76256071740009E84E /* InterfaceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C95F75256071740009E84E /* InterfaceBar.swift */; };
 		E3C9603C256469DE0009E84E /* EffectBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C9603B256469DE0009E84E /* EffectBubbles.swift */; };
 		E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */; };
@@ -122,6 +126,10 @@
 		E373A3C62556A39E00D04135 /* interrupt2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = interrupt2.m4a; sourceTree = "<group>"; };
 		E373A3C92557798000D04135 /* spacejazz.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = spacejazz.m4a; sourceTree = "<group>"; };
 		E3899075255CB6350037B507 /* DroppedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroppedItem.swift; sourceTree = "<group>"; };
+		E392DF4725719BEA00D3CA4A /* boostEmitter1.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = boostEmitter1.sks; sourceTree = "<group>"; };
+		E392DF4925719D2800D3CA4A /* boostEmitter2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = boostEmitter2.sks; sourceTree = "<group>"; };
+		E392DF4B25719DD500D3CA4A /* boostEmitter3.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = boostEmitter3.sks; sourceTree = "<group>"; };
+		E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = radioactiveDecay.sks; sourceTree = "<group>"; };
 		E3C95F75256071740009E84E /* InterfaceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceBar.swift; sourceTree = "<group>"; };
 		E3C9603B256469DE0009E84E /* EffectBubbles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectBubbles.swift; sourceTree = "<group>"; };
 		E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxyEmitter.swift; sourceTree = "<group>"; };
@@ -212,6 +220,10 @@
 				E3248BDD256DB36300974CF6 /* Spawner.swift */,
 				E3248BDF256DB43500974CF6 /* Shield.swift */,
 				E3248BE1256E314100974CF6 /* EffectField.swift */,
+				E392DF4725719BEA00D3CA4A /* boostEmitter1.sks */,
+				E392DF4925719D2800D3CA4A /* boostEmitter2.sks */,
+				E392DF4B25719DD500D3CA4A /* boostEmitter3.sks */,
+				E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -364,6 +376,7 @@
 			files = (
 				E35AE46725686227003DCE34 /* warp sound.m4a in Resources */,
 				E373A3CA2557798800D04135 /* spacejazz.m4a in Resources */,
+				E392DF4825719BEA00D3CA4A /* boostEmitter1.sks in Resources */,
 				E373A3C72556A42F00D04135 /* interrupt1.m4a in Resources */,
 				E373A3C82556A42F00D04135 /* interrupt2.m4a in Resources */,
 				E373A3C32556829500D04135 /* vibing.m4a in Resources */,
@@ -372,7 +385,9 @@
 				E373A3BD2554C97C00D04135 /* fall.m4a in Resources */,
 				E373A3BE2554C97C00D04135 /* tension.m4a in Resources */,
 				E373A3B22554AC7500D04135 /* dark_space.m4a in Resources */,
+				E392DF4A25719D2800D3CA4A /* boostEmitter2.sks in Resources */,
 				E34AB9F5252BBD3F007AF254 /* sparkEmitter.sks in Resources */,
+				E392DF4E2571B67000D3CA4A /* radioactiveDecay.sks in Resources */,
 				E34AB9F7252BBDC9007AF254 /* magicEmitter.sks in Resources */,
 				E34AB9C4252BAE6D007AF254 /* Main.storyboard in Resources */,
 				E34AB9ED252BAF32007AF254 /* GameScene.sks in Resources */,
@@ -380,6 +395,7 @@
 				E34AB9C6252BAE70007AF254 /* Assets.xcassets in Resources */,
 				E34AB9F9252BBE31007AF254 /* smokeEmitter.sks in Resources */,
 				E34AB9C9252BAE70007AF254 /* LaunchScreen.storyboard in Resources */,
+				E392DF4C25719DD500D3CA4A /* boostEmitter3.sks in Resources */,
 				8270C0B8254B73F700424235 /* StarryBackground.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
