@@ -15,7 +15,7 @@ class EffectField: SpaceObject {
     
     init(sprite: SKSpriteNode, xRange: (CGFloat, CGFloat), yRange: (CGFloat, CGFloat), hideSprite: Bool) {
         
-        super.init(0, sprite, xRange, yRange, Inventory(), 0, 0, 0, CollisionCategories.EFFECT_FIELD_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
+        super.init(0, sprite, xRange, yRange, Inventory(), 0, 0, 0, 0)
         
         sprite.isHidden = hideSprite
     }
@@ -23,7 +23,7 @@ class EffectField: SpaceObject {
     required init(instance: SpaceObject) {
         guard let _ = instance as? EffectField else {fatalError()}
         
-        super.init(instance.durability, instance.sprite, instance.xRange, instance.yRange, instance.inventory, instance.speed, instance.rotation, instance.targetAngle, instance.collisionCategory, instance.testCategory, instance.boostSpeed)
+        super.init(instance.durability, instance.sprite, instance.xRange, instance.yRange, instance.inventory, instance.speed, instance.rotation, instance.targetAngle, instance.boostSpeed)
         
     }
     

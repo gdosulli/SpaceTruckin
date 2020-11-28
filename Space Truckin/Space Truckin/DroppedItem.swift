@@ -21,7 +21,7 @@ class DroppedItem: SpaceObject {
     
     init(sprite s1: SKSpriteNode, item i1: Item, speed: CGFloat, direction: CGFloat) {
         self.item = i1
-        super.init(1, s1, (200,50), (200,50), Inventory(), speed, 3.14, direction, CollisionCategories.ITEM_CATEGORY, CollisionCategories.TRUCK_CATEGORY, 0)
+        super.init(1, s1, (200,50), (200,50), Inventory(), speed, 3.14, direction, 0)
     }
     
     required init(instance: SpaceObject) {
@@ -36,6 +36,7 @@ class DroppedItem: SpaceObject {
     
     
     override func spawn(at spawnPoint: CGPoint) {
+        sprite.name = "item"
         sprite.size = CGSize(width: xRange.0, height: yRange.0)
         
         let margin: CGFloat = 0.5
@@ -94,14 +95,10 @@ class DroppedItem: SpaceObject {
                        
                        action.append(SKAction.removeFromParent())
                        sprite.run(SKAction.sequence(action))
-                       
-                                           
                     }
-                   
                     //print("\(item.value) \(item.type) added to capsule")
                     return
                 }
-                
                 nextPiece = p.followingPiece
             }
         }

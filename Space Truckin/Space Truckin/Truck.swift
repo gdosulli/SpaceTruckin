@@ -9,7 +9,8 @@ import Foundation
 import SpriteKit
 import CoreGraphics
 
-
+//Note: add thermo-stellar truckpiece for destroying wayward planets (to be used sparingly)
+//Note: add wayward planets that need to be corrected with thermo-stellar device
 
 class TruckPiece: SpaceObject {
     let thruster: SKEmitterNode = SKEmitterNode(fileNamed: "sparkEmitter")!
@@ -25,18 +26,18 @@ class TruckPiece: SpaceObject {
     var maxLeashLength = CGFloat(250)
     
     convenience init(sprite s1: SKSpriteNode) {
-        self.init(2, s1, nil, (1.3,1.0), (1.3,1.0), Inventory(), 100, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, 0)
+        self.init(2, s1, nil, (1.3,1.0), (1.3,1.0), Inventory(), 100, 1, 0, 0)
     }
     
     convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
-        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, piece.boostSpeed)
+        self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, piece.boostSpeed)
         piece.followingPiece = self
 
     }
  
     convenience init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat, boostedSpeed: CGFloat) {
 
-        self.init(durability, s1, nil, (size,size), (size,size), Inventory(), speed, 10, 0, CollisionCategories.TRUCK_CATEGORY, CollisionCategories.LOST_CAPSULE_CATEGORY, boostedSpeed)
+        self.init(durability, s1, nil, (size,size), (size,size), Inventory(), speed, 10, 0, boostedSpeed)
     }
     
     init(_ durability: Int,
@@ -48,13 +49,11 @@ class TruckPiece: SpaceObject {
     _ speed: CGFloat,
     _ rotation: CGFloat,
     _ targetAngle: CGFloat,
-    _ collisionCategory: UInt32,
-    _ testCategory: UInt32,
     _ boostSpeed: CGFloat) {
         
         
 
-        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory, boostSpeed)
+        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, boostSpeed)
         
         self.targetPiece = targetPiece
         
@@ -69,7 +68,6 @@ class TruckPiece: SpaceObject {
     
         
         sprite.name = "capsule"
-
     }
     
     required init(instance: SpaceObject) {
@@ -224,9 +222,12 @@ class TruckPiece: SpaceObject {
         return firstPiece
     }
     
-    //Attaches target piece into the
+    //Attaches target piece into the chain
     func addToChain(adding piece: TruckPiece) {
         piece.lost = false
+        //if let remainingChain = piece.followingPiece {
+        //    piece.followingPiece?.breakChain()
+        //}
         
         piece.targetPiece?.followingPiece = nil
         piece.targetPiece = getLastPiece()
@@ -249,17 +250,11 @@ class TruckPiece: SpaceObject {
             
             //TODO: make a function that clones attributes from a given truckpiece onto the
             
-            if self.sprite.name == "capsule" {
-                p.sprite.name = "capsule"
-            } else if self.sprite.name == "rival_capsule" {
-                p.sprite.name = "rival_capsule"
-            }
+            p.sprite.name = self.sprite.name
             
             // rival to normal
             // if normal to rival
-            
-            print(self.sprite.name!)
-            
+                        
             followPiece = p.followingPiece
             let date = Date().addingTimeInterval(3.0) //releashing timer
             let timer = Timer(fireAt: date, interval: 0, target: p, selector: #selector(endReleashing), userInfo: nil, repeats: false)
@@ -270,23 +265,41 @@ class TruckPiece: SpaceObject {
     //Releashing should work by setting a timestamp for the releashing to be ended at, this would avoid releashings conflicting
     @objc func endReleashing() {
         releashing = false
-        print("Releashing ended")
+        //print("Releashing ended")
     }
     
     //NOTE: onImpact force unwraps sprite names, shouldn't be a problem though
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
-        print(obj.sprite.name ?? "nameless")
-        if (obj.sprite.name?.starts(with: "asteroid"))! || (obj.sprite.name?.starts(with: "debris"))! {
-            let newNormal = CGVector(dx: -10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+        //print("A",contact.bodyA.node?.name)
+        //print("B",contact.bodyB.node?.name)
+        var collisionVector = contact.contactNormal
+//        if self.sprite === contact.bodyB.node{
+//            print("FLIP CAPSULE")
+//            collisionVector.dx *= -1
+//            collisionVector.dy *= -1
+//        }
+        //print(obj.sprite.name)
+        //print("Vector:",collisionVector)
+        
+        //Capsule vs Asteroid and Debris collision
+        if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
+            let newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
-            print("oof ouch \(durability)")
+            print("OOF ouch! \(durability) hull remaining.")
             if durability <= 0 {
                 onDestroy()
             }
-        } else if obj.collisionCategory == CollisionCategories.LOST_CAPSULE_CATEGORY {
-            addToChain(adding: (obj as? TruckPiece)!)
-        } else if obj.collisionCategory == CollisionCategories.SPACE_STATION_CATEGORY {
+            
+            
+        //Capsule vs Lost Capsule collision
+        } else if obj.sprite.name == "lost_capsule" {
+            if self.sprite.name != "lost_capsule" || self.sprite != contact.bodyA { //This should ensure too lost capsules never connect to each other at the same time
+                addToChain(adding: (obj as? TruckPiece)!)
+            }
+            
+        //Capsule vs SpaceStation Collision
+        } else if obj.sprite.name == "station_arm"{
             // contact w space station
             if obj.sprite.name == "station_arm" {
                 // trigger entry
@@ -295,12 +308,27 @@ class TruckPiece: SpaceObject {
                 // bump
                 print("bump")
             }
+            
+            
+        //Capsule vs Rival Capsule collision
+        } else if obj.sprite.name == "rival_capsule"{
+            var newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
+            self.addForce(vec: newNormal)
+            //durability -= obj.impactDamage
+            //print("OOF ouch! \(durability) hull remaining.")
+            //if durability <= 0 {
+            //    onDestroy()
+            //}
         }
     }
-    
+        
     override func onDestroy() {
         //print("Truck should be destroyed but i didnt code this whoops my bad sorry team")
         print("pop")
+        //change name to destroyed_capsule?
+        breakChain()
+        self.followingPiece?.breakChain()
+        
         if !invincible {
             dropItem(at: sprite.position)
             destroyed = true
@@ -343,11 +371,12 @@ class TruckPiece: SpaceObject {
         return nodes
     }
     
-    //Breaks the chain
+    //Seperates from targetPiece, creates snap sprite, turns all pieces in chain into lost_capsules
     func breakChain(){
         let pos = self.targetPiece?.sprite.position
         self.targetPiece?.followingPiece = nil
         self.targetPiece = nil
+        
         self.lost = true
         let snap = EffectBubble(type: .SNAP, duration: 0.5)
         self.sprite.parent?.addChild(snap.getChildren()[0]!)
@@ -371,13 +400,13 @@ class TruckPiece: SpaceObject {
         let distancex = sprite.position.x - nextPiece.sprite.position.x
         let distancey = sprite.position.y - nextPiece.sprite.position.y
         let distance = sqrt(distancex * distancex + distancey * distancey)
-        
         return distance
     }
 }
-//
-//// TODO: implement barrel-roll/dash/burst on swipe
-////=====================================================================
+
+
+// TODO: implement barrel-roll/dash/burst on swipe
+//=====================================================================
 //class TruckChain {
 //    let head: TruckPiece!
 //    var tail: TruckPiece!
@@ -491,7 +520,7 @@ class TruckPiece: SpaceObject {
 //        }
 //    }
 //
-//// TODO delay deletion so explosion play (i know how to do this)
+// TODO delay deletion so explosion play (i know how to do this)
 //    func checkForDestroyed() {
 //        if head.destroyed {
 //            // game over
