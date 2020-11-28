@@ -12,11 +12,41 @@ import GameplayKit
 
 class Asteroid : SpaceObject {
     
-    // setup physics detection
-    let asteroidCategory : UInt32 = 0x1 << 1
-    let truckCategory : UInt32 = 0x1 << 0
+    required init(instance: SpaceObject) {
+        guard let _ = instance as? Asteroid else {fatalError()}
+        let sprite = instance.sprite.copy() as? SKSpriteNode
+        if let name = sprite?.name {
+            sprite?.name = name + "c"
+        }
+        
+        super.init(instance.durability, sprite!, instance.xRange, instance.yRange, instance.inventory, instance.speed, instance.rotation, instance.targetAngle, instance.boostSpeed)
+    }
+
+    
+    // convenience for non-moving objects
+    convenience init (_ durability: Int,
+                      _ sprite: SKSpriteNode,
+                      _ xRange: (CGFloat, CGFloat),
+                      _ yRange: (CGFloat, CGFloat),
+                      _ inventory: Inventory) {
+        self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, 0)
+    }
+    
+    override init (_ durability: Int,
+          _ sprite: SKSpriteNode,
+          _ xRange: (CGFloat, CGFloat),
+          _ yRange: (CGFloat, CGFloat),
+          _ inventory: Inventory,
+          _ speed: CGFloat,
+          _ rotation: CGFloat,
+          _ targetAngle: CGFloat,
+          _ boostSpeed: CGFloat) {
+        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, boostSpeed)
+    }
     
     override func spawn(at spawnPoint: CGPoint) {
+        sprite.name = "asteroid"
+        
         // set random asteroid size
         let dimension = CGFloat.random(in: xRange.0...xRange.1)
         sprite.size = CGSize(width: dimension, height: dimension)
@@ -32,7 +62,6 @@ class Asteroid : SpaceObject {
         
         // set random initial position
         sprite.position = spawnPoint
-        
         // setup asteroid to rotate randomly
         let spinSpeed = Double.random(in: 2...5) * Double(dimension / 100)
         var action  = [SKAction]()
@@ -45,46 +74,74 @@ class Asteroid : SpaceObject {
     
     //TODO: May need to make normal vector direction a field in order to know whether to flip vector or not
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
-        let newNormal = CGVector(dx: 10 * contact.contactNormal.dx, dy: 10 * contact.contactNormal.dy)
-        self.addForce(vec: newNormal)
-        durability -= obj.impactDamage
-        if durability <= 0 {
-            self.onDestroy()
+        //if !destroyed{ //Needed to prevent bumping around the explosion
+        if self.sprite.physicsBody === contact.bodyA {
+            let newNormal = CGVector(dx: 10 * contact.contactNormal.dx, dy: 10 * contact.contactNormal.dy)
+            self.addForce(vec: newNormal)
+            durability -= obj.impactDamage
+            if durability <= 0 {
+                self.onDestroy()
+            }
+        } else {
+            let newNormal = CGVector(dx: 10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+            self.addForce(vec: newNormal)
+            durability -= obj.impactDamage
+            if durability <= 0 {
+                self.onDestroy()
+            }
         }
+        //}
     }
     
     override func onDestroy() {
-        if !destroyed {
-            destroyed = true
-            explode()
-            let duration = Double.random(in: 0.4...0.7)
-            let removeDate = Date().addingTimeInterval(duration)
-            let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
-            RunLoop.main.add(timer, forMode: .common)
-            
-        }
-        
+        destroyed = true
+        explode()
+        let duration = Double.random(in: 0.4...0.7)
+        let removeDate = Date().addingTimeInterval(duration)
+        let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
+        RunLoop.main.add(timer, forMode: .common)
     }
     
-    func dropItems(at point: CGPoint) {
-        let numItems = Int.random(in: 2...4)
-        let quantity = 20
-        let point = self.sprite.position
-        //TODO
-        let asteroidItemTypes = [ItemType.Precious, ItemType.Nuclear, ItemType.Stone]
-
-        let item = Item(type: asteroidItemTypes.randomElement()!, value: 20)
-        for i in 0..<numItems {
-            let drop = DroppedItem(sprite: SKSpriteNode(imageNamed: DroppedItem.filenames[item.type.rawValue]), item: item, speed: 120, direction: CGFloat(i) * CGFloat(Double.pi) / 2)
-
-            drop.spawn(at: CGPoint(x: point.x + 10 * CGFloat(i), y: point.y + 10 * CGFloat(i)))
-            (self.sprite.parent as? GameScene)!.objectsInScene[drop.sprite] = drop
-            self.sprite.parent!.addChild(drop.sprite)
-        }
-    }
     
     @objc func deleteSelf () {
-        dropItems(at: self.sprite.position)
+        let rnum: Int = Int.random(in: 0...3)
+        for _ in 0...rnum {
+            dropItem(at: self.sprite.position)
+        }
         self.sprite.removeFromParent()
     }
 }
+
+
+//class RadioactiveAsteroid: Asteroid {
+//    let radGlow = SKEmitterNode(fileNamed: "radioactiveDecay")
+//    
+//    override init(_ durability: Int, _ sprite: SKSpriteNode, _ xRange: (CGFloat, CGFloat), _ yRange: (CGFloat, CGFloat), _ inventory: Inventory, _ speed: CGFloat, _ rotation: CGFloat, _ targetAngle: CGFloat, _ collisionCategory: UInt32, _ testCategory: UInt32, _ boostSpeed: CGFloat) {
+//        
+//        
+//        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory, boostSpeed)
+//        radGlow?.zPosition = sprite.zPosition - 1
+//    }
+//    
+//    required init(instance: SpaceObject) {
+//        guard let _ = instance as? RadioactiveAsteroid else {fatalError()}
+//        
+//        let sprite = instance.sprite.copy() as? SKSpriteNode
+//        if let name = sprite?.name {
+//            sprite?.name = name + "c"
+//        }
+//        
+//        super.init(instance.durability, sprite!, instance.xRange, instance.yRange, instance.inventory, instance.speed, instance.rotation, instance.targetAngle, instance.collisionCategory, instance.testCategory, instance.boostSpeed)
+//        
+//    }
+//    
+//    override func update(by delta: CGFloat) {
+//        radGlow?.position = sprite.position
+//        super.update(by: delta)
+//    }
+//    
+//    
+//    override func getChildren() -> [SKNode?] {
+//        return super.getChildren() + [radGlow]
+//    }
+//}

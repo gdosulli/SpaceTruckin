@@ -21,6 +21,8 @@ class Movable {
     var normalSpeed: CGFloat
     var outsideForces: CGVector
     var boosted = false
+    var outsideForcesDecay = CGFloat(0.9)
+    var collisionWeight = CGFloat(10)
     
     
     init(speed: CGFloat, rotation: CGFloat, angleInRadians: CGFloat, sprite: SKSpriteNode, boostSpeed: CGFloat) {
@@ -33,12 +35,12 @@ class Movable {
         self.boostSpeed = boostSpeed
         self.outsideForces = CGVector(dx: 0, dy: 0)
     }
-
+        
     func translate(by vector: CGPoint) {
         sprite.position.x += vector.x + outsideForces.dx
         sprite.position.y += vector.y + outsideForces.dy
-        outsideForces.dx *= 0.9
-        outsideForces.dy *= 0.9
+        outsideForces.dx *= outsideForcesDecay
+        outsideForces.dy *= outsideForcesDecay
     }
     
     func changeAngleTo(point pos: CGPoint) {
@@ -48,19 +50,19 @@ class Movable {
         let sine = atan2(unitVec.y, unitVec.x)
         changeTargetAngle(to: sine)
     }
-       
+    
     func changeTargetAngle(to angle: CGFloat) {
            targetAngle = angle
     }
-       
+    
     func changeTargetAngle(by angle: CGFloat) {
            targetAngle += angle
     }
-       
+    
     func changeSpeed(to: CGFloat) {
            speed = to
     }
-       
+    
     func changeSpeed(by: CGFloat) {
            speed += by
     }
@@ -71,7 +73,7 @@ class Movable {
         
         outsideForces = CGVector(dx: x, dy: y)
     }
-       
+    
     func move(by delta: CGFloat) {
         let translateVector = CGPoint(x: cos(targetAngle) * self.speed * delta, y:  sin(targetAngle) * self.speed * delta)
         self.translate(by: translateVector)
@@ -82,7 +84,6 @@ class Movable {
         let translateVector = CGPoint(x: cos(angleCorrector()) * self.speed * delta, y:  sin(angleCorrector()) * self.speed * delta)
         self.translate(by: translateVector)
     }
-    
     
     // Adjusts angular velocity of truckpiece depending on angle to target
     func turn(by delta: CGFloat) {
@@ -126,6 +127,4 @@ class Movable {
 // TODO: Implement a lockDirection(for interval: TimeInterval) that makes it so a Movable can't rotate for
 // a specified time
 
-
-// Also TODO: make it so ships can only move forwards, and rotate towards a targetPoint over time
 

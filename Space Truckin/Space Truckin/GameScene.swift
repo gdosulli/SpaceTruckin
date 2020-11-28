@@ -11,15 +11,14 @@ import GameplayKit
 
 struct Player {
     var head: TruckPiece
-    var chain: TruckChain
     let cam = SKCameraNode()
     
     func getChildren() -> [SKNode?] {
-        return chain.getChildren()
+        return head.getAllChainedChildren()
     }
     
     func getClickedPiece(from node: SKSpriteNode) -> TruckPiece? {
-        for piece in chain.getAllPieces() {
+        for piece in head.getAllPieces() {
             if piece.sprite === node {
                 return piece
             }
@@ -28,7 +27,7 @@ struct Player {
     }
     
     func setBoost(b: Bool) {
-        for p in chain.getAllPieces() {
+        for p in head.getAllPieces() {
             p.setBoost(b: false)
         }
         
@@ -40,14 +39,14 @@ struct Player {
         }
     }
     
-    
-    func update(by delta: CGFloat) {
-//        head.move(by: delta)
-//        chain.movePieces(by: delta)
-        chain.updateFollowers()
-        chain.checkForDestroyed()
-    }
-    
+//    
+//    //func update(by delta: CGFloat) {
+////        head.move(by: delta)
+////        chain.movePieces(by: delta)
+//        chain.updateFollowers()
+//        chain.checkForDestroyed()
+//    }
+//    
     func getInventory() -> Inventory {
         var maxCapacities = [ItemType:Int]()
         var items = [ItemType:Int]()
@@ -56,7 +55,7 @@ struct Player {
             items[type] = 0
         }
         
-        for piece in chain.getAllPieces() {
+        for piece in head.getAllPieces() {
             for type in ItemType.allCases {
                 maxCapacities[type]! += piece.inventory.getMaxCapacity(for: type)
                 items[type]! += piece.inventory.getCurrentCapacity(for: type)
@@ -69,10 +68,8 @@ struct Player {
 extension Player {
     init(_ head: TruckPiece) {
         self.head = head
-        self.chain = TruckChain(head: head)
+        head.isHead = true
     }
-    
-    
 }
 
 struct DropDownMenu {
@@ -96,7 +93,7 @@ struct DropDownMenu {
         }
         
         map.moveMap(to: center)
-        infoScreen.background.position = map.mapView.position
+//        infoScreen.background.position = map.mapView.position
     }
     
     func getButtons() -> [SKSpriteNode] {
@@ -229,10 +226,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var explosions: [SKTexture]! //TODO: consider moving this to a better home
     var destroyedNodes: (Set<SKSpriteNode?>) = []
     var destroyTimer: Timer!
-    var swarm = false
     
     var storageBar: InterfaceBar!
-
+    
+    var muteSound = false
+    
+    var boostLocked = false
 
     override func didMove(to view: SKView) {
         // Initialize screen height and width
@@ -248,27 +247,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let sprite = SKSpriteNode(imageNamed: "space_truck_cab")
 
         
-        if swarm {
-            player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500, inventory: Inventory(for: .Oxygen, max: 100, starting: 100)))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head, inventory: Inventory(max: 100, starting: 0)))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"), target: player.head, inventory: Inventory(max: 100, starting: 0)))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head, inventory: Inventory(max: 100, starting: 0)))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"), target: player.head, inventory: Inventory(max: 100, starting: 0)))
-            
-        } else {
-            player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500, inventory: Inventory(for: .Oxygen, max: 100, starting: 100)))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"),
-                                               target: player.chain.getLastPiece(), inventory: Inventory(max: 100, starting: 0)))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"),
-                                               target: player.chain.getLastPiece(), inventory: Inventory(max: 100, starting: 0)))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"),
-                                               target: player.chain.getLastPiece(), inventory: Inventory(max: 100, starting: 0)))
-            player.chain.add(piece: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"),
-                                               target: player.chain.getLastPiece(), inventory: Inventory(max: 100, starting: 0)))
-        }
+
+        player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500, inventory: Inventory()))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
         
         
-        for c in player.chain.getAllPieces() {
+        for c in player.head.getAllPieces() {
             
             objectsInScene[c.sprite] = c
             
@@ -276,6 +267,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(c.thruster)
         }
         
+        let station = SpaceStation()
+        station.spawn(at: CGPoint(x: player.head.sprite.position.x + 3000, y: player.head.sprite.position.y))
+        for child in station.getChildren() {
+            self.addChild(child!)
+        }
             
         
         background = SKEmitterNode(fileNamed: "StarryBackground")
@@ -295,7 +291,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             buttons: [],
                             offset: 0)
         
-        menu.add(SKSpriteNode(imageNamed: "Mine"), called: "mine")
+        
         menu.add(SKSpriteNode(imageNamed: "Map_button"), called: "map")
         menu.add(SKSpriteNode(imageNamed: "Cargo_button"), called: "cargo")
         menu.add(SKSpriteNode(imageNamed: "Stop"), called: "stop")
@@ -346,6 +342,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                               fadeTime: 1.5,
                                               frameWidth: frameWidth,
                                               frameHeight: frameHeight)
+        
         // sets the map
         let testMap = Map(sizeOf: (4, 4), threat: 3, maxObjects: 1, named: "test Area", frame: CGSize(width: frameWidth, height: frameHeight))
         
@@ -384,6 +381,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                              repeats: true)
         
         musicPlayer = MusicPlayer(mood: Mood.PRESENT, setting: Setting.ALL)
+        
+        // double tap stuff
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(gesture:)))
+        doubleTap.numberOfTapsRequired = 2
+        
+        self.scene?.view?.addGestureRecognizer(doubleTap)
     }
     
     func setTimer(using mapTimers: [String: Double]) {
@@ -422,6 +425,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let touchedNode = self.atPoint(pos)
         // checks which node was touched and preforms that action
         if let name = touchedNode.name {
+            print(name)
             var realName = name
             if name.contains("Sector ") {
                 realName =  "sector page"
@@ -440,16 +444,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 menu.stop()
                 player.head.circle = !player.head.circle
                 stopped = !stopped
-            case "mine":
-                //TODO: start mining
-                //menu.clicked()
-                //musicPlayer.interrupt(withMood: Mood.DARK)
-                //player.chain.mine(for: 1.5)
-                player.setBoost(b: true)
             case "pause":
                 //TODO: need to actually pause the game
                 gameIsPaused = true
-                camScale -= 1
                 menu.clicked()
                 musicPlayer.skip()
             case "capsule":
@@ -464,6 +461,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 menu.viewSector(named: name)
             case "jump":
                 setTimer(using: menu.travel())
+                musicPlayer.muted = false
+                musicPlayer.unmute()
+                musicPlayer.playSong(MySongs.JUMP)
+                musicPlayer.getPlaylist()
+                
                 menu.map.animateTravel(on: self, with: self.frame.size)
             case "return" :
                 menu.map.hideInfoScreen()
@@ -480,12 +482,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     }
     
+    @objc func handleDoubleTap(gesture: UITapGestureRecognizer) {
+        print("double touch")
+        player.setBoost(b: true)
+        boostLocked = true
+        let duration = 0.05
+        let unlockDate = Date().addingTimeInterval(duration)
+        let timer = Timer(fireAt: unlockDate, interval: 0, target: self, selector: #selector(unlockBoost), userInfo: nil, repeats: false)
+        RunLoop.main.add(timer, forMode: .common)
+
+    }
+    
+    @objc func unlockBoost() {
+        boostLocked = false
+        print("unlocked")
+    }
+    
+
     func touchMoved(toPoint pos : CGPoint) {
         if !touchedButton{
             player.head.changeAngleTo(point: pos)
-            if player.head.boosted {
-                player.setBoost(b: false)
-            }
         }
     }
     
@@ -493,7 +509,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //player.chain.dash(angle: 0)
         print("up")
         if player.head.boosted {
-            player.setBoost(b: false)
+            if !boostLocked {
+                player.setBoost(b: false)
+            }
         }
         
     }
@@ -536,7 +554,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         if !stopped {
-            player.update(by: delta)
+            //player.update(by: delta) // Deprecated
         }
         
         
@@ -547,7 +565,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         for object in objectsInScene {
             object.value.move(by: delta)
-            object.value.update()
+            object.value.update(by: delta)
             if object.value.destroyed {
                 destroyedNodes.insert(object.value.sprite)
             }
@@ -587,7 +605,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         self.addChild(debrisSprite)
         
-        let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle, CollisionCategories.ASTEROID_CATEGORY, CollisionCategories.TRUCK_CATEGORY, speed)
+        let debris = Debris(1, debrisSprite, (450,600), (450,600), Inventory(), speed, rotation, targetAngle, speed)
         
         let spawnPoint = getRandPos(for: debrisSprite)
         debris.spawn(at: spawnPoint)
@@ -619,9 +637,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                            Inventory(),
                            speed,
                            rotation,
-                           targetAngle,
-                           CollisionCategories.ASTEROID_CATEGORY,
-                           CollisionCategories.TRUCK_CATEGORY, speed)
+                           targetAngle, speed)
         
         ast.spawn(at: spawnPoint)
         
