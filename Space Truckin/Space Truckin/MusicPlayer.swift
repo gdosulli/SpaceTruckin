@@ -85,7 +85,7 @@ class MusicPlayer {
     var currentSong: Song?
     var currentPlaylist: [Song] = []
     var globalVolume: Float = 2.0
-    var muted = true
+    var muted = false
 
     
     
