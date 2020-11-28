@@ -63,6 +63,13 @@ class Area {
         // start spawn timers
         setTimer()
         
+        // start garbage collection timer
+        timers["garbage"] = Timer.scheduledTimer(timeInterval: 1.0,
+        target: self,
+        selector: #selector(removeFreeNodes),
+        userInfo: nil,
+        repeats: true)
+        
         // reintroduce player
         warp(truckList: player.head.getAllPieces(), at: CGPoint(x: 0,y: 0))
     }
