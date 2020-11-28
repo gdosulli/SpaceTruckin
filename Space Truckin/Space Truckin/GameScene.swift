@@ -93,7 +93,7 @@ struct DropDownMenu {
         }
         
         map.moveMap(to: center)
-//        infoScreen.background.position = map.mapView.position
+        infoScreen.background.position = map.mapView.position
     }
     
     func getButtons() -> [SKSpriteNode] {

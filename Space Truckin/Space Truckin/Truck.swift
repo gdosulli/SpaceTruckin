@@ -26,7 +26,7 @@ class TruckPiece: SpaceObject {
     var maxLeashLength = CGFloat(250)
     
     convenience init(sprite s1: SKSpriteNode) {
-        self.init(2, s1, nil, (1.3,1.0), (1.3,1.0), Inventory(), 100, 1, 0, 0)
+        self.init(2, s1, nil, (1.3,1.0), (1.3,1.0), Inventory(max: 100, starting: 0), 100, 1, 0, 0)
     }
     
     convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
@@ -42,7 +42,7 @@ class TruckPiece: SpaceObject {
                      boostedSpeed: CGFloat,
                      inventory: Inventory) {
 
-        self.init(durability, s1, nil, (size,size), (size,size), Inventory(), speed, 10, 0, boostedSpeed)
+        self.init(durability, s1, nil, (size,size), (size,size), inventory, speed, 10, 0, boostedSpeed)
     }
     
     init(_ durability: Int,

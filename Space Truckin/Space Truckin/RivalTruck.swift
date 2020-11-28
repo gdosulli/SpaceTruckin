@@ -83,12 +83,9 @@ class RivalTruckPiece: TruckPiece {
         head.isHead = true
         var truckList: [TruckPiece] = [head]
         for i in 0..<numFollowers{
-            let piece = TruckPiece(2, SKSpriteNode(imageNamed: "rival_truck_capsule1"), nil,(1.4,1.0), (1.4,1.0), Inventory(), rival_speed, 0, 0, rival_speed)
+            let piece = TruckPiece(2, SKSpriteNode(imageNamed: "rival_truck_capsule1"), nil,(1.4,1.0), (1.4,1.0), Inventory(for: itemList.randomElement()!, max: 100, starting: 100), rival_speed, 0, 0, rival_speed)
             piece.addToChain(adding: truckList[i])//M
             
-            if let chosenItemType = itemList.randomElement(){
-                _ = piece.inventory.addItem(item: Item.init(type: chosenItemType, value: piece.inventory.maxCapacities[chosenItemType]!))
-            }
             truckList.append(piece)
         }
         for piece in truckList {

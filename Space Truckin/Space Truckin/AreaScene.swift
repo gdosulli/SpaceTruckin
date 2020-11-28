@@ -61,7 +61,12 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         let sprite = SKSpriteNode(imageNamed: "space_truck_cab")
 
         
-        let player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1.3, speed: 250, boostedSpeed: 500, inventory: Inventory()))
+        let player = Player(TruckPiece(sprite: sprite,
+                                       durability: 2,
+                                       size: 1.3,
+                                       speed: 250,
+                                       boostedSpeed: 500,
+                                       inventory: Inventory(for: .Oxygen, max: 100, starting: 100)))
         player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
         player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2")))
         player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
@@ -85,8 +90,6 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         menuConroller.size = CGSize(width: frameWidth/5, height: frameHeight/5)
         menu = DropDownMenu(controller: menuConroller, buttons: [], offset: 0)
         
-        
-        menu.add(SKSpriteNode(imageNamed: "Mine"), called: "mine")
         menu.add(SKSpriteNode(imageNamed: "Map_button"), called: "map")
         menu.add(SKSpriteNode(imageNamed: "Cargo_button"), called: "cargo")
         menu.add(SKSpriteNode(imageNamed: "Stop"), called: "stop")
@@ -143,6 +146,8 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         // comment out testMap above and uncomment this to use the original map
         //let testMap = Map(with: [["1/A2/D8/"]], sizeOf: (1, 1), threat: 3, starting: (0, 0), named: "test Area", frame: CGSize(width: frameWidth, height: frameHeight))
         menu.setMap(with: testMap, on: self)
+        let infoScreen = InfoScreen(frameSize: testMap.mapView.size)
+        menu.setInfoScreen(with: infoScreen, on: self)
         
         for i in 2...6 {
             let drill = "space_truck_cab\(i)"
@@ -164,7 +169,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         musicPlayer = MusicPlayer(mood: Mood.PRESENT, setting: Setting.ALL)
         
         
-        // double tap stuff
+        // double tap recognizer
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(gesture:)))
         doubleTap.numberOfTapsRequired = 2
         
@@ -191,8 +196,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
                 //TODO: switch to map view
                 menu.map.showMap()
             case "cargo":
-                camScale += 1
-                menu.clicked()
+                menu.showInfoScreen()
             case "stop",
                  "start":
                 menu.stop()
@@ -210,11 +214,8 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
                 menu.clicked()
                 musicPlayer.skip()
             case "capsule":
-                touchedButton = false
                 print("tap registered on capsule")
                 if let selectedPiece = currentArea.player.getClickedPiece(from: touchedNode as! SKSpriteNode) {
-                    print("tapped \(selectedPiece.sprite.name)")
-
                     selectedInventory.inventory = selectedPiece.inventory
                     selectedInventory.capsule.texture = selectedPiece.sprite.texture
                     selectedInventory.resetOpacity()
@@ -335,13 +336,13 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         
         updateCamera()
         
-        // ui stuff
-        
+        // update UI overlays
         selectedInventory.move(to: CGPoint(x: cam.position.x - frameWidth + frameWidth/5,
                                            y:  cam.position.y + frameHeight - frameHeight/10))
         selectedInventory.update(currentTime)
         
         menu.move(menu: CGPoint(x: cam.position.x + frameWidth - frameWidth/10, y:  cam.position.y + frameHeight), map: cam.position, on: self)
+        menu.updateInfoScreen(currentArea.player.getInventory())
         
         // sound stuff
         musicPlayer.update()
