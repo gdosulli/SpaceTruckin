@@ -356,7 +356,36 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    
+    func didEnd(_ contact: SKPhysicsContact) {
+        var firstBody: SKPhysicsBody
+        var secondBody: SKPhysicsBody
+
+        var firstObject: SpaceObject?
+        var secondObject: SpaceObject?
+
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+        
+        if let sprite = firstBody.node as? SKSpriteNode{
+                 firstObject = currentArea.objectsInArea[sprite] as? SpaceObject
+             }
+             
+             if let sprite = secondBody.node as? SKSpriteNode{
+                 secondObject = currentArea.objectsInArea[sprite] as? SpaceObject
+             }
+
+             if let object1 = firstObject, let object2 = secondObject {
+                 object1.onImpactEnded(with: object2, contact)
+                 object2.onImpactEnded(with: object1, contact)
+             }
+        
+        
+    }
 
     func didBegin(_ contact: SKPhysicsContact) {
         var firstBody: SKPhysicsBody
@@ -372,10 +401,6 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
             firstBody = contact.bodyB
             secondBody = contact.bodyA
         }
-        //print("normal: \(contact.contactNormal)")
-        
-        //print( (firstBody.node as? SKSpriteNode)?.name )
-        //print( (secondBody.node as? SKSpriteNode)?.name )
 
         if let sprite = firstBody.node as? SKSpriteNode{
             firstObject = currentArea.objectsInArea[sprite] as? SpaceObject
@@ -384,20 +409,11 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         if let sprite = secondBody.node as? SKSpriteNode{
             secondObject = currentArea.objectsInArea[sprite] as? SpaceObject
         }
-        //print("obj1: \(firstObject)")
-        //print("obj2: \(secondObject)")
 
         if let object1 = firstObject, let object2 = secondObject {
-            //print("objects")
             object1.onImpact(with: object2, contact)
             object2.onImpact(with: object1, contact)
         }
-        
-        /*
-        if (firstBody.categoryBitMask & photonTorpedoCategory) != 0 && (secondBody.categoryBitMask & alienCategory) != 0  {
-            didColide(torpedo: firstBody.node as! SKSpriteNode, alien: secondBody.node as! SKSpriteNode)
-        }
-        */
         
     }
 

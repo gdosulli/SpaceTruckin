@@ -95,6 +95,9 @@ class SpaceObject : Movable, Copyable {
         fatalError("Subclasses need to implement the `onDestroy()` method.")
     }
     
+    func onImpactEnded(with obj: SpaceObject, _ contact: SKPhysicsContact){
+    }
+    
     func onDestroy() {
         fatalError("Subclasses need to implement the `onDestroy()` method.")
     }
