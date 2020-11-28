@@ -41,6 +41,11 @@ class SpaceStation: SpaceObject {
         sprite.physicsBody?.isDynamic = false
     }
     
+    required init(instance: SpaceObject) {
+        fatalError("init(instance:) has not been implemented")
+    }
+    
+    
     override func spawn(at spawnPoint: CGPoint) {
         sprite.name = "station"
         armSprite.name = "station_arm"

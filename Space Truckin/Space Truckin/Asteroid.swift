@@ -10,9 +10,10 @@ import Foundation
 import SpriteKit
 import GameplayKit
 
-class Asteroid : SpaceObject, Copyable {
+class Asteroid : SpaceObject {
     
-    required init(instance: Asteroid) {
+    required init(instance: SpaceObject) {
+        guard let _ = instance as? Asteroid else {fatalError()}
         let sprite = instance.sprite.copy() as? SKSpriteNode
         if let name = sprite?.name {
             sprite?.name = name + "c"

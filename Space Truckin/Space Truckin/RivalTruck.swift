@@ -70,12 +70,16 @@ class RivalTruckPiece: TruckPiece {
         sprite.name = "rival_capsule"
     }
     
+    required init(instance: SpaceObject) {
+        fatalError("init(instance:) has not been implemented")
+    }
+    
     //Returns a list of connected rival truckPieces
     static func generateChain(with numFollowers: Int, holding itemList: [ItemType]) -> [RivalTruckPiece]{
         
         let rival_speed = CGFloat(200)
         
-        let head = RivalTruckPiece.init(sprite: SKSpriteNode(imageNamed: "rival_truck_cab"), xRange: (1.0,1.0), yRange: (1.0,1.0), speed: rival_speed, rotation: 0)//M
+        let head = RivalTruckPiece.init(sprite: SKSpriteNode(imageNamed: "rival_truck_cab"), xRange: (1.5,1.0), yRange: (1.5,1.0), speed: rival_speed, rotation: 0)//M
         head.isHead = true
         var truckList = [head]
         for i in 0..<numFollowers{

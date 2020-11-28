@@ -18,7 +18,7 @@ struct CollisionCategories {
 }
 
 
-class SpaceObject : Movable {
+class SpaceObject : Movable, Copyable {
     var durability: Int
     var xRange: (CGFloat, CGFloat)
     var yRange: (CGFloat, CGFloat)
@@ -27,6 +27,8 @@ class SpaceObject : Movable {
     var testCategory = CollisionCategories.SPACEOBJECT
     var destroyed = false
     var impactDamage = 1
+    
+    
     var OBJECT_ID = 0
     static var objectCount = 0
     
@@ -68,20 +70,20 @@ class SpaceObject : Movable {
         self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, 0)
     }
     
-//    required init(instance: SpaceObject) {
-//        self.durability = instance.durability
-//        self.xRange = instance.xRange
-//        self.yRange = instance.yRange
-//        self.inventory = instance.inventory
-//        self.collisionCategory = instance.collisionCategory
-//        self.testCategory = instance.testCategory
-//
-//        let sprite = instance.sprite.copy() as! SKSpriteNode
-//        sprite.name = "\(SpaceObject.objectCount)"
-//
-//        super.init(speed: instance.speed, rotation: instance.rotation, angleInRadians: instance.targetAngle, sprite: sprite, boostSpeed: instance.boostSpeed)
-//
-//    }
+    required init(instance: SpaceObject) {
+        self.durability = instance.durability
+        self.xRange = instance.xRange
+        self.yRange = instance.yRange
+        self.inventory = instance.inventory
+        self.collisionCategory = instance.collisionCategory
+        self.testCategory = instance.testCategory
+
+        let sprite = instance.sprite.copy() as! SKSpriteNode
+        sprite.name = "\(SpaceObject.objectCount)"
+
+        super.init(speed: instance.speed, rotation: instance.rotation, angleInRadians: instance.targetAngle, sprite: sprite, boostSpeed: instance.boostSpeed)
+
+    }
     
     func spawn(at spawnPoint: CGPoint) {
         //fatalError("Subclasses need to implement the `spawn()` method.")
@@ -98,6 +100,10 @@ class SpaceObject : Movable {
     
     func expand(amount: CGFloat, duration: TimeInterval) {
         // code for expanding
+    }
+    
+    func getImpactDamage() -> CGFloat {
+        return CGFloat(impactDamage)
     }
     
     func explode(){
@@ -140,7 +146,7 @@ protocol Copyable {
 }
 
 extension Copyable {
-    func copy() -> Self {
+    func copy() -> Self? {
         return Self.init(instance: self)
     }
 }

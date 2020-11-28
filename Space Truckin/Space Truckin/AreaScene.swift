@@ -43,6 +43,8 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
     var currentArea: Area!
     
     var boostLocked = false
+    
+    var drillAnim:[SKTexture] = []
 
 
     override func didMove(to view: SKView) {
@@ -59,7 +61,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         let sprite = SKSpriteNode(imageNamed: "space_truck_cab")
 
         
-        let player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500))
+        let player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1.3, speed: 250, boostedSpeed: 500))
         player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
         player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2")))
         player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
@@ -141,6 +143,12 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         // comment out testMap above and uncomment this to use the original map
         //let testMap = Map(with: [["1/A2/D8/"]], sizeOf: (1, 1), threat: 3, starting: (0, 0), named: "test Area", frame: CGSize(width: frameWidth, height: frameHeight))
         menu.setMap(with: testMap, on: self)
+        
+        for i in 2...6 {
+            let drill = "space_truck_cab\(i)"
+            drillAnim.append(SKTexture(imageNamed: drill))
+            print(i)
+        }
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
@@ -239,11 +247,20 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
     
     @objc func handleDoubleTap(gesture: UITapGestureRecognizer) {
         print("double touch")
+        currentArea.player.head.sprite.run(SKAction.animate(with: drillAnim,
+                                                            timePerFrame: 0.1,
+                                                            resize: false,
+                                                            restore: false))
         currentArea.player.setBoost(b: true)
         boostLocked = true
         let duration = 0.05
         let unlockDate = Date().addingTimeInterval(duration)
-        let timer = Timer(fireAt: unlockDate, interval: 0, target: self, selector: #selector(unlockBoost), userInfo: nil, repeats: false)
+        let timer = Timer(fireAt: unlockDate,
+                          interval: 0,
+                          target: self,
+                          selector: #selector(unlockBoost),
+                          userInfo: nil,
+                          repeats: false)
         RunLoop.main.add(timer, forMode: .common)
 
     }
@@ -265,6 +282,10 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         if currentArea.player.head.boosted {
             if !boostLocked {
                 currentArea.player.setBoost(b: false)
+                currentArea.player.head.sprite.run(SKAction.animate(with: drillAnim.reversed(),
+                                                                    timePerFrame: 0.1,
+                                                                    resize: false,
+                                                                    restore: false))
             }
         }
         
@@ -302,6 +323,10 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
             delta = CGFloat(currentTime - t)
         } else {
             delta = 0
+        }
+        
+        if delta > 0.5 {
+            delta = 0.01
         }
         lastTime = currentTime
         
