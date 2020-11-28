@@ -13,10 +13,10 @@
 		8270C0B8254B73F700424235 /* StarryBackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8270C0B7254B73F700424235 /* StarryBackground.sks */; };
 		82723AE3254228D5002A1E53 /* SpaceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82723AE2254228D5002A1E53 /* SpaceObject.swift */; };
 		82723AE825422E5B002A1E53 /* Asteroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82723AE725422E5B002A1E53 /* Asteroid.swift */; };
+		82F81B262571866F00D5A160 /* InfoScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F81B252571866F00D5A160 /* InfoScreen.swift */; };
 		E3248BDE256DB36300974CF6 /* Spawner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3248BDD256DB36300974CF6 /* Spawner.swift */; };
 		E3248BE0256DB43500974CF6 /* Shield.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3248BDF256DB43500974CF6 /* Shield.swift */; };
 		E3248BE2256E314100974CF6 /* EffectField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3248BE1256E314100974CF6 /* EffectField.swift */; };
-		82F81B262571866F00D5A160 /* InfoScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F81B252571866F00D5A160 /* InfoScreen.swift */; };
 		E33F6147254221C9005BAB37 /* Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33F6146254221C9005BAB37 /* Inventory.swift */; };
 		E33F614925422EC4005BAB37 /* Movable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33F614825422EC4005BAB37 /* Movable.swift */; };
 		E34A4754254BC42000479EFB /* GalaxyBackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34A4753254BC42000479EFB /* GalaxyBackground.sks */; };
@@ -84,10 +84,10 @@
 		8270C0B7254B73F700424235 /* StarryBackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StarryBackground.sks; sourceTree = "<group>"; };
 		82723AE2254228D5002A1E53 /* SpaceObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceObject.swift; sourceTree = "<group>"; };
 		82723AE725422E5B002A1E53 /* Asteroid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asteroid.swift; sourceTree = "<group>"; };
+		82F81B252571866F00D5A160 /* InfoScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoScreen.swift; sourceTree = "<group>"; };
 		E3248BDD256DB36300974CF6 /* Spawner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spawner.swift; sourceTree = "<group>"; };
 		E3248BDF256DB43500974CF6 /* Shield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shield.swift; sourceTree = "<group>"; };
 		E3248BE1256E314100974CF6 /* EffectField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectField.swift; sourceTree = "<group>"; };
-		82F81B252571866F00D5A160 /* InfoScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoScreen.swift; sourceTree = "<group>"; };
 		E33F6146254221C9005BAB37 /* Inventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inventory.swift; sourceTree = "<group>"; };
 		E33F614825422EC4005BAB37 /* Movable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movable.swift; sourceTree = "<group>"; };
 		E34A4753254BC42000479EFB /* GalaxyBackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GalaxyBackground.sks; sourceTree = "<group>"; };

@@ -135,7 +135,6 @@ class Area {
     
     //Warps the given list of truckpieces in at the given point, with a slight delay between each piece appearing.
     func warp(truckList: [TruckPiece], at point: CGPoint) {
-        let context = ["pieces": truckList, "point": point] as [String : Any]
         
         print("WARPING \(truckList[0].sprite.name)")
         var head: TruckPiece?
@@ -152,7 +151,8 @@ class Area {
         head!.spawn(at: point)
         addObject(obj: head!)
         
-        print(head!.sprite.name!)
+        
+        let context = ["pieces": truckList, "point": point] as [String : Any]
         timers[head!.sprite.name!] =  Timer.scheduledTimer(timeInterval: 0.5 * Double(head!.xRange.0),
         target: self,
         selector: #selector(warpPiece),
@@ -170,7 +170,7 @@ class Area {
         var nextPieceOpt: TruckPiece?
         var head: TruckPiece?
         for p in truckList {
-            if !p.isHead && p.targetPiece == nil {
+            if !p.isHead && p.targetPiece == nil && p.sprite.parent == nil {
                 nextPieceOpt = p
                 break
             } else if p.isHead {
@@ -234,6 +234,36 @@ class Area {
     //            if object.value.destroyed {
     //                destroyedNodes.inse
     //            }
+            }
+        }
+    }
+    
+    
+    @objc func removeFarNodes() {
+        let playerX = player.head.sprite.position.x
+        let playerY = player.head.sprite.position.y
+        
+        for o in objectsInArea {
+            let position = o.value?.sprite.position
+            var remove = false
+            if position!.x > (playerX + 3 * scene!.frameWidth) || position!.x < (playerX - 3 * scene!.frameWidth) {
+                remove = true
+            } else if position!.y > (playerY + 3 * scene!.frameHeight) || position!.y < (playerY - 3 * scene!.frameHeight){
+                remove = true
+            }
+            
+            if remove {
+                if o.value!.sprite.name == "capsule" {
+                    print("capsule far")
+                } else if uniqueItems.contains(where: {object in
+                    object.OBJECT_ID == o.value!.OBJECT_ID
+                }) {
+                    print("unique item far")
+                }else {
+                    o.value?.onDestroy()
+                    objectsInArea.removeValue(forKey: o.key)
+                }
+
             }
         }
     }

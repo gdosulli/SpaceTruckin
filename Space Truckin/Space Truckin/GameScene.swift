@@ -39,14 +39,14 @@ struct Player {
         }
     }
     
-    
-    //func update(by delta: CGFloat) {
-//        head.move(by: delta)
-//        chain.movePieces(by: delta)
-        chain.updateFollowers()
-        chain.checkForDestroyed()
-    }
-    
+//    
+//    //func update(by delta: CGFloat) {
+////        head.move(by: delta)
+////        chain.movePieces(by: delta)
+//        chain.updateFollowers()
+//        chain.checkForDestroyed()
+//    }
+//    
     func getInventory() -> Inventory {
         var maxCapacities = [ItemType:Int]()
         var items = [ItemType:Int]()
@@ -55,7 +55,7 @@ struct Player {
             items[type] = 0
         }
         
-        for piece in chain.getAllPieces() {
+        for piece in head.getAllPieces() {
             for type in ItemType.allCases {
                 maxCapacities[type]! += piece.inventory.getMaxCapacity(for: type)
                 items[type]! += piece.inventory.getCurrentCapacity(for: type)
@@ -93,7 +93,7 @@ struct DropDownMenu {
         }
         
         map.moveMap(to: center)
-        infoScreen.background.position = map.mapView.position
+//        infoScreen.background.position = map.mapView.position
     }
     
     func getButtons() -> [SKSpriteNode] {
@@ -248,7 +248,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         
 
-        player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500))
+        player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1, speed: 250, boostedSpeed: 500, inventory: Inventory()))
         player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
         player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2")))
         player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
@@ -290,6 +290,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         menu = DropDownMenu(controller: menuConroller,
                             buttons: [],
                             offset: 0)
+        
         
         menu.add(SKSpriteNode(imageNamed: "Map_button"), called: "map")
         menu.add(SKSpriteNode(imageNamed: "Cargo_button"), called: "cargo")

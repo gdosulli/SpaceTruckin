@@ -61,7 +61,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         let sprite = SKSpriteNode(imageNamed: "space_truck_cab")
 
         
-        let player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1.3, speed: 250, boostedSpeed: 500))
+        let player = Player(TruckPiece(sprite: sprite, durability: 2, size: 1.3, speed: 250, boostedSpeed: 500, inventory: Inventory()))
         player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
         player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2")))
         player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))

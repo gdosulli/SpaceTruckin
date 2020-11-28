@@ -75,12 +75,21 @@ class Asteroid : SpaceObject {
     //TODO: May need to make normal vector direction a field in order to know whether to flip vector or not
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
         //if !destroyed{ //Needed to prevent bumping around the explosion
+        if self.sprite.physicsBody === contact.bodyA {
             let newNormal = CGVector(dx: 10 * contact.contactNormal.dx, dy: 10 * contact.contactNormal.dy)
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
             if durability <= 0 {
                 self.onDestroy()
             }
+        } else {
+            let newNormal = CGVector(dx: 10 * contact.contactNormal.dx, dy: -10 * contact.contactNormal.dy)
+            self.addForce(vec: newNormal)
+            durability -= obj.impactDamage
+            if durability <= 0 {
+                self.onDestroy()
+            }
+        }
         //}
     }
     
