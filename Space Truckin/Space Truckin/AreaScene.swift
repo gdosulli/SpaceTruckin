@@ -225,6 +225,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
             case "jump":
                 // TODO change area code
                 //setTimer(using: menu.travel())
+                menu.travel()
                 musicPlayer.muted = false
                 musicPlayer.unmute()
                 musicPlayer.playSong(MySongs.JUMP)
@@ -233,6 +234,8 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
                 menu.map.animateTravel(on: self, with: self.frame.size)
             case "return" :
                 menu.map.hideInfoScreen()
+            case "infoScreen":
+                touchedButton = true
             default:
                 touchedButton = false
             }
