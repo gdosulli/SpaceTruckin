@@ -75,21 +75,24 @@ class RivalTruckPiece: TruckPiece {
     }
     
     //Returns a list of connected rival truckPieces
-    static func generateChain(with numFollowers: Int, holding itemList: [ItemType]) -> [RivalTruckPiece]{
+    static func generateChain(with numFollowers: Int, holding itemList: [ItemType]) -> [TruckPiece]{
         
         let rival_speed = CGFloat(200)
         
         let head = RivalTruckPiece.init(sprite: SKSpriteNode(imageNamed: "rival_truck_cab"), xRange: (1.5,1.0), yRange: (1.5,1.0), speed: rival_speed, rotation: 0)//M
         head.isHead = true
-        var truckList = [head]
+        var truckList: [TruckPiece] = [head]
         for i in 0..<numFollowers{
-            let piece = RivalTruckPiece.init(sprite: SKSpriteNode(imageNamed: "rival_truck_capsule1"), xRange: (1.4,1.0), yRange: (1.4,1.0), speed: rival_speed, rotation: 0)//M
-            piece.addToChain(adding: truckList[i])
+            let piece = TruckPiece(2, SKSpriteNode(imageNamed: "rival_truck_capsule1"), nil,(1.4,1.0), (1.4,1.0), Inventory(), rival_speed, 0, 0, rival_speed)
+            piece.addToChain(adding: truckList[i])//M
             
             if let chosenItemType = itemList.randomElement(){
                 _ = piece.inventory.addItem(item: Item.init(type: chosenItemType, value: piece.inventory.maxCapacities[chosenItemType]!))
             }
             truckList.append(piece)
+        }
+        for piece in truckList {
+            piece.sprite.name = "rival_capsule"
         }
         return truckList
     }
@@ -98,37 +101,51 @@ class RivalTruckPiece: TruckPiece {
         super.update(by: delta)
     }
     
-    override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
+ override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
+            
+            var collisionVector = contact.contactNormal
+    //        if self.sprite === contact.bodyB.node{
+    //            print("FLIP RIVAL")
+    //            collisionVector.dx *= -1
+    //            collisionVector.dy *= -1
+    //        }
+                //Rival Capsule vs Capsule collision
+                if obj.sprite.name == "capsule" {
+                    var newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
+                    self.addForce(vec: newNormal)
+                    
+                    durability -= obj.impactDamage
+                    if durability <= 0 {
+                        onDestroy() //This should all be a "changeHealth" function of truckPiece
+                    }
+                    
+            
+               //Rival Capsule vs Asteroid and Debris collision
+                } else if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
+                    let newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
+                    self.addForce(vec: newNormal)
+                    durability -= obj.impactDamage
+                    print("oof ouch \(durability)")
+                    if durability <= 0 {
+                        onDestroy() //This should all be a "changeHealth" function of truckPiece
+                    }
         
-        var collisionVector = contact.contactNormal
-//        if self.sprite === contact.bodyB.node{
-//            print("FLIP RIVAL")
-//            collisionVector.dx *= -1
-//            collisionVector.dy *= -1
-//        }
-        
-        //Rival Capsule vs Capsule collision
-        if (obj.sprite.name?.starts(with: "capsule"))! {
-            var newNormal = CGVector(dx: 10 * collisionVector.dx, dy: 10 * collisionVector.dy)
-            self.addForce(vec: newNormal)
-        
-        
-        //Rival Capsule vs Asteroid and Debris collision
-        } else if (obj.sprite.name?.starts(with: "asteroid"))! || (obj.sprite.name?.starts(with: "debris"))! {
-            let newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
-            self.addForce(vec: newNormal)
-            durability -= obj.impactDamage
-            print("oof ouch \(durability)")
-            if durability <= 0 {
-                onDestroy()
-            }
+                //Rival Capsule vs Rival Capsule collision (does nothing)
+                } else if obj.sprite.name == "rival_capsule" {
+                //Rival Capsule vs Lost Capsule collision
+                } else if obj.sprite.name == "lost_capsule" {
+                    addToChain(adding: (obj as? TruckPiece)!)
+                
+               //Capsule vs SpaceStation Collision --- needed or not?
+               
+               //Test basic truck collisions
+                    
+                } else {
+                    super.onImpact(with: obj, contact)
+                }
+            
+            //If not rival_capsule just use basic truck collisions
     
-            
-        //Rival Capsule vs Lost Capsule collision
-        } else if obj.sprite.name == "lost_capsule" {
-            addToChain(adding: (obj as? TruckPiece)!)
-            
-        //Capsule vs SpaceStation Collision --- needed or not?
         }
-    }
+
 }

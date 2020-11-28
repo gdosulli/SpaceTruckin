@@ -72,6 +72,7 @@ class Area {
         
         // reintroduce player
         warp(truckList: player.head.getAllPieces(), at: CGPoint(x: 0,y: 0))
+        player.head.invincible = true
     }
     
     @objc func spawnObject(timer: Timer) {
@@ -136,8 +137,10 @@ class Area {
     func warp(truckList: [TruckPiece], at point: CGPoint) {
         let context = ["pieces": truckList, "point": point] as [String : Any]
         
+        print("WARPING \(truckList[0].sprite.name)")
         var head: TruckPiece?
         for piece in truckList {
+            print("\(String(describing: piece.sprite.name))")
             if piece.isHead {
                 head = piece
             }
@@ -149,6 +152,7 @@ class Area {
         head!.spawn(at: point)
         addObject(obj: head!)
         
+        print(head!.sprite.name!)
         timers[head!.sprite.name!] =  Timer.scheduledTimer(timeInterval: 0.5 * Double(head!.xRange.0),
         target: self,
         selector: #selector(warpPiece),
@@ -177,8 +181,7 @@ class Area {
         // set that piece's target to head.getLastPiece() (the last piece in the connected chain)
         // add that piece to the area
         if let newPiece = nextPieceOpt {
-            let target = head!.getLastPiece()
-            target.addToChain(adding: newPiece)
+            head!.addToChain(adding: newPiece)
             newPiece.spawn(at: point)
             addObject(obj: newPiece)
         } else {
@@ -290,6 +293,10 @@ func generateTestArea(withScene scene: AreaScene) -> Area {
     ss.spawn(at: CGPoint(x: 0, y: 1200))//Spawns such that player appears from the arm
 
     let enemyChain: [TruckPiece] = RivalTruckPiece.generateChain(with: 5, holding: [.Nuclear])
+    print("ENEMY NAMES")
+    for p in enemyChain {
+        print("\(p.sprite.name)")
+    }
     
     a.warp(truckList: enemyChain, at: CGPoint(x: 400, y: -500))
     

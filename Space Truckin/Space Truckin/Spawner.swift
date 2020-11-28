@@ -34,7 +34,7 @@ class Spawner: SpaceObject {
         
         let sprite = SKSpriteNode(color: .red, size: CGSize(width: 300, height: 300))
         
-        super.init(0, sprite, (300,500), (300,500), Inventory(), 0, 0, 0, CollisionCategories.EFFECT_FIELD_CATEGORY, CollisionCategories.EFFECT_FIELD_CATEGORY, 0)
+        super.init(0, sprite, (300,500), (300,500), Inventory(), 0, 0, 0, 0)
         sprite.color = sprite.color.withAlphaComponent(0.5)
 
     }
@@ -42,7 +42,7 @@ class Spawner: SpaceObject {
     required init(instance: SpaceObject) {
         guard let _ = instance as? Spawner else {fatalError("trying to copy something that isn't a spawner")}
         
-        super.init(0, instance.sprite, instance.xRange, instance.yRange, instance.inventory, instance.speed, instance.rotation, instance.targetAngle, instance.collisionCategory, instance.testCategory, instance.boostSpeed)
+        super.init(0, instance.sprite, instance.xRange, instance.yRange, instance.inventory, instance.speed, instance.rotation, instance.targetAngle, instance.boostSpeed)
         
     }
     

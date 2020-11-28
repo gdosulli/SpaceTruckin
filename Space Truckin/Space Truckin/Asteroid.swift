@@ -104,35 +104,35 @@ class Asteroid : SpaceObject {
 }
 
 
-class RadioactiveAsteroid: Asteroid {
-    let radGlow = SKEmitterNode(fileNamed: "radioactiveDecay")
-    
-    override init(_ durability: Int, _ sprite: SKSpriteNode, _ xRange: (CGFloat, CGFloat), _ yRange: (CGFloat, CGFloat), _ inventory: Inventory, _ speed: CGFloat, _ rotation: CGFloat, _ targetAngle: CGFloat, _ collisionCategory: UInt32, _ testCategory: UInt32, _ boostSpeed: CGFloat) {
-        
-        
-        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory, boostSpeed)
-        radGlow?.zPosition = sprite.zPosition - 1
-    }
-    
-    required init(instance: SpaceObject) {
-        guard let _ = instance as? RadioactiveAsteroid else {fatalError()}
-        
-        let sprite = instance.sprite.copy() as? SKSpriteNode
-        if let name = sprite?.name {
-            sprite?.name = name + "c"
-        }
-        
-        super.init(instance.durability, sprite!, instance.xRange, instance.yRange, instance.inventory, instance.speed, instance.rotation, instance.targetAngle, instance.collisionCategory, instance.testCategory, instance.boostSpeed)
-        
-    }
-    
-    override func update(by delta: CGFloat) {
-        radGlow?.position = sprite.position
-        super.update(by: delta)
-    }
-    
-    
-    override func getChildren() -> [SKNode?] {
-        return super.getChildren() + [radGlow]
-    }
-}
+//class RadioactiveAsteroid: Asteroid {
+//    let radGlow = SKEmitterNode(fileNamed: "radioactiveDecay")
+//    
+//    override init(_ durability: Int, _ sprite: SKSpriteNode, _ xRange: (CGFloat, CGFloat), _ yRange: (CGFloat, CGFloat), _ inventory: Inventory, _ speed: CGFloat, _ rotation: CGFloat, _ targetAngle: CGFloat, _ collisionCategory: UInt32, _ testCategory: UInt32, _ boostSpeed: CGFloat) {
+//        
+//        
+//        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, collisionCategory, testCategory, boostSpeed)
+//        radGlow?.zPosition = sprite.zPosition - 1
+//    }
+//    
+//    required init(instance: SpaceObject) {
+//        guard let _ = instance as? RadioactiveAsteroid else {fatalError()}
+//        
+//        let sprite = instance.sprite.copy() as? SKSpriteNode
+//        if let name = sprite?.name {
+//            sprite?.name = name + "c"
+//        }
+//        
+//        super.init(instance.durability, sprite!, instance.xRange, instance.yRange, instance.inventory, instance.speed, instance.rotation, instance.targetAngle, instance.collisionCategory, instance.testCategory, instance.boostSpeed)
+//        
+//    }
+//    
+//    override func update(by delta: CGFloat) {
+//        radGlow?.position = sprite.position
+//        super.update(by: delta)
+//    }
+//    
+//    
+//    override func getChildren() -> [SKNode?] {
+//        return super.getChildren() + [radGlow]
+//    }
+//}

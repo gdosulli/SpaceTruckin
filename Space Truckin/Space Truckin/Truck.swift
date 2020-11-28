@@ -287,14 +287,14 @@ class TruckPiece: SpaceObject {
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
             print("OOF ouch! \(durability) hull remaining.")
-            if durability <= 0 {
+            if !invincible && durability <= 0 {
                 onDestroy()
             }
             
             
         //Capsule vs Lost Capsule collision
         } else if obj.sprite.name == "lost_capsule" {
-            if self.sprite.name != "lost_capsule" || self.sprite != contact.bodyA { //This should ensure too lost capsules never connect to each other at the same time
+            if self.sprite.name != "lost_capsule" || self.sprite === contact.bodyA { //This should ensure too lost capsules never connect to each other at the same time
                 addToChain(adding: (obj as? TruckPiece)!)
             }
             
@@ -308,17 +308,32 @@ class TruckPiece: SpaceObject {
                 // bump
                 print("bump")
             }
-            
-            
-        //Capsule vs Rival Capsule collision
-        } else if obj.sprite.name == "rival_capsule"{
-            var newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
-            self.addForce(vec: newNormal)
-            //durability -= obj.impactDamage
-            //print("OOF ouch! \(durability) hull remaining.")
-            //if durability <= 0 {
-            //    onDestroy()
-            //}
+        } else if sprite.name == "capsule" {
+            // capsule on rival collision
+            print("capsule ")
+
+            if obj.sprite.name == "rival_capsule" {
+                let newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
+                self.addForce(vec: newNormal)
+                durability -= obj.impactDamage
+                print("OOF ouch! \(durability) hull remaining.")
+                if !invincible && durability <= 0 {
+                    onDestroy()
+                }
+            }
+        } else if sprite.name == "rival_capsule" {
+            print("rival")
+
+            // rival on capsule collision
+            if obj.sprite.name == "capsule" {
+                let newNormal = CGVector(dx: 10 * collisionVector.dx, dy: 10 * collisionVector.dy)
+                self.addForce(vec: newNormal)
+                durability -= obj.impactDamage
+                print("OOF ouch! \(durability) hull remaining.")
+                if !invincible && durability <= 0 {
+                    onDestroy()
+                }
+            }
         }
     }
         
@@ -333,17 +348,20 @@ class TruckPiece: SpaceObject {
             dropItem(at: sprite.position)
             destroyed = true
             explode()
+            
+            let duration = Double.random(in: 0.7...1.0)
+            let removeDate = Date().addingTimeInterval(duration)
+            let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
+            RunLoop.main.add(timer, forMode: .common)
         }
-//        let duration = Double.random(in: 0.4...0.7)
-//        let removeDate = Date().addingTimeInterval(duration)
-//        let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
-//        RunLoop.main.add(timer, forMode: .common)
+
     }
     
     @objc func deleteSelf() {
         dropItem(at: self.sprite.position)
-        self.sprite.removeFromParent()
-        self.thruster.removeFromParent()
+        for child in self.getChildren() {
+            child?.removeFromParent()
+        }
     }
     
     //Returns all attached pieces
@@ -386,11 +404,9 @@ class TruckPiece: SpaceObject {
         
         var followPiece: TruckPiece? = self
         while let p = followPiece {
-            p.collisionCategory = CollisionCategories.LOST_CAPSULE_CATEGORY
-            p.testCategory = CollisionCategories.ASTEROID_CATEGORY
+//            p.collisionCategory = CollisionCategories.LOST_CAPSULE_CATEGORY
+//            p.testCategory = CollisionCategories.ASTEROID_CATEGORY
             p.sprite.name = "lost_capsule"
-            p.sprite.physicsBody?.categoryBitMask = p.collisionCategory
-            p.sprite.physicsBody?.contactTestBitMask = p.testCategory
             followPiece = p.followingPiece
             p.setBoost(b: false)
         }
