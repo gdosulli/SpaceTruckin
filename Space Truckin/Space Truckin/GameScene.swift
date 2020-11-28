@@ -43,9 +43,27 @@ struct Player {
     //func update(by delta: CGFloat) {
 //        head.move(by: delta)
 //        chain.movePieces(by: delta)
-    //    .updateFollowers()
-    //    chain.checkForDestroyed()
-    //}
+        chain.updateFollowers()
+        chain.checkForDestroyed()
+    }
+    
+    func getInventory() -> Inventory {
+        var maxCapacities = [ItemType:Int]()
+        var items = [ItemType:Int]()
+        for type in ItemType.allCases {
+            maxCapacities[type] = 0
+            items[type] = 0
+        }
+        
+        for piece in chain.getAllPieces() {
+            for type in ItemType.allCases {
+                maxCapacities[type]! += piece.inventory.getMaxCapacity(for: type)
+                items[type]! += piece.inventory.getCurrentCapacity(for: type)
+            }
+        }
+        
+        return Inventory(maxCapacities, items)
+    }
 }
 extension Player {
     init(_ head: TruckPiece) {
@@ -62,6 +80,7 @@ struct DropDownMenu {
     var menuIsOpen = false
     
     var map: Map!
+    var infoScreen: InfoScreen!
     var viewingSector: String!
     
     func move(menu position: CGPoint, map center: CGPoint, on scene: SKScene){
@@ -74,6 +93,7 @@ struct DropDownMenu {
         }
         
         map.moveMap(to: center)
+        infoScreen.background.position = map.mapView.position
     }
     
     func getButtons() -> [SKSpriteNode] {
@@ -127,15 +147,40 @@ struct DropDownMenu {
         scene.addChild(map.travelScreen)
     }
     
+    mutating func setInfoScreen(with newInfoScreen: InfoScreen, on scene: SKScene) {
+        infoScreen = newInfoScreen
+        scene.addChild(infoScreen.background)
+    }
+    
+    func updateInfoScreen(_ inventory: Inventory) {
+        infoScreen.update(inventory)
+    }
+    
+    func showInfoScreen() {
+        infoScreen.show()
+    }
+    
     mutating func viewSector(named name: String) {
         viewingSector = name
         map.showInfo(about: name)
     }
     
-    func travel() -> [String : Double] {
-        map.showMap()
+    mutating func travel() -> [String : Double] {
         map.travel(to: viewingSector)
+        closeTabs()
         return map.getSpawnTimes()
+    }
+    
+    mutating func closeTabs() {
+        if !map.mapView.isHidden {
+            map.showMap()
+        }
+        if !infoScreen.background.isHidden {
+            infoScreen.show()
+        }
+        if menuIsOpen {
+            clicked()
+        }
     }
     
 }
@@ -242,7 +287,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         menuConroller.isUserInteractionEnabled = false
         menuConroller.anchorPoint = CGPoint(x: 1, y: 1)
         menuConroller.size = CGSize(width: frameWidth/5, height: frameHeight/5)
-        menu = DropDownMenu(controller: menuConroller, buttons: [], offset: 0)
+        menu = DropDownMenu(controller: menuConroller,
+                            buttons: [],
+                            offset: 0)
         
         menu.add(SKSpriteNode(imageNamed: "Map_button"), called: "map")
         menu.add(SKSpriteNode(imageNamed: "Cargo_button"), called: "cargo")
@@ -301,6 +348,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // comment out testMap above and uncomment this to use the original map
         //let testMap = Map(with: [["1/A2/D8/"]], sizeOf: (1, 1), threat: 3, starting: (0, 0), named: "test Area", frame: CGSize(width: frameWidth, height: frameHeight))
         menu.setMap(with: testMap, on: self)
+        let infoScreen = InfoScreen(frameSize: testMap.mapView.size)
+        menu.setInfoScreen(with: infoScreen, on: self)
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
@@ -388,8 +437,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 //TODO: switch to map view
                 menu.map.showMap()
             case "cargo":
-                camScale += 1
-                menu.clicked()
+                menu.showInfoScreen()
             case "stop",
                  "start":
                 menu.stop()
@@ -532,6 +580,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         selectedInventory.update(currentTime)
         
         menu.move(menu: CGPoint(x: cam.position.x + frameWidth - frameWidth/10, y:  cam.position.y + frameHeight), map: cam.position, on: self)
+        
+        menu.updateInfoScreen(player.getInventory())
         
         musicPlayer.update()
         

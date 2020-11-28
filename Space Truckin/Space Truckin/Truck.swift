@@ -35,7 +35,12 @@ class TruckPiece: SpaceObject {
 
     }
  
-    convenience init(sprite s1: SKSpriteNode, durability: Int, size: CGFloat, speed: CGFloat, boostedSpeed: CGFloat) {
+    convenience init(sprite s1: SKSpriteNode,
+                     durability: Int,
+                     size: CGFloat,
+                     speed: CGFloat,
+                     boostedSpeed: CGFloat,
+                     inventory: Inventory) {
 
         self.init(durability, s1, nil, (size,size), (size,size), Inventory(), speed, 10, 0, boostedSpeed)
     }

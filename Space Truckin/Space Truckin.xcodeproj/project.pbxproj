@@ -16,6 +16,7 @@
 		E3248BDE256DB36300974CF6 /* Spawner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3248BDD256DB36300974CF6 /* Spawner.swift */; };
 		E3248BE0256DB43500974CF6 /* Shield.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3248BDF256DB43500974CF6 /* Shield.swift */; };
 		E3248BE2256E314100974CF6 /* EffectField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3248BE1256E314100974CF6 /* EffectField.swift */; };
+		82F81B262571866F00D5A160 /* InfoScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F81B252571866F00D5A160 /* InfoScreen.swift */; };
 		E33F6147254221C9005BAB37 /* Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33F6146254221C9005BAB37 /* Inventory.swift */; };
 		E33F614925422EC4005BAB37 /* Movable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33F614825422EC4005BAB37 /* Movable.swift */; };
 		E34A4754254BC42000479EFB /* GalaxyBackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34A4753254BC42000479EFB /* GalaxyBackground.sks */; };
@@ -86,6 +87,7 @@
 		E3248BDD256DB36300974CF6 /* Spawner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spawner.swift; sourceTree = "<group>"; };
 		E3248BDF256DB43500974CF6 /* Shield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shield.swift; sourceTree = "<group>"; };
 		E3248BE1256E314100974CF6 /* EffectField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectField.swift; sourceTree = "<group>"; };
+		82F81B252571866F00D5A160 /* InfoScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoScreen.swift; sourceTree = "<group>"; };
 		E33F6146254221C9005BAB37 /* Inventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inventory.swift; sourceTree = "<group>"; };
 		E33F614825422EC4005BAB37 /* Movable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movable.swift; sourceTree = "<group>"; };
 		E34A4753254BC42000479EFB /* GalaxyBackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GalaxyBackground.sks; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				E392DF4925719D2800D3CA4A /* boostEmitter2.sks */,
 				E392DF4B25719DD500D3CA4A /* boostEmitter3.sks */,
 				E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */,
+				82F81B252571866F00D5A160 /* InfoScreen.swift */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 				E34AB9BF252BAE6D007AF254 /* GameScene.swift in Sources */,
 				E3248BDE256DB36300974CF6 /* Spawner.swift in Sources */,
 				E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */,
+				82F81B262571866F00D5A160 /* InfoScreen.swift in Sources */,
 				E3899076255CB6350037B507 /* DroppedItem.swift in Sources */,
 				E33F6147254221C9005BAB37 /* Inventory.swift in Sources */,
 				E373A3B92554B44B00D04135 /* Truck.swift in Sources */,
