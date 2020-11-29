@@ -24,6 +24,8 @@ class Movable {
     var outsideForcesDecay = CGFloat(0.9)
     var collisionWeight = CGFloat(10)
     
+    var lastVector = CGVector(dx: 0, dy: 0)
+    
     
     init(speed: CGFloat, rotation: CGFloat, angleInRadians: CGFloat, sprite: SKSpriteNode, boostSpeed: CGFloat) {
         self.speed = speed
@@ -41,8 +43,11 @@ class Movable {
         sprite.position.y += vector.y + outsideForces.dy
         outsideForces.dx *= outsideForcesDecay
         outsideForces.dy *= outsideForcesDecay
+        
+        lastVector = CGVector(dx: vector.x, dy: vector.y)
     }
     
+
     func changeAngleTo(point pos: CGPoint) {
         let difference = CGPoint(x: pos.x - sprite.position.x, y: pos.y - sprite.position.y)
         let diffMag = sqrt(difference.x * difference.x + difference.y * difference.y)
@@ -127,4 +132,20 @@ class Movable {
 // TODO: Implement a lockDirection(for interval: TimeInterval) that makes it so a Movable can't rotate for
 // a specified time
 
-
+extension CGVector {
+    func dotted(with v: CGVector) -> CGFloat{
+        return self.dx * v.dx + self.dy * v.dy
+    }
+    
+    func reflected(over v: CGVector) -> CGVector{
+        let dotProd = self.dotted(with: v)
+        let n = CGVector(dx: v.dx * -2 * dotProd, dy: v.dy * -2 * dotProd)
+        return CGVector(dx: self.dx + n.dx, dy: self.dy + n.dy)
+        
+    }
+    
+    func mult(by: CGFloat) -> CGVector {
+        return CGVector(dx: dx * by, dy: dx * by)
+    }
+    
+}
