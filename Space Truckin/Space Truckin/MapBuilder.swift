@@ -41,18 +41,22 @@ class Map {
     let cockPit: SKSpriteNode! = SKSpriteNode(imageNamed: "cockpit")
     
     let allObjects = [0: "A", 1: "D", 2:"T"] //TODO: T is place holder remove from here and full name dictionary below
-    let allObjectsFullNames = ["A": "Asteroids", "D": "Debris", "T": "Tests"]
+    let allObjectsFullNames = ["AN": ("asteroid_normal", 0), "AP": ("asteroid_precious", 1), "AR": ("asteroid_radioactive", 1),
+                               "SL": ("satellite", 0), "CT": ("cell_tower", 0)]
     var possibleObjects: Array<String> = []
     
     var currentLocation: (Int, Int)
+    var initialLocation: (Int, Int)
+    
     var playerLabel: SKLabelNode!
     
     init(sizeOf area: (Int, Int), threat level: Int, maxObjects perZone: Int, named name: String, frame size: CGSize) {
         height = area.0 - 1
         width = area.1 - 1
         danger = level
-        intensity = perZone
+        intensity = perZone - 1
         currentLocation = (Int.random(in: 0...width), Int.random(in: 0...height))
+        initialLocation = currentLocation
         mapOf = name
                 
         for _ in 0...width {
@@ -74,6 +78,7 @@ class Map {
         danger = level
         intensity = 0
         currentLocation = location
+        initialLocation = currentLocation
         mapOf = name
         generateMap(CGSize(width: size.width * 1.3, height: size.height * 1.3))
         
@@ -85,17 +90,17 @@ class Map {
         var objects: Set<String> = []
         var localDanger = danger
         
-        
-        
         for _ in 0...intensity {
-            let check = objects.count
-            var addObject = Int.random(in: 0...localDanger)
+            var addObject = Int.random(in: 0...allObjectsFullNames.count - 1)
+            let key =  Array(allObjectsFullNames.keys)[addObject]
             if addObject >= allObjects.count {
                 addObject = allObjects.count - Int.random(in: allObjects.count/2...allObjects.count-1)
             }
-            objects.insert(allObjects[addObject]!)
-            if check < objects.count {
-                localDanger -= addObject
+            if let object = allObjectsFullNames[key] {
+                if object.1 <= localDanger {
+                    objects.insert(object.0)
+                    localDanger -= object.1
+                }
             }
         }
         
@@ -106,6 +111,7 @@ class Map {
             zoneKey += String(Int.random(in: 2...risk)) + "/"
         }
         
+        print("Zone: ", zoneKey)
         return zoneKey
     }
     
@@ -243,23 +249,24 @@ class Map {
     func getSectorInfo(_ secName: String) -> [String: String]{
         var info: [String: String] = [:]
         let rawData = secName.split(separator: "/")
+        print(rawData)
         info["sectorDanger"] = String(rawData[0])
-        for i in 0...allObjects.count - 1 {
-            if let object = allObjects[i] {
+        for i in 0...allObjectsFullNames.count - 1 {
+            let object = Array(allObjectsFullNames.values)[i]
                 for j in 1...rawData.count - 1 {
-                    if rawData[j].contains(object) {
+                    if rawData[j].contains(object.0) {
                         var rate = ""
                         for c in rawData[j] {
-                            if String(c) != object {
+                            if !object.0.contains(String(c)) {
                                 rate += String(c)
                             }
                         }
-                        info[object] = rate
+                        info[object.0] = rate
                     }
                 }
-            }
             
         }
+        print("info: ", info)
         return info
     }
     
@@ -305,9 +312,9 @@ class Map {
         
         var fontSize: CGFloat
         if infoScreen.size.height < infoScreen.size.width {
-            fontSize = infoScreen.size.height/CGFloat(Double(info.count + 1) * 2.5)
+            fontSize = infoScreen.size.height/CGFloat(Double(info.count + 1) * 1.75)
         } else {
-            fontSize = infoScreen.size.width/CGFloat(Double(info.count + 1) * 2.5)
+            fontSize = infoScreen.size.width/CGFloat(Double(info.count + 1) * 1.75)
         }
         
         var label = SKLabelNode(fontNamed: FONT)
@@ -339,9 +346,10 @@ class Map {
         
         infoScreen.addChild(label)
         
-        for i in 0...allObjects.count - 1 {
-            if let value = allObjects[i] {
-                if let spawnRate = info[value] {
+        for i in 0...allObjectsFullNames.count - 1 {
+            let key = Array(allObjectsFullNames.keys)[i]
+            if let value = allObjectsFullNames[key] {
+                if let spawnRate = info[value.0] {
                     var rarity: String = ""
                     var colorRarity: UIColor = UIColor.black
                     if let rate = Int(spawnRate){
@@ -357,8 +365,8 @@ class Map {
                         }
                     }
                     label = SKLabelNode(fontNamed: FONT)
-                    if let name = allObjectsFullNames[value] {
-                        label.text = name + ": " + rarity
+                    if let name = allObjectsFullNames[key] {
+                        label.text = name.0 + ": " + rarity
                     }
                     label.fontSize = fontSize * 0.7
                     label.fontColor = colorRarity
@@ -368,6 +376,7 @@ class Map {
                     infoScreen.addChild(label)
                 }
             }
+            
         }
         infoScreen.isHidden = false
     }
@@ -414,7 +423,7 @@ class Map {
             if let value = allObjects[i] {
                 if let spawnRate = info[value] {
                     if let object = allObjectsFullNames[value] {
-                        spawnDelays[object] = Double(spawnRate)
+                        spawnDelays[object.0] = Double(spawnRate)
                     }
                 }
             }
