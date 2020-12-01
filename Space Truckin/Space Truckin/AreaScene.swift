@@ -9,6 +9,194 @@
 import SpriteKit
 import GameplayKit
 
+struct Player {
+    var head: TruckPiece
+    let cam = SKCameraNode()
+    
+    func getChildren() -> [SKNode?] {
+        return head.getAllChainedChildren()
+    }
+    
+    func getClickedPiece(from node: SKSpriteNode) -> TruckPiece? {
+        for piece in head.getAllPieces() {
+            if piece.sprite === node {
+                return piece
+            }
+        }
+        return nil
+    }
+    
+    func setBoost(b: Bool) {
+        for p in head.getAllPieces() {
+            p.setBoost(b: false)
+        }
+        
+        var truckPiece: TruckPiece?
+        truckPiece = head
+        while truckPiece != nil {
+            truckPiece?.setBoost(b: b)
+            truckPiece = truckPiece?.followingPiece
+        }
+    }
+    
+//
+//    //func update(by delta: CGFloat) {
+////        head.move(by: delta)
+////        chain.movePieces(by: delta)
+//        chain.updateFollowers()
+//        chain.checkForDestroyed()
+//    }
+//
+    func getInventory() -> Inventory {
+        var maxCapacities = [ItemType:Int]()
+        var items = [ItemType:Int]()
+        for type in ItemType.allCases {
+            maxCapacities[type] = 0
+            items[type] = 0
+        }
+        
+        for piece in head.getAllPieces() {
+            for type in ItemType.allCases {
+                maxCapacities[type]! += piece.inventory.getMaxCapacity(for: type)
+                items[type]! += piece.inventory.getCurrentCapacity(for: type)
+            }
+        }
+        
+        return Inventory(maxCapacities, items)
+    }
+}
+extension Player {
+    init(_ head: TruckPiece) {
+        self.head = head
+        head.isHead = true
+    }
+}
+
+struct DropDownMenu {
+    //TODO: resize buttons to be proportional to screen
+    var controller: SKSpriteNode
+    var buttons: [SKSpriteNode]
+    var offset: CGFloat
+    var menuIsOpen = false
+    
+    var map: Map!
+    var infoScreen: InfoScreen!
+    var viewingSector: String!
+    
+    func move(menu position: CGPoint, map center: CGPoint, on scene: SKScene){
+        controller.position = position
+        
+        for i in 0...buttons.count-1{
+            buttons[i].position.x = controller.position.x
+            let dif: CGFloat = offset*CGFloat((Float(i)+1.0))
+            buttons[i].position.y = controller.position.y - dif
+        }
+        
+        map.moveMap(to: center)
+        infoScreen.background.position = map.mapView.position
+    }
+    
+    func getButtons() -> [SKSpriteNode] {
+        return buttons
+    }
+    
+    mutating func add(_ button: SKSpriteNode, called name: String){
+        button.position = controller.position
+        button.zPosition = 99
+        button.name = name
+        button.isUserInteractionEnabled = false
+        button.anchorPoint = controller.anchorPoint
+        button.size = controller.size
+        buttons.append(button)
+    }
+
+    mutating func clicked(){
+        menuIsOpen = !menuIsOpen
+        if menuIsOpen{
+            let height = controller.size.height
+            offset = height + height/10.0
+            controller.texture = SKTexture(imageNamed: "Close_arrow")
+        } else {
+            offset = 0
+            controller.texture = SKTexture(imageNamed: "Open_arrow")
+        }
+    }
+    
+    func stop(){
+        for b in buttons{
+            if b.name == "start" {
+                b.name = "stop"
+                b.texture = SKTexture(imageNamed: "Stop")
+            } else if b.name == "stop" {
+                b.name = "start"
+                b.texture = SKTexture(imageNamed: "Start")
+            }
+        }
+    }
+    
+    mutating func setMap(with newMap: Map, on scene: SKScene) {
+        if map != nil {
+            map.removeMap()
+        }
+        map = newMap
+        scene.addChild(map.mapView)
+        scene.addChild(map.infoScreen)
+        for sector in map.sectorViews {
+            scene.addChild(sector)
+        }
+        scene.addChild(map.travelScreen)
+    }
+    
+    mutating func setInfoScreen(with newInfoScreen: InfoScreen, on scene: SKScene) {
+        infoScreen = newInfoScreen
+        scene.addChild(infoScreen.background)
+    }
+    
+    func updateInfoScreen(_ inventory: Inventory) {
+        infoScreen.update(inventory)
+    }
+    
+    mutating func showInfoScreen() {
+        infoScreen.show()
+        if !map.mapView.isHidden {
+            map.showMap()
+        }
+    }
+    
+    mutating func showMap() {
+        map.showMap()
+        if !infoScreen.background.isHidden {
+            infoScreen.show()
+        }
+    }
+    
+    
+    mutating func viewSector(named name: String) {
+        viewingSector = name
+        map.showInfo(about: name)
+    }
+    
+    mutating func travel() -> [String : Double] {
+        map.travel(to: viewingSector)
+        closeTabs()
+        if menuIsOpen {
+            clicked()
+        }
+        return map.getSpawnTimes()
+    }
+    
+    mutating func closeTabs() {
+        if !map.mapView.isHidden {
+            map.showMap()
+        }
+        if !infoScreen.background.isHidden {
+            infoScreen.show()
+        }
+    }
+    
+}
+
+
 class AreaScene: SKScene, SKPhysicsContactDelegate {
     var stopped = false
     
@@ -194,7 +382,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
                 menu.clicked()
             case "map":
                 //TODO: switch to map view
-                menu.map.showMap()
+                menu.showMap()
             case "cargo":
                 menu.showInfoScreen()
             case "stop",
@@ -210,7 +398,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
                 currentArea.player.setBoost(b: true)
             case "pause":
                 //TODO: need to actually pause the game
-                currentArea.gameIsPaused = true
+                currentArea.gameIsPaused = !currentArea.gameIsPaused
                 menu.clicked()
                 musicPlayer.skip()
             case "capsule":
@@ -224,8 +412,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
                 menu.viewSector(named: name)
             case "jump":
                 // TODO change area code
-                //setTimer(using: menu.travel())
-                menu.travel()
+                currentArea.setArea(with: menu.travel())
                 musicPlayer.muted = false
                 musicPlayer.unmute()
                 musicPlayer.playSong(MySongs.JUMP)
@@ -234,7 +421,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
                 menu.map.animateTravel(on: self, with: self.frame.size)
             case "return" :
                 menu.map.hideInfoScreen()
-            case "infoScreen":
+            case "infoScreen", "info":
                 touchedButton = true
             default:
                 touchedButton = false
@@ -250,22 +437,24 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func handleDoubleTap(gesture: UITapGestureRecognizer) {
-        print("double touch")
-        currentArea.player.head.sprite.run(SKAction.animate(with: drillAnim,
-                                                            timePerFrame: 0.1,
-                                                            resize: false,
-                                                            restore: false))
-        currentArea.player.setBoost(b: true)
-        boostLocked = true
-        let duration = 0.05
-        let unlockDate = Date().addingTimeInterval(duration)
-        let timer = Timer(fireAt: unlockDate,
-                          interval: 0,
-                          target: self,
-                          selector: #selector(unlockBoost),
-                          userInfo: nil,
-                          repeats: false)
-        RunLoop.main.add(timer, forMode: .common)
+        if !touchedButton {
+            print("double touch")
+            currentArea.player.head.sprite.run(SKAction.animate(with: drillAnim,
+                                                                timePerFrame: 0.1,
+                                                                resize: false,
+                                                                restore: false))
+            currentArea.player.setBoost(b: true)
+            boostLocked = true
+            let duration = 0.05
+            let unlockDate = Date().addingTimeInterval(duration)
+            let timer = Timer(fireAt: unlockDate,
+                              interval: 0,
+                              target: self,
+                              selector: #selector(unlockBoost),
+                              userInfo: nil,
+                              repeats: false)
+            RunLoop.main.add(timer, forMode: .common)
+        }
 
     }
     
