@@ -48,11 +48,21 @@ class Debris : SpaceObject {
     
     //TODO: May need to make normal vector direction a field in order to know whether to flip vector or not
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
-        let newNormal = CGVector(dx: 10 * contact.contactNormal.dx, dy: 10 * contact.contactNormal.dy)
-        self.addForce(vec: newNormal)
-        durability -= obj.impactDamage
-        if durability <= 0 {
-            self.onDestroy()
+        if obj.sprite.name == "item" {
+            
+        } else if obj.sprite.name == "asteroid" {
+            
+        } else if obj.sprite.name == "debris" {
+                
+        } else {
+            let coeff: CGFloat = 4
+
+            let newNormal = reboundVector(from: contact.contactPoint).mult(by: coeff)
+            self.addForce(vec: newNormal)
+            durability -= obj.impactDamage
+            if durability <= 0 {
+                self.onDestroy()
+            }
         }
     }
         

@@ -15,9 +15,6 @@ class Asteroid : SpaceObject {
     required init(instance: SpaceObject) {
         guard let _ = instance as? Asteroid else {fatalError()}
         let sprite = instance.sprite.copy() as? SKSpriteNode
-        if let name = sprite?.name {
-            sprite?.name = name + "c"
-        }
         
         super.init(instance.durability, sprite!, instance.xRange, instance.yRange, instance.inventory, instance.speed, instance.rotation, instance.targetAngle, instance.boostSpeed)
     }
@@ -76,15 +73,17 @@ class Asteroid : SpaceObject {
     //TODO: May need to make normal vector direction a field in order to know whether to flip vector or not
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
         //if !destroyed{ //Needed to prevent bumping around the explosion
-        print("asteroid on impact with \(obj.sprite.name!)")
+        //print("asteroid on impact with \(obj.sprite.name!)")
         if obj.sprite.name == "item" {
             
         } else if obj.sprite.name == "asteroid" {
             
-        }else {
+        } else if obj.sprite.name == "debris" {
+                
+        } else {
             let coeff: CGFloat = 4
-            //
-            let newNormal = CGVector.getVector(fromPoint: contact.contactPoint, toPoint: self.sprite.position).nomalized().mult(by: coeff)
+
+            let newNormal = reboundVector(from: contact.contactPoint).mult(by: coeff)
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
             if durability <= 0 {

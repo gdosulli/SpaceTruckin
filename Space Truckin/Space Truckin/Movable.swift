@@ -44,6 +44,11 @@ class Movable: NSObject {
         outsideForces.dx *= outsideForcesDecay
         outsideForces.dy *= outsideForcesDecay
         
+        //TODO: possibly remove this, its not necessary but it keeps things clean
+        if outsideForces.dx < 0.01 && outsideForces.dx > -0.01 && outsideForces.dy < 0.01 && outsideForces.dy > -0.01 {
+            outsideForces = CGVector(dx: 0, dy: 0)
+        }
+        
         lastVector = CGVector(dx: vector.x, dy: vector.y)
     }
     
@@ -116,6 +121,10 @@ class Movable: NSObject {
         RunLoop.main.add(timer, forMode: .common)
     }
     
+    func reboundVector(from point: CGPoint) -> CGVector{
+        return CGVector.getVector(fromPoint: point, toPoint: self.sprite.position).normalized()
+    }
+    
     func angleCorrector() -> CGFloat { return (sprite.zRotation + CGFloat(Double.pi/2)) }
     
     @objc func unlock() {
@@ -147,17 +156,16 @@ extension CGVector {
         
     }
     
-    func mult(by: CGFloat) -> CGVector {
-        return CGVector(dx: dx * by, dy: dx * by)
+    func mult(by scalar: CGFloat) -> CGVector {
+        return CGVector(dx: dx * scalar, dy: dy * scalar)
     }
     
     static func getVector(fromPoint a: CGPoint, toPoint b: CGPoint) -> CGVector {
-        
         return CGVector(dx: b.x - a.x, dy: b.y - a.y)
         
     }
     
-    func nomalized() -> CGVector {
+    func normalized() -> CGVector {
         let magnitude = sqrt(dx * dx + dy * dy)
         return CGVector(dx: dx / magnitude, dy: dy / magnitude)
     }

@@ -280,27 +280,20 @@ class TruckPiece: SpaceObject {
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
         //print("A",contact.bodyA.node?.name)
         //print("B",contact.bodyB.node?.name)
-        let coeff: CGFloat = 5
+        let coeff: CGFloat = 10
         let collisionVector = obj.lastVector.reflected(over: contact.contactNormal)
-        let newNormal = CGVector.getVector(fromPoint: contact.contactPoint, toPoint: self.sprite.position).nomalized().mult(by: coeff)
+//        let newNormal = reboundVector(from: contact.contactPoint).mult(by: coeff)
+        let newNormal = reboundVector(from: obj.sprite.position).mult(by: coeff)
 
-//        if self.sprite === contact.bodyB.node{
-//            print("FLIP CAPSULE")
-//            collisionVector.dx *= -1
-//            collisionVector.dy *= -1
-//        }
-        //print(obj.sprite.name)
-        //print("Vector:",collisionVector)
-        
         //Capsule vs Asteroid and Debris collision
         if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
+            print("ADDING VECTOR")
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
             print("OOF ouch! \(durability) hull remaining.")
             if !invincible && durability <= 0 {
                 onDestroy()
             }
-            
             
         //Capsule vs Lost Capsule collision
         } else if obj.sprite.name == "lost_capsule" {
@@ -318,10 +311,11 @@ class TruckPiece: SpaceObject {
                 // bump
                 print("bump")
             }
+            
+        //Capsule-Only Collisions
         } else if sprite.name == "capsule" {
-            // capsule on rival collision
-            print("capsule ")
-
+            
+            //Capsule vs Rival Capsule Collision
             if obj.sprite.name == "rival_capsule" {
                 self.addForce(vec: newNormal)
                 durability -= obj.impactDamage
@@ -330,10 +324,11 @@ class TruckPiece: SpaceObject {
                     onDestroy()
                 }
             }
+        
+        //Rival-Only Collisions
         } else if sprite.name == "rival_capsule" {
-            print("rival")
-
-            // rival on capsule collision
+            
+            //Rival Capsule vs Capsule Collision
             if obj.sprite.name == "capsule" {
                 self.addForce(vec: newNormal)
                 durability -= obj.impactDamage
