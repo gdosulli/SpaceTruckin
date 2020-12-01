@@ -78,10 +78,12 @@ class Asteroid : SpaceObject {
             
         } else if obj.sprite.name == "asteroid" {
             
-        }else {
+        } else if obj.sprite.name == "debris" {
+                
+        } else {
             let coeff: CGFloat = 4
 
-            let newNormal = CGVector.getVector(fromPoint: contact.contactPoint, toPoint: self.sprite.position).normalized().mult(by: coeff)
+            let newNormal = reboundVector(from: contact.contactPoint).mult(by: coeff)
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
             if durability <= 0 {

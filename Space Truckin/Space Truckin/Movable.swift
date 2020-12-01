@@ -121,6 +121,10 @@ class Movable {
         RunLoop.main.add(timer, forMode: .common)
     }
     
+    func reboundVector(from point: CGPoint) -> CGVector{
+        return CGVector.getVector(fromPoint: point, toPoint: self.sprite.position).normalized()
+    }
+    
     func angleCorrector() -> CGFloat { return (sprite.zRotation + CGFloat(Double.pi/2)) }
     
     @objc func unlock() {
@@ -149,12 +153,11 @@ extension CGVector {
         
     }
     
-    func mult(by: CGFloat) -> CGVector {
-        return CGVector(dx: dx * by, dy: dy * by)
+    func mult(by scalar: CGFloat) -> CGVector {
+        return CGVector(dx: dx * scalar, dy: dy * scalar)
     }
     
     static func getVector(fromPoint a: CGPoint, toPoint b: CGPoint) -> CGVector {
-        
         return CGVector(dx: b.x - a.x, dy: b.y - a.y)
         
     }
