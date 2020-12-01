@@ -22,6 +22,8 @@ class Area {
     var uniqueItems: [SpaceObject]!
 
     var timers: [String: Timer] = [:]
+    var spawnTimers: [String: Timer] = [:]
+    
     var gameIsPaused = false
 
     var landmark: SpaceObject?
@@ -60,7 +62,7 @@ class Area {
         }
         
         
-        // start spawn timers
+        // start timers
         setTimer()
         
         // start garbage collection timer
@@ -108,7 +110,7 @@ class Area {
         for rate in spawnRates {
             let context = ["obj": rate.obj]
             let name = rate.obj.sprite.name
-            timers[name ?? "test"] = Timer.scheduledTimer(timeInterval: rate.rate,
+            spawnTimers[name ?? "test"] = Timer.scheduledTimer(timeInterval: rate.rate,
             target: self,
             selector: #selector(spawnObject(timer:)),
             userInfo: context,
@@ -295,6 +297,32 @@ class Area {
         }
        
     }
+    
+    func setArea(with spawns: [String : Double]) {
+        for timer in spawnTimers {
+            timer.value.invalidate()
+        }
+        
+        for obj in objectsInArea {
+            switch obj.key?.name {
+            case "asteroid", "debris", "item":
+                obj.value?.sprite.removeFromParent()
+                objectsInArea.removeValue(forKey: obj.key)
+            default:
+                print(obj.key?.name)
+                continue
+            }
+        }
+        
+        var x: CGFloat = 0
+        // after setting spawns reset player
+        for capsule in player.head.getAllPieces() {
+            capsule.sprite.position = CGPoint(x: x, y: 0)
+            x -= capsule.sprite.size.height/2.0
+        }
+        
+    }
+    
 }
 
 
@@ -340,3 +368,6 @@ func generateTestArea(withScene scene: AreaScene) -> Area {
     
     return a
 }
+
+
+

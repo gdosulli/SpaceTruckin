@@ -155,7 +155,7 @@ class Map {
         let mapBackground = SKSpriteNode(imageNamed: "ComputerFrameXL")
         mapBackground.position = CGPoint(x: 0, y: 0)
         mapBackground.zPosition = 100
-        mapBackground.name = "sectorMap"
+        mapBackground.name = "info"
         mapBackground.isUserInteractionEnabled = false
         mapBackground.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         mapBackground.isHidden = true
@@ -419,17 +419,20 @@ class Map {
     func getSpawnTimes() -> [String : Double] {
         var spawnDelays: [String : Double] = [:]
         let info = getSectorInfo(map[currentLocation.0][currentLocation.1])
-        for i in 0...allObjects.count - 1 {
-            if let value = allObjects[i] {
-                if let spawnRate = info[value] {
-                    if let object = allObjectsFullNames[value] {
-                        spawnDelays[object.0] = Double(spawnRate)
-                    }
-                }
+        for i in 0...allObjectsFullNames.count - 1 {
+            let object = Array(allObjectsFullNames.values)[i]
+            if let spawnRate = info[object.0] {
+                spawnDelays[object.0] = Double(spawnRate)
             }
+            
         }
-                
-        print(spawnDelays)
+        if currentLocation == initialLocation {
+            spawnDelays["initial"] = 1.0
+        } else {
+            spawnDelays["initial"] = 0.0
+        }
+        
+        print("spawns: ", spawnDelays)
         return spawnDelays
     }
     
