@@ -150,7 +150,7 @@ extension CGVector {
     }
     
     func mult(by: CGFloat) -> CGVector {
-        return CGVector(dx: dx * by, dy: dx * by)
+        return CGVector(dx: dx * by, dy: dy * by)
     }
     
     static func getVector(fromPoint a: CGPoint, toPoint b: CGPoint) -> CGVector {
@@ -161,7 +161,7 @@ extension CGVector {
     
     func normalized() -> CGVector {
         let magnitude = sqrt(dx * dx + dy * dy)
-        return CGVector(dx: dx * magnitude, dy: dy * magnitude)
+        return CGVector(dx: dx / magnitude, dy: dy / magnitude)
     }
     
 }

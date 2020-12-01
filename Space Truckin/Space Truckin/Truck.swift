@@ -282,8 +282,8 @@ class TruckPiece: SpaceObject {
         //print("B",contact.bodyB.node?.name)
         let coeff: CGFloat = 5
         let collisionVector = obj.lastVector.reflected(over: contact.contactNormal)
-//        let newNormal = CGVector.getVector(fromPoint: contact.contactPoint, toPoint: self.sprite.position).nomalized().mult(by: coeff)
-        let newNormal = CGVector.getVector(fromPoint: obj.sprite.position, toPoint: sprite.position).normalized()
+        let newNormal = CGVector.getVector(fromPoint: contact.contactPoint, toPoint: self.sprite.position).normalized().mult(by: coeff)
+//        let newNormal = CGVector.getVector(fromPoint: obj.sprite.position, toPoint: sprite.position).normalized().mult(by: coeff)
         print("NEW:",newNormal) //trying new collision vector
 
 //        if self.sprite === contact.bodyB.node{
