@@ -159,9 +159,9 @@ extension CGVector {
         
     }
     
-    func nomalized() -> CGVector {
+    func normalized() -> CGVector {
         let magnitude = sqrt(dx * dx + dy * dy)
-        return CGVector(dx: dx / magnitude, dy: dy / magnitude)
+        return CGVector(dx: dx * magnitude, dy: dy * magnitude)
     }
     
 }

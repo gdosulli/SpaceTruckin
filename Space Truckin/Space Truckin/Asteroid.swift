@@ -80,7 +80,7 @@ class Asteroid : SpaceObject {
         }else {
             let coeff: CGFloat = 4
 
-            let newNormal = CGVector.getVector(fromPoint: contact.contactPoint, toPoint: self.sprite.position).nomalized().mult(by: coeff)
+            let newNormal = CGVector.getVector(fromPoint: contact.contactPoint, toPoint: self.sprite.position).normalized().mult(by: coeff)
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
             if durability <= 0 {
