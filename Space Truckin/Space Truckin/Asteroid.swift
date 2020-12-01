@@ -78,7 +78,9 @@ class Asteroid : SpaceObject {
         print("asteroid on impact with \(obj.sprite.name!)")
         if obj.sprite.name == "item" {
             
-        } else {
+        } else if obj.sprite.name == "asteroid" {
+            
+        }else {
             let coeff: CGFloat = 4
             //
             let newNormal = CGVector.getVector(fromPoint: contact.contactPoint, toPoint: self.sprite.position).nomalized().mult(by: coeff)
