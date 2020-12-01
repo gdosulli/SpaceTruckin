@@ -426,11 +426,13 @@ class Map {
             }
             
         }
+        /*
         if currentLocation == initialLocation {
             spawnDelays["initial"] = 1.0
         } else {
             spawnDelays["initial"] = 0.0
         }
+         */
         
         print("spawns: ", spawnDelays)
         return spawnDelays

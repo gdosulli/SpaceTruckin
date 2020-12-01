@@ -10,6 +10,15 @@ import GameplayKit
 
 class Debris : SpaceObject {
     
+    convenience init (_ durability: Int,
+                      _ sprite: SKSpriteNode,
+                      _ xRange: (CGFloat, CGFloat),
+                      _ yRange: (CGFloat, CGFloat),
+                      _ inventory: Inventory) {
+        self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, 0)
+        sprite.name = "debris"
+    }
+    
     override func spawn(at spawnPoint: CGPoint) {
         sprite.name = "debris"
         // set random asteroid size

@@ -27,6 +27,7 @@ class Asteroid : SpaceObject {
                       _ yRange: (CGFloat, CGFloat),
                       _ inventory: Inventory) {
         self.init(durability, sprite, xRange, yRange, inventory, 0, 0, 0, 0)
+        sprite.name = "asteroid"
     }
     
     override init (_ durability: Int,

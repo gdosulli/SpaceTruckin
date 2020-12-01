@@ -18,6 +18,7 @@ class Area {
     var scene: AreaScene?
     
     var spawnRates: [SpawnRate]!
+    var spawnTypes: [String:SpaceObject]
     var initialItems: [SpaceObject]?
     var uniqueItems: [SpaceObject]!
 
@@ -45,6 +46,41 @@ class Area {
     
     init(scene gameScene: AreaScene) {
         scene = gameScene
+        let stoneInv = Inventory([.Stone: 15], [.Stone: 15])
+        let radInv = Inventory([.Nuclear: 10], [.Nuclear: 10])
+        let remInv = Inventory([.Precious: 5], [.Precious: 5])
+        
+        let stoneAst = Asteroid(1, SKSpriteNode(imageNamed: "asteroid_normal"), (150, 350), (150, 350), stoneInv)
+        let radAst = Asteroid(1, SKSpriteNode(imageNamed: "asteroid_radioactive"), (150, 350), (150, 350), radInv)
+        let remAst = Asteroid(1, SKSpriteNode(imageNamed: "asteroid_precious"), (100, 275), (100, 275), remInv)
+        let sat = Debris(1, SKSpriteNode(imageNamed: debris[0]), (500, 700), (300, 500), Inventory())
+        let cell = Debris(1, SKSpriteNode(imageNamed: debris[1]), (500, 700), (300, 500), Inventory())
+        
+        spawnTypes = [asteroids[0]: stoneAst,
+                      asteroids[1]: remAst,
+                      asteroids[2]: radAst,
+                      debris[0]: sat,
+                      debris[1]: cell]
+        
+        let background = SKEmitterNode(fileNamed: "StarryBackground")
+        background?.advanceSimulationTime(30)
+        background?.zPosition = -100
+        backgroundItems.append(background!)
+        
+        let ss = SpaceStation()
+        //ss.spawn(at: CGPoint(x: CGFloat(Int.random(in: -300...300)), y: CGFloat(Int.random(in: 1000...1500))))//TODO change random ranges
+        ss.spawn(at: CGPoint(x: 0, y: 1200))//Spawns such that player appears from the arm
+        
+        let enemyChain: [TruckPiece] = RivalTruckPiece.generateChain(with: 5, holding: [.Nuclear])
+        print("ENEMY NAMES")
+        for p in enemyChain {
+            print("\(p.sprite.name)")
+        }
+        
+        warp(truckList: enemyChain, at: CGPoint(x: 400, y: -500))
+        
+        uniqueItems = [ss]
+        initialItems = uniqueItems
     }
     
     func loadArea() {
@@ -79,23 +115,40 @@ class Area {
     
     @objc func spawnObject(timer: Timer) {
         guard let context = timer.userInfo as? [String: SpaceObject] else { return }
-        let obj = (context["obj"] as? Asteroid)?.copy()
-        let spawnPoint = getRandPos(for: player.head, radius: 2000)
-        let speed = CGFloat.random(in: 35...400)
+        
+        let spawnRad: CGFloat = (scene?.frame.width)! * 1.5
         let targetAngle = CGFloat.random(in: 0...2 * CGFloat.pi)
         let rotation = Bool.random() ? -2 * CGFloat.pi : 2 * CGFloat.pi
-        obj?.speed = speed
-        obj?.targetAngle = targetAngle
-        obj?.rotation = rotation
-        obj?.spawn(at: spawnPoint)
-//        obj?.sprite.size = CGSize(width: obj!.xRange.0, height: obj!.yRange.0)
-//        obj?.sprite.position = spawnPoint
-        addObject(obj: obj!)
+        let spawnPoint = getRandPos(for: player.head, radius: spawnRad)
         
-        // object spawn code
+        if (context["obj"]?.sprite.name == "asteroid") {
+            let obj = (context["obj"] as? Asteroid)?.copy()
+            let speed = CGFloat.random(in: 35...400)
+            obj?.speed = speed
+            obj?.targetAngle = targetAngle
+            obj?.rotation = rotation
+            obj?.spawn(at: spawnPoint)
+            addObject(obj: obj!)
+        } else if (context["obj"]?.sprite.name == "debris") {
+            let obj = (context["obj"] as? Debris)?.copy()
+            let speed = CGFloat.random(in: 15...100)
+            obj?.speed = speed
+            obj?.targetAngle = targetAngle
+            obj?.rotation = rotation
+            obj?.spawn(at: spawnPoint)
+            
+            // randomize inventory of debris
+            var possInv: [Int] = []
+            for i in stride(from: 5, to: 25, by: 5) {
+                possInv.append(i)
+            }
+            let invSize = possInv.randomElement()!
+            obj?.inventory = Inventory(max: invSize, starting: invSize, possibleTypes: [.Oxygen, .Water, .Scrap])
+            addObject(obj: obj!)
+        }
     }
     
-    // TODO: Overhaul this so it f*ckin works properly and doesn't spawn on the player
+    
     func getRandPos(for object: SpaceObject, radius: CGFloat) -> CGPoint {
         let angle = Double.random(in: 0...(2*Double.pi))
         let x = object.sprite.position.x + CGFloat(cos(angle))*radius
@@ -313,6 +366,14 @@ class Area {
                 continue
             }
         }
+        
+        // setup spawnrates
+        spawnRates = []
+        for spawn in spawns.keys {
+            spawnRates.append(SpawnRate(obj: spawnTypes[spawn]!, rate: TimeInterval(spawns[spawn]!)))
+        }
+        
+        setTimer()
         
         var x: CGFloat = 0
         // after setting spawns reset player
