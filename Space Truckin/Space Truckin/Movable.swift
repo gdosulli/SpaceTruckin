@@ -44,6 +44,11 @@ class Movable {
         outsideForces.dx *= outsideForcesDecay
         outsideForces.dy *= outsideForcesDecay
         
+        //TODO: possibly remove this, its not necessary but it keeps things clean
+        if outsideForces.dx < 0.01 && outsideForces.dx > -0.01 && outsideForces.dy < 0.01 && outsideForces.dy > -0.01 {
+            outsideForces = CGVector(dx: 0, dy: 0)
+        }
+        
         lastVector = CGVector(dx: vector.x, dy: vector.y)
     }
     

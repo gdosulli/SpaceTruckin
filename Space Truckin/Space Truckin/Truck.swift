@@ -282,7 +282,9 @@ class TruckPiece: SpaceObject {
         //print("B",contact.bodyB.node?.name)
         let coeff: CGFloat = 5
         let collisionVector = obj.lastVector.reflected(over: contact.contactNormal)
-        let newNormal = CGVector.getVector(fromPoint: contact.contactPoint, toPoint: self.sprite.position).nomalized().mult(by: coeff)
+//        let newNormal = CGVector.getVector(fromPoint: contact.contactPoint, toPoint: self.sprite.position).nomalized().mult(by: coeff)
+        let newNormal = CGVector.getVector(fromPoint: obj.sprite.position, toPoint: sprite.position).nomalized().mult(by: coeff)
+        print("NEW:",newNormal) //trying new collision vector
 
 //        if self.sprite === contact.bodyB.node{
 //            print("FLIP CAPSULE")
@@ -294,13 +296,13 @@ class TruckPiece: SpaceObject {
         
         //Capsule vs Asteroid and Debris collision
         if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
+            print("ADDING VECTOR")
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
             print("OOF ouch! \(durability) hull remaining.")
             if !invincible && durability <= 0 {
                 onDestroy()
             }
-            
             
         //Capsule vs Lost Capsule collision
         } else if obj.sprite.name == "lost_capsule" {
@@ -320,8 +322,6 @@ class TruckPiece: SpaceObject {
             }
         } else if sprite.name == "capsule" {
             // capsule on rival collision
-            print("capsule ")
-
             if obj.sprite.name == "rival_capsule" {
                 self.addForce(vec: newNormal)
                 durability -= obj.impactDamage
@@ -331,8 +331,6 @@ class TruckPiece: SpaceObject {
                 }
             }
         } else if sprite.name == "rival_capsule" {
-            print("rival")
-
             // rival on capsule collision
             if obj.sprite.name == "capsule" {
                 self.addForce(vec: newNormal)
