@@ -10,7 +10,7 @@ import Foundation
 import CoreGraphics
 import SpriteKit
 
-class Movable {
+class Movable: NSObject {
     var speed: CGFloat
     var rotation: CGFloat
     var currentAngle: CGFloat
@@ -126,6 +126,9 @@ class Movable {
         speed = normalSpeed
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        return sprite == (object as? SpaceObject)?.sprite
+    }
 }
 
 

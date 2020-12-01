@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		7F5C093C255324B80028F808 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5C093B255324B80028F808 /* MenuViewController.swift */; };
-		7F5C094B2553B4B40028F808 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9BE252BAE6D007AF254 /* GameScene.swift */; };
 		7F75732F2566A9AB00C36CA5 /* MapBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F75732E2566A9AB00C36CA5 /* MapBuilder.swift */; };
 		8270C0B8254B73F700424235 /* StarryBackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8270C0B7254B73F700424235 /* StarryBackground.sks */; };
 		82723AE3254228D5002A1E53 /* SpaceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82723AE2254228D5002A1E53 /* SpaceObject.swift */; };
@@ -22,7 +21,6 @@
 		E34A4754254BC42000479EFB /* GalaxyBackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = E34A4753254BC42000479EFB /* GalaxyBackground.sks */; };
 		E34A4756254BDF8B00479EFB /* Debris.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34A4755254BDF8B00479EFB /* Debris.swift */; };
 		E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9B8252BAE6D007AF254 /* AppDelegate.swift */; };
-		E34AB9BF252BAE6D007AF254 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9BE252BAE6D007AF254 /* GameScene.swift */; };
 		E34AB9C1252BAE6D007AF254 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34AB9C0252BAE6D007AF254 /* GameViewController.swift */; };
 		E34AB9C4252BAE6D007AF254 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9C2252BAE6D007AF254 /* Main.storyboard */; };
 		E34AB9C6252BAE70007AF254 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E34AB9C5252BAE70007AF254 /* Assets.xcassets */; };
@@ -94,7 +92,6 @@
 		E34A4755254BDF8B00479EFB /* Debris.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debris.swift; sourceTree = "<group>"; };
 		E34AB9B5252BAE6D007AF254 /* Space Truckin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Space Truckin.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E34AB9B8252BAE6D007AF254 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E34AB9BE252BAE6D007AF254 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		E34AB9C0252BAE6D007AF254 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		E34AB9C3252BAE6D007AF254 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E34AB9C5252BAE70007AF254 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -195,7 +192,6 @@
 				82723AE725422E5B002A1E53 /* Asteroid.swift */,
 				E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */,
 				E34AB9EC252BAF32007AF254 /* GameScene.sks */,
-				E34AB9BE252BAE6D007AF254 /* GameScene.swift */,
 				E34AB9C0252BAE6D007AF254 /* GameViewController.swift */,
 				E34AB9CA252BAE70007AF254 /* Info.plist */,
 				E33F6146254221C9005BAB37 /* Inventory.swift */,
@@ -428,7 +424,6 @@
 				E3248BE0256DB43500974CF6 /* Shield.swift in Sources */,
 				E35AE46B256A577A003DCE34 /* AreaScene.swift in Sources */,
 				E373A3AF25549E1E00D04135 /* MusicPlayer.swift in Sources */,
-				E34AB9BF252BAE6D007AF254 /* GameScene.swift in Sources */,
 				E3248BDE256DB36300974CF6 /* Spawner.swift in Sources */,
 				E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */,
 				82F81B262571866F00D5A160 /* InfoScreen.swift in Sources */,
@@ -456,7 +451,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7F5C094B2553B4B40028F808 /* GameScene.swift in Sources */,
 				E34AB9D4252BAE71007AF254 /* Space_TruckinTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
