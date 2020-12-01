@@ -101,6 +101,8 @@ class TruckPiece: SpaceObject {
                 //print("SNAP")
                 breakChain()
             }
+        } else if !isHead {
+            lost = true
         }
         
         thruster.targetNode = sprite.parent
@@ -114,8 +116,9 @@ class TruckPiece: SpaceObject {
     //Behavior for lost pieces
     func moveLost(by delta: CGFloat){
         // deltaMod adjusts the delta to 'accelerate' and 'decelerate' to maintain follow distance of trucks
-
-        super.moveForward(by: delta * 0.4)
+        targetAngle = sprite.zRotation - CGFloat(Double.pi / 8)
+        turn(by: delta * 20)
+        super.moveForward(by: delta * 0.9)
     }
     
     //TODO: Is this ever called?
@@ -160,7 +163,7 @@ class TruckPiece: SpaceObject {
                     turnMod = 240
                 } else if boosted && distToNext > gapMin {
                     deltaMod = deltaMod * 1.2 //TODO make this a var
-                    turnMod = 120
+                    turnMod = 300
                 } else if distToNext > gapMax{
                     deltaMod = deltaMod * speedupMod
                     turnMod = 180
@@ -229,7 +232,7 @@ class TruckPiece: SpaceObject {
     
     //Attaches target piece into the chain
     func addToChain(adding piece: TruckPiece) {
-        piece.lost = false
+        
         //if let remainingChain = piece.followingPiece {
         //    piece.followingPiece?.breakChain()
         //}
@@ -242,12 +245,12 @@ class TruckPiece: SpaceObject {
         
         var followPiece: TruckPiece? = piece
         while let p = followPiece {
-            p.releashing = true
             //print("reattaching\(String(describing: p.sprite.name))")
-            p.collisionCategory = self.collisionCategory
-            p.testCategory = self.testCategory
-            p.sprite.physicsBody?.categoryBitMask = self.collisionCategory
-            p.sprite.physicsBody?.contactTestBitMask = self.testCategory
+            
+            p.lost = false
+            p.releashing = true
+
+
             p.speed = self.speed
             p.boostSpeed = self.boostSpeed
             p.boosted = self.boosted
@@ -400,7 +403,6 @@ class TruckPiece: SpaceObject {
         self.targetPiece?.followingPiece = nil
         self.targetPiece = nil
         
-        self.lost = true
         let snap = EffectBubble(type: .SNAP, duration: 0.5)
         self.sprite.parent?.addChild(snap.getChildren()[0]!)
         if let p = pos {
@@ -409,8 +411,6 @@ class TruckPiece: SpaceObject {
         
         var followPiece: TruckPiece? = self
         while let p = followPiece {
-//            p.collisionCategory = CollisionCategories.LOST_CAPSULE_CATEGORY
-//            p.testCategory = CollisionCategories.ASTEROID_CATEGORY
             p.sprite.name = "lost_capsule"
             followPiece = p.followingPiece
             p.setBoost(b: false)
