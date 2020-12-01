@@ -39,7 +39,7 @@ class Area {
     
     // array for randomaly choosing an asteroid to load
     var asteroids = ["asteroid_normal", "asteroid_precious", "asteroid_radioactive"]
-    var debris = ["satellite_1", "cell_tower1"]
+    var debris = ["satellite", "cell_tower"]
     
     init(scene gameScene: AreaScene) {
         scene = gameScene
