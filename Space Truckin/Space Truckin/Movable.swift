@@ -148,4 +148,15 @@ extension CGVector {
         return CGVector(dx: dx * by, dy: dx * by)
     }
     
+    static func getVector(fromPoint a: CGPoint, toPoint b: CGPoint) -> CGVector {
+        
+        return CGVector(dx: b.x - a.x, dy: b.y - a.y)
+        
+    }
+    
+    func nomalized() -> CGVector {
+        let magnitude = sqrt(dx * dx + dy * dy)
+        return CGVector(dx: dx / magnitude, dy: dy / magnitude)
+    }
+    
 }

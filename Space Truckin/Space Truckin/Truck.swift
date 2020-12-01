@@ -243,7 +243,7 @@ class TruckPiece: SpaceObject {
         var followPiece: TruckPiece? = piece
         while let p = followPiece {
             p.releashing = true
-            print("reattaching\(String(describing: p.sprite.name))")
+            //print("reattaching\(String(describing: p.sprite.name))")
             p.collisionCategory = self.collisionCategory
             p.testCategory = self.testCategory
             p.sprite.physicsBody?.categoryBitMask = self.collisionCategory
@@ -277,7 +277,10 @@ class TruckPiece: SpaceObject {
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
         //print("A",contact.bodyA.node?.name)
         //print("B",contact.bodyB.node?.name)
-        var collisionVector = contact.contactNormal
+        let coeff: CGFloat = 5
+        let collisionVector = obj.lastVector.reflected(over: contact.contactNormal)
+        let newNormal = CGVector.getVector(fromPoint: contact.contactPoint, toPoint: self.sprite.position).nomalized().mult(by: coeff)
+
 //        if self.sprite === contact.bodyB.node{
 //            print("FLIP CAPSULE")
 //            collisionVector.dx *= -1
@@ -288,7 +291,6 @@ class TruckPiece: SpaceObject {
         
         //Capsule vs Asteroid and Debris collision
         if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
-            let newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
             print("OOF ouch! \(durability) hull remaining.")
@@ -318,7 +320,6 @@ class TruckPiece: SpaceObject {
             print("capsule ")
 
             if obj.sprite.name == "rival_capsule" {
-                let newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
                 self.addForce(vec: newNormal)
                 durability -= obj.impactDamage
                 print("OOF ouch! \(durability) hull remaining.")
@@ -331,7 +332,6 @@ class TruckPiece: SpaceObject {
 
             // rival on capsule collision
             if obj.sprite.name == "capsule" {
-                let newNormal = CGVector(dx: 10 * collisionVector.dx, dy: 10 * collisionVector.dy)
                 self.addForce(vec: newNormal)
                 durability -= obj.impactDamage
                 print("OOF ouch! \(durability) hull remaining.")
@@ -344,7 +344,7 @@ class TruckPiece: SpaceObject {
         
     override func onDestroy() {
         //print("Truck should be destroyed but i didnt code this whoops my bad sorry team")
-        print("pop")
+        //print("pop")
         //change name to destroyed_capsule?
         breakChain()
         self.followingPiece?.breakChain()

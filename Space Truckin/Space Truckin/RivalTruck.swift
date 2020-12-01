@@ -122,7 +122,7 @@ class RivalTruckPiece: TruckPiece {
                     let newNormal = CGVector(dx: -10 * collisionVector.dx, dy: -10 * collisionVector.dy)
                     self.addForce(vec: newNormal)
                     durability -= obj.impactDamage
-                    print("oof ouch \(durability)")
+                    //print("oof ouch \(durability)")
                     if durability <= 0 {
                         onDestroy() //This should all be a "changeHealth" function of truckPiece
                     }
