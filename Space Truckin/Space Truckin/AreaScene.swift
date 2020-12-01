@@ -264,7 +264,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
 //        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
 //        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
     
-        currentArea = generateTestArea(withScene: self)
+        currentArea = Area(scene: self)
         currentArea.player = player
     
         
@@ -336,6 +336,9 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         menu.setMap(with: testMap, on: self)
         let infoScreen = InfoScreen(frameSize: testMap.mapView.size)
         menu.setInfoScreen(with: infoScreen, on: self)
+        
+        
+        currentArea.setArea(with: menu.map.getSpawnTimes())
         
         for i in 2...6 {
             let drill = "space_truck_cab\(i)"

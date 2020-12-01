@@ -66,6 +66,10 @@ class Inventory {
         self.init(for: possibleTypes.randomElement()!, max: max, starting: current)
     }
     
+    convenience init(max: Int, starting current: Int, possibleTypes: [ItemType]) {
+        self.init(for: possibleTypes.randomElement()!, max: max, starting: current)
+    }
+    
     func getRemainingCapacity(for type: ItemType) -> Int {
         return maxCapacities[type]! - items[type]!
     }
