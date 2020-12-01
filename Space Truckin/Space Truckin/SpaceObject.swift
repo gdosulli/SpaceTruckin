@@ -111,6 +111,7 @@ class SpaceObject : Movable, Copyable {
     }
     
     func explode(){
+        sprite.physicsBody = nil //The wonky impacts were becoming way too much.
         sprite.run(SKAction.animate(with: SpaceObject.explosionAnimation, timePerFrame: 0.1, resize: false, restore: false))
     }
     
