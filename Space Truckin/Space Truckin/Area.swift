@@ -340,7 +340,7 @@ class Area {
         let playerX = player.head.sprite.position.x
         let playerY = player.head.sprite.position.y
         for a in objectsInArea {
-            if !uniqueItems.contains((a.value)!) {
+            if !uniqueItems.contains((a.value)!) && !a.value!.isImportant{ //TODO: fix this, not the right use of isImportant and uniqueItems
                 let position = a.value?.sprite.position
                 if position!.x > (playerX + 3 * scene!.frameWidth) || position!.x < (playerX - 3 * scene!.frameWidth) {
                     a.value?.sprite.removeFromParent()

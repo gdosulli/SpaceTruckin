@@ -77,7 +77,7 @@ class TruckPiece: SpaceObject {
         thruster.zPosition = sprite.zPosition - 2
         thruster.position = sprite.position
     
-        
+        isImportant = true
         sprite.name = "capsule"
     }
     
