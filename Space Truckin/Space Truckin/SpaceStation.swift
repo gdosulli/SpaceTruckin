@@ -66,10 +66,11 @@ class SpaceStation: SpaceObject {
     
     func dock(_ piece: TruckPiece){
         sprite.isPaused = true
-        stationMenu.frameSize = (sprite.parent?.frame.size ?? CGSize(width: 0, height: 0)) as CGSize
-        
+        let scene = (sprite.parent as! AreaScene)
+        let cam = scene.cam
+        stationMenu.frameSize = CGSize(width: scene.frame.width * scene.camScale, height: scene.frame.height * scene.camScale)
         stationMenu.reinit()
-        stationMenu.background.position = (sprite.parent as? AreaScene)?.cam.position as! CGPoint
+        stationMenu.background.position = cam.position
         sprite.parent?.addChild(stationMenu.background)
     
         

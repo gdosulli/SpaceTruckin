@@ -83,7 +83,7 @@ class SpaceStationScreen {
         background.isUserInteractionEnabled = false
         background.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         background.isHidden = true
-        let screen = SKSpriteNode(color: UIColor(displayP3Red: 0.3373, green: 0, blue: 0.0039, alpha: 1), size: CGSize(width: frameSize.width/1.1, height: frameSize.height/1.2))
+        let screen = SKSpriteNode(color: UIColor(red: 0/255, green: 147/255, blue: 160/255, alpha: 1.0), size: CGSize(width: frameSize.width/1.1, height: frameSize.height/1.2))
         screen.position = CGPoint(x: 0, y: 0)
         screen.zPosition = 99
         screen.name = background.name
