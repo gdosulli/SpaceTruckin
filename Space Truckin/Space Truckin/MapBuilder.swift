@@ -264,7 +264,6 @@ class Map {
                         info[object.0] = rate
                     }
                 }
-            
         }
         print("info: ", info)
         return info

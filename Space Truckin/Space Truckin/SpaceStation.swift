@@ -44,7 +44,6 @@ class SpaceStation: SpaceObject {
         fatalError("init(instance:) has not been implemented")
     }
     
-    
     override func spawn(at spawnPoint: CGPoint) {
         sprite.name = "station_arm"
         hullSprite.name = "station"
@@ -62,11 +61,15 @@ class SpaceStation: SpaceObject {
     
     func dock(){
         sprite.isPaused = true
+        //set head
+        //show screen
         print("DOCKED")
     }
     
     func undock(){
         sprite.isPaused = false
+        //remove head reference?
+        //hide screen
         print("UNDOCKED")
     }
     
@@ -91,13 +94,15 @@ class SpaceStation: SpaceObject {
                 
         } else if obj.sprite.name == "capsule"{
             let piece = obj as! TruckPiece
-            if piece.isHead{
-                dock()
-            }
-            if sprite.isPaused {
-                piece.dockPiece()
-                if piece.followingPiece == nil {
-                    print("MENU OPEN NOW PLS")
+            if !piece.docked {
+                if piece.isHead{
+                    dock()
+                }
+                if sprite.isPaused {
+                    piece.dockPiece()
+                    if piece.followingPiece == nil {
+                        print("MENU OPEN NOW PLS")
+                    }
                 }
             }
         }

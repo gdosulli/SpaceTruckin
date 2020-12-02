@@ -26,6 +26,8 @@ class TruckPiece: SpaceObject {
     var invincible = false
     var maxLeashLength = CGFloat(250)
     
+    var wallet = 0
+    
     convenience init(sprite s1: SKSpriteNode) {
         self.init(2, s1, nil, (1.3,1.0), (1.3,1.0), Inventory(max: 100, starting: 0), 100, 1, 0, 0)
     }
@@ -132,24 +134,31 @@ class TruckPiece: SpaceObject {
         boosted = b
         if b {
             speed = boostSpeed
-            thruster.particleBirthRate = 5000
-//            thruster.particleLifetime = 1.4
-            thruster.particleScaleSpeed = -0.4
+            thruster.particleScaleSpeed = -0.2
         } else {
             speed = normalSpeed
-            thruster.particleBirthRate = 2000
-//            thruster.particleLifetime = 0.6
             thruster.particleScaleSpeed = -0.4
         }
     }
     
     //TODO: Currently contains semi-hardcoded values for leashing truck pieces, some should become fields of Truck
     override func move(by delta: CGFloat) {
+        var deltaMod = delta
+        var turnMod = CGFloat(60)
+
         if docked {
             
         } else if lost {
             moveLost(by: delta)
-        } else {
+        } else if getFirstPiece().docked {
+            if !sprite.isHidden {
+                deltaMod = deltaMod * 0.75
+                turnMod = 300
+                turn(by: delta * turnMod)
+                thruster.particleBirthRate = speed * 4
+                super.moveForward(by: deltaMod)
+            }
+        } else{
             // deltaMod adjusts the delta to 'accelerate' and 'decelerate' to maintain follow distance of trucks
             let gapMax = CGFloat(130) // max encouraged follow distance
             let gapMin = CGFloat(125) // min encouraged follow
@@ -157,8 +166,6 @@ class TruckPiece: SpaceObject {
             let releashingMod = CGFloat(1.5)
             let slowdownMod = CGFloat(0.9) // decrease by this when ahead
             //TODO slow down turnspeed and increase movespeed during mining boost
-            var turnMod = CGFloat(60)
-            var deltaMod = delta
             
             if let piece = targetPiece{
                 let distToNext = getGapSize(nextPiece: piece)

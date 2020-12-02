@@ -88,7 +88,6 @@ class InfoScreen {
         refreshLabels()
     }
     
-    
     func refreshLabels() {
         for type in ItemType.allCases {
             invLabels[type]?.text = "\(String(describing: inventory.items[type]!)) / \(String(describing: inventory.maxCapacities[type]!))"
