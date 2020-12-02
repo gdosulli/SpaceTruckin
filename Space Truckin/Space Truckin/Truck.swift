@@ -19,7 +19,8 @@ class TruckPiece: SpaceObject {
     var followingPiece: TruckPiece?
     let mineDuration: TimeInterval = 5.0
     var lost = false
-    var releashing = false
+    var docked = false
+    var releashingFrames = 0
     var isHead = false
     var circle = false
     var invincible = false
@@ -97,13 +98,18 @@ class TruckPiece: SpaceObject {
     override func update(by delta: CGFloat) {
         if let piece = targetPiece {
             changeAngleTo(point: piece.sprite.position)
-            if getGapSize(nextPiece: piece) > maxLeashLength && !releashing{
-                //print("SNAP")
-                breakChain()
+            if releashingFrames == 0 {
+                if getGapSize(nextPiece: piece) > maxLeashLength {
+                    //print("SNAP")
+                    breakChain()
+                }
+            } else {
+                releashingFrames -= 1
             }
         } else if !isHead {
             lost = true
         }
+        
         
         thruster.targetNode = sprite.parent
         thruster.position = sprite.position
@@ -128,20 +134,20 @@ class TruckPiece: SpaceObject {
             speed = boostSpeed
             thruster.particleBirthRate = 5000
 //            thruster.particleLifetime = 1.4
-            thruster.particleScaleSpeed = -0.2
+            thruster.particleScaleSpeed = -0.4
         } else {
             speed = normalSpeed
             thruster.particleBirthRate = 2000
 //            thruster.particleLifetime = 0.6
             thruster.particleScaleSpeed = -0.4
-
-
         }
     }
     
     //TODO: Currently contains semi-hardcoded values for leashing truck pieces, some should become fields of Truck
     override func move(by delta: CGFloat) {
-        if lost {
+        if docked {
+            
+        } else if lost {
             moveLost(by: delta)
         } else {
             // deltaMod adjusts the delta to 'accelerate' and 'decelerate' to maintain follow distance of trucks
@@ -158,7 +164,7 @@ class TruckPiece: SpaceObject {
                 let distToNext = getGapSize(nextPiece: piece)
                 if distToNext < gapMin{
                     deltaMod = deltaMod * slowdownMod
-                } else if releashing {
+                } else if releashingFrames != 0 {
                     deltaMod = deltaMod * releashingMod
                     turnMod = 240
                 } else if boosted && distToNext > gapMin {
@@ -188,26 +194,12 @@ class TruckPiece: SpaceObject {
         let translateVector = CGVector(dx: cos(angleCorrector()) * self.speed * delta, dy:  sin(angleCorrector()) * self.speed * delta)
         self.sprite.physicsBody?.applyForce(translateVector)
     }
-    
-    // mining may end up as something that happens as long as a button is being held down (and there's enough energy) meaning the timeInterval aspect may not be forever
-    func mine(for duration: TimeInterval) {
-        lockDirection(for: duration)
-        boostSpeed(for: duration)
-        sprite.physicsBody?.angularVelocity = 0
-        
-        //set to not clash with other releashings ??
-//        releashing = true
-//        let date = Date().addingTimeInterval(3.0) //releashing timer
-//        let timer = Timer(fireAt: date, interval: 0, target: self, selector: #selector(endReleashing), userInfo: nil, repeats: false)
-//        RunLoop.main.add(timer, forMode: .common)
-    }
-    
+
     //TODO: Note that the angle at spawn is hardcoded.
     override func spawn(at spawnPoint: CGPoint) {
         sprite.size = CGSize(width: xRange.0 * sprite.size.width, height: yRange.0 * sprite.size.height)
         sprite.position = spawnPoint
         sprite.zRotation = targetAngle - CGFloat(Double.pi/2)
-        
     }
     
     //Returns last in chain
@@ -216,7 +208,6 @@ class TruckPiece: SpaceObject {
         while let p = lastPiece.followingPiece {
             lastPiece = p
         }
-        
         return lastPiece
     }
     
@@ -226,17 +217,11 @@ class TruckPiece: SpaceObject {
         while let p = firstPiece.targetPiece {
             firstPiece = p
         }
-               
         return firstPiece
     }
     
     //Attaches target piece into the chain
     func addToChain(adding piece: TruckPiece) {
-        
-        //if let remainingChain = piece.followingPiece {
-        //    piece.followingPiece?.breakChain()
-        //}
-        
         piece.targetPiece?.followingPiece = nil
         piece.targetPiece = getLastPiece()
         piece.followingPiece?.targetPiece = nil
@@ -245,11 +230,8 @@ class TruckPiece: SpaceObject {
         
         var followPiece: TruckPiece? = piece
         while let p = followPiece {
-            //print("reattaching\(String(describing: p.sprite.name))")
-            
             p.lost = false
-            p.releashing = true
-
+            p.releashingFrames = 240 //Note: Change this value to change the number of frames for releashing
 
             p.speed = self.speed
             p.boostSpeed = self.boostSpeed
@@ -264,16 +246,7 @@ class TruckPiece: SpaceObject {
             // if normal to rival
                         
             followPiece = p.followingPiece
-            let date = Date().addingTimeInterval(3.0) //releashing timer
-            let timer = Timer(fireAt: date, interval: 0, target: p, selector: #selector(endReleashing), userInfo: nil, repeats: false)
-            RunLoop.main.add(timer, forMode: .common)
          }
-    }
-    
-    //Releashing should work by setting a timestamp for the releashing to be ended at, this would avoid releashings conflicting
-    @objc func endReleashing() {
-        releashing = false
-        //print("Releashing ended")
     }
     
     //NOTE: onImpact force unwraps sprite names, shouldn't be a problem though
@@ -281,13 +254,12 @@ class TruckPiece: SpaceObject {
         //print("A",contact.bodyA.node?.name)
         //print("B",contact.bodyB.node?.name)
         let coeff: CGFloat = 10
-        let collisionVector = obj.lastVector.reflected(over: contact.contactNormal)
-//        let newNormal = reboundVector(from: contact.contactPoint).mult(by: coeff)
-        let newNormal = reboundVector(from: obj.sprite.position).mult(by: coeff)
+//        let collisionVector = obj.lastVector.reflected(over: contact.contactNormal)
+        let newNormal = reboundVector(from: contact.contactPoint).mult(by: coeff)
+//        let newNormal = reboundVector(from: obj.sprite.position).mult(by: coeff)
 
         //Capsule vs Asteroid and Debris collision
         if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
-            print("ADDING VECTOR")
             self.addForce(vec: newNormal)
             durability -= obj.impactDamage
             print("OOF ouch! \(durability) hull remaining.")
@@ -306,7 +278,6 @@ class TruckPiece: SpaceObject {
             // contact w space station
             if obj.sprite.name == "station_arm" {
                 // trigger entry
-                print("trigger entry w normal \(contact.contactNormal) at point \(contact.contactPoint)")
             } else {
                 // bump
                 print("bump")
@@ -320,7 +291,7 @@ class TruckPiece: SpaceObject {
                 self.addForce(vec: newNormal)
                 durability -= obj.impactDamage
                 print("OOF ouch! \(durability) hull remaining.")
-                if !invincible && durability <= 0 {
+                if durability <= 0 {
                     onDestroy()
                 }
             }
@@ -333,7 +304,7 @@ class TruckPiece: SpaceObject {
                 self.addForce(vec: newNormal)
                 durability -= obj.impactDamage
                 print("OOF ouch! \(durability) hull remaining.")
-                if !invincible && durability <= 0 {
+                if durability <= 0 {
                     onDestroy()
                 }
             }
@@ -344,10 +315,9 @@ class TruckPiece: SpaceObject {
         //print("Truck should be destroyed but i didnt code this whoops my bad sorry team")
         //print("pop")
         //change name to destroyed_capsule?
-        breakChain()
-        self.followingPiece?.breakChain()
-        
-        if !invincible {
+        if !invincible && !destroyed{
+            breakChain()
+            self.followingPiece?.breakChain()
             dropItem(at: sprite.position)
             destroyed = true
             explode()
@@ -412,6 +382,18 @@ class TruckPiece: SpaceObject {
         }
     }
     
+    func dockPiece(){
+        print("DockingChain")
+        sprite.isHidden = true
+        thruster.particleBirthRate = 0
+        docked = true
+//        var piece: TruckPiece = getFirstPiece()
+//        while let p = piece{
+//            //p.
+//
+//        }
+    }
+    
     func getGapSize(nextPiece: TruckPiece) -> CGFloat{
         let distancex = sprite.position.x - nextPiece.sprite.position.x
         let distancey = sprite.position.y - nextPiece.sprite.position.y
@@ -419,227 +401,3 @@ class TruckPiece: SpaceObject {
         return distance
     }
 }
-
-
-// TODO: implement barrel-roll/dash/burst on swipe
-//=====================================================================
-//class TruckChain {
-//    let head: TruckPiece!
-//    var tail: TruckPiece!
-//    var truckPieces: [TruckPiece]
-//    var offset: CGFloat
-//    var speedDecrement: CGFloat
-//    var minimumSpeed: CGFloat
-//    var greatDistance: Bool = false
-//    var warningDistance: CGFloat
-//    var boostRadius: CGFloat
-//    var dashSpeed: CGFloat
-//    var dashTimer: Timer?
-//    var dashIndex = 0
-//    var dashAngle: CGFloat = 0
-//    var maxLeashLength: CGFloat = 250
-//    var destroyedIndices = [Int]()
-//    var destroyedPieces = [TruckPiece]()
-//
-//    init(head h: TruckPiece) {
-//        head = h
-//        head.isHead = true
-//        head.invincible = true
-//        tail = head
-//        truckPieces = []
-//        offset = head.sprite.size.height
-//        speedDecrement = 0
-//        minimumSpeed = 10
-//        warningDistance = head.sprite.size.width * 3
-//        boostRadius = head.sprite.size.width * 1.5
-//        dashSpeed = 5
-//    }
-//
-//    func getAllPieces() -> [TruckPiece] {
-//        return [head] + truckPieces
-//    }
-//
-//    func getLastPiece() -> TruckPiece {
-//        var lastPiece: TruckPiece = head
-//        while let p = lastPiece.followingPiece {
-//            lastPiece = p
-//        }
-//        return lastPiece
-//    }
-//
-//    func movePieces(by delta: CGFloat) {
-//        //head.move(by: delta)
-//        for piece in truckPieces {
-//            piece.move(by: delta)
-//        }
-//    }
-//
-//    func getSprites() -> [SKSpriteNode] {
-//        var sprites = [head.sprite!]
-//        for piece in truckPieces {
-//            sprites.append(piece.sprite!)
-//        }
-//        return sprites
-//    }
-//
-//    func getThrusters() -> [SKEmitterNode] {
-//        var thrusters : [SKEmitterNode] = []
-//        let t1 = head.thruster
-//        thrusters.append(t1)
-//
-//        for piece in truckPieces {
-//            let t2 = piece.thruster
-//            thrusters.append(t2)
-//        }
-//        return thrusters
-//    }
-//
-//    func updateFollowers() {
-//        head.update(by: 0)
-//        for p in truckPieces {
-//            p.update(by: 0)
-//            if let target = p.targetPiece{
-//                if p.getGapSize(nextPiece: target) > maxLeashLength && !p.releashing{
-//                    //print("SNAP")
-//                    breakChain(at: p)
-//                }
-//            }
-//        }
-//    }
-//
-//    func breakChain(at piece: TruckPiece){
-//        let pos = piece.targetPiece?.sprite.position
-//        piece.targetPiece?.followingPiece = nil
-//        piece.targetPiece = nil
-//        piece.lost = true
-//        let snap = EffectBubble(type: .SNAP, duration: 0.5)
-//        piece.sprite.parent?.addChild(snap.getChildren()[0]!)
-//        if let p = pos {
-//            snap.spawn(at: p)
-//        }
-//
-//        var followPiece: TruckPiece? = piece
-//        while let p = followPiece {
-//            p.collisionCategory = CollisionCategories.LOST_CAPSULE_CATEGORY
-//            p.testCategory = CollisionCategories.ASTEROID_CATEGORY
-//            p.sprite.physicsBody?.categoryBitMask = p.collisionCategory
-//            p.sprite.physicsBody?.contactTestBitMask = p.testCategory
-//            followPiece = p.followingPiece
-//        }
-//    }
-//
-//    func updateDistance() {
-//        if getMaxDistance() > warningDistance {
-//            self.greatDistance = true
-//        } else {
-//            self.greatDistance = false
-//        }
-//    }
-//
-// TODO delay deletion so explosion play (i know how to do this)
-//    func checkForDestroyed() {
-//        if head.destroyed {
-//            // game over
-//        }
-//
-//        for i in 0..<truckPieces.count {
-//            if truckPieces[i].destroyed {
-//                destroyedIndices.append(i)
-//            }
-//        }
-//
-//        for i in destroyedIndices.reversed() {
-//            let piece = truckPieces[i]
-//            breakChain(at: piece)
-//            for child in piece.getChildren() {
-//                child?.removeFromParent()
-//            }
-//            truckPieces.remove(at: i)
-//        }
-//
-//        destroyedIndices.removeAll()
-//    }
-//
-//
-//    func getMaxDistance() -> CGFloat {
-//        var maxDistance: CGFloat = 0.0
-//
-//        for i in 0..<truckPieces.count {
-//            if i == 0 {
-//                let distance = head.sprite.position.distance(point: truckPieces[i].sprite.position)
-//                if maxDistance < distance {
-//                    maxDistance = distance
-//                }
-//            } else {
-//                let distance = truckPieces[i].sprite.position.distance(point: truckPieces[i-1].sprite.position)
-//                if maxDistance < distance {
-//                    maxDistance = distance
-//                }
-//            }
-//        }
-//
-//        return maxDistance
-//    }
-//
-//    func mine(for duration: TimeInterval) {
-//        head.mine(for: duration)
-//        for p in truckPieces {
-//            if p.collisionCategory == CollisionCategories.TRUCK_CATEGORY {
-//                p.boostSpeed(for: duration)
-//            }
-//        }
-//    }
-//
-//    func dash(angle: CGFloat) {
-//        guard dashTimer == nil else { return }
-//
-//        print("dash at \(angle)")
-//        dashAngle = angle
-//        dashTimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(pieceDash), userInfo: nil, repeats: true)
-//    }
-//
-//    @objc func pieceDash() {
-//        guard dashTimer != nil else { return }
-//
-//        // DASH
-//
-//    }
-//
-//    func add(piece: TruckPiece) {
-//
-//        var lastPiece: TruckPiece
-//        var lastPos: CGPoint
-//        var lastAngle: CGFloat
-//
-//        if truckPieces.count > 0 {
-//            lastPiece = truckPieces[truckPieces.count-1]
-//        } else {
-//            lastPiece = head
-//        }
-//
-//        lastPos = lastPiece.sprite.position
-//        lastAngle = lastPiece.targetAngle
-//
-//
-//        // move piece to a point behind the piece in front of it by offset amount
-//        let newPos = CGPoint(x: lastPos.x - (cos(lastAngle) * offset), y: lastPos.y - (sin(lastAngle) * offset))
-//
-//
-//        piece.sprite.zPosition = lastPiece.sprite.zPosition-1
-//        piece.sprite.position = newPos
-//        piece.changeTargetAngle(to: lastAngle)
-//        piece.changeSpeed(to: lastPiece.speed-speedDecrement)
-//
-//        truckPieces.append(piece)
-//    }
-//
-//    func getChildren() -> [SKNode?] {
-//        var nodes = head.getChildren()
-//        for piece in truckPieces {
-//            nodes += piece.getChildren()
-//        }
-//
-//        return nodes
-//    }
-//
-//}

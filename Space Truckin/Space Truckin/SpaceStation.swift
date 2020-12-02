@@ -16,7 +16,7 @@ class SpaceStation: SpaceObject {
     var dimension: CGFloat
     
     convenience init() {
-        self.init(-1, SKSpriteNode(imageNamed: "space_station_arm_1"), (2000, 2000), (500, 500), Inventory(), 25, 30, 0, 100)
+        self.init(-1, SKSpriteNode(imageNamed: "space_station_arm_1"), (2000, 2000), (500, 500), Inventory(), 0, 30, 0, 100)
     }
     
     override init(_ durability: Int, _ sprite: SKSpriteNode, _ xRange: (CGFloat, CGFloat), _ yRange: (CGFloat, CGFloat), _ inventory: Inventory, _ speed: CGFloat, _ rotation: CGFloat, _ targetAngle: CGFloat, _ boostSpeed: CGFloat) {
@@ -26,7 +26,7 @@ class SpaceStation: SpaceObject {
         sprite.size = CGSize(width: dimension, height: 1.2 * dimension)
         sprite.zRotation = armAngle
         let margin: CGFloat = 0.8
-        sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: sprite.size.width * margin, height: margin * sprite.size.height))
+        sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: sprite.size.width * 0.2, height: margin * sprite.size.height))
         hullSprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: hullSprite.size.width * margin, height: margin * hullSprite.size.height))
         sprite.zPosition = 10
         hullSprite.zPosition = sprite.zPosition - 1
@@ -36,7 +36,7 @@ class SpaceStation: SpaceObject {
         hullSprite.physicsBody?.contactTestBitMask = CollisionCategories.SPACEOBJECT
         hullSprite.physicsBody?.collisionBitMask = 0
         
-        super.init(durability, sprite, xRange, yRange, inventory, speed, rotation, targetAngle, boostSpeed)
+        super.init(durability, sprite, xRange, yRange, inventory, 0, rotation, targetAngle, boostSpeed)
         sprite.physicsBody?.isDynamic = false
     }
     
@@ -59,6 +59,16 @@ class SpaceStation: SpaceObject {
         sprite.run(SKAction.sequence(action))
     }
     
+    func dock(){
+        sprite.isPaused = true
+        print("DOCKED")
+    }
+    
+    func undock(){
+        sprite.isPaused = false
+        print("UNDOCKED")
+    }
+    
     override func move(by delta: CGFloat) {
         moveForward(by: delta)
     }
@@ -68,6 +78,28 @@ class SpaceStation: SpaceObject {
     }
     
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
+        let coeff: CGFloat = 4
+
+        let newNormal = reboundVector(from: contact.contactPoint).mult(by: coeff)
+        
+        if obj.sprite.name == "item" {
+            
+        } else if obj.sprite.name == "asteroid" {
+            
+        } else if obj.sprite.name == "debris" {
+                
+        } else if obj.sprite.name == "capsule"{
+            let piece = obj as! TruckPiece
+            if piece.isHead{
+                dock()
+            }
+            if sprite.isPaused {
+                piece.dockPiece()
+                if piece.followingPiece == nil {
+                    print("MENU OPEN NOW PLS")
+                }
+            }
+        }
     }
     
     override func getChildren() -> [SKNode?] {
