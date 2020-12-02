@@ -15,6 +15,7 @@ class SpaceStation: SpaceObject {
     var armAngle: CGFloat = 0
     var dimension: CGFloat
     var stationMenu: SpaceStationScreen
+    var area: Area!
     
     convenience init() {
         self.init(-1, SKSpriteNode(imageNamed: "space_station_arm_1"), (2000, 2000), (500, 500), Inventory(), 0, 30, 0, 100)
@@ -63,9 +64,18 @@ class SpaceStation: SpaceObject {
         sprite.run(SKAction.sequence(action))
     }
     
-    func dock(){
+    func dock(_ piece: TruckPiece){
         sprite.isPaused = true
-        stationMenu.frameSize = (sprite.parent as? AreaScene)!.frame.size
+        stationMenu.frameSize = (sprite.parent?.frame.size ?? CGSize(width: 0, height: 0)) as CGSize
+        
+        stationMenu.reinit()
+        stationMenu.background.position = (sprite.parent as? AreaScene)?.cam.position as! CGPoint
+        sprite.parent?.addChild(stationMenu.background)
+    
+        
+        
+        stationMenu.truckHead = piece
+        stationMenu.show()
         //set head
         //show screen
         print("DOCKED")
@@ -101,7 +111,7 @@ class SpaceStation: SpaceObject {
             let piece = obj as! TruckPiece
             if !piece.docked {
                 if piece.isHead{
-                    dock()
+                    dock(piece)
                 }
                 if sprite.isPaused {
                     piece.dockPiece()
