@@ -53,6 +53,7 @@
 		E392DF4A25719D2800D3CA4A /* boostEmitter2.sks in Resources */ = {isa = PBXBuildFile; fileRef = E392DF4925719D2800D3CA4A /* boostEmitter2.sks */; };
 		E392DF4C25719DD500D3CA4A /* boostEmitter3.sks in Resources */ = {isa = PBXBuildFile; fileRef = E392DF4B25719DD500D3CA4A /* boostEmitter3.sks */; };
 		E392DF4E2571B67000D3CA4A /* radioactiveDecay.sks in Resources */ = {isa = PBXBuildFile; fileRef = E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */; };
+		E392DF5025773DCB00D3CA4A /* SpaceStationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */; };
 		E3C95F76256071740009E84E /* InterfaceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C95F75256071740009E84E /* InterfaceBar.swift */; };
 		E3C9603C256469DE0009E84E /* EffectBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C9603B256469DE0009E84E /* EffectBubbles.swift */; };
 		E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */; };
@@ -129,6 +130,7 @@
 		E392DF4925719D2800D3CA4A /* boostEmitter2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = boostEmitter2.sks; sourceTree = "<group>"; };
 		E392DF4B25719DD500D3CA4A /* boostEmitter3.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = boostEmitter3.sks; sourceTree = "<group>"; };
 		E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = radioactiveDecay.sks; sourceTree = "<group>"; };
+		E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceStationMenu.swift; sourceTree = "<group>"; };
 		E3C95F75256071740009E84E /* InterfaceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceBar.swift; sourceTree = "<group>"; };
 		E3C9603B256469DE0009E84E /* EffectBubbles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectBubbles.swift; sourceTree = "<group>"; };
 		E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxyEmitter.swift; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				E392DF4B25719DD500D3CA4A /* boostEmitter3.sks */,
 				E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */,
 				82F81B252571866F00D5A160 /* InfoScreen.swift */,
+				E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -439,6 +442,7 @@
 				E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */,
 				7F5C093C255324B80028F808 /* MenuViewController.swift in Sources */,
 				E35AE45F25659891003DCE34 /* SpaceStation.swift in Sources */,
+				E392DF5025773DCB00D3CA4A /* SpaceStationMenu.swift in Sources */,
 				E35AE46D256BA082003DCE34 /* RivalTruck.swift in Sources */,
 				7F75732F2566A9AB00C36CA5 /* MapBuilder.swift in Sources */,
 				E34A4756254BDF8B00479EFB /* Debris.swift in Sources */,
