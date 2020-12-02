@@ -32,6 +32,10 @@ class TruckPiece: SpaceObject {
         self.init(2, s1, nil, (1.3,1.0), (1.3,1.0), Inventory(max: 100, starting: 0), 100, 1, 0, 0)
     }
     
+    convenience init(sprite s1: SKSpriteNode, inventory inv: Inventory) {
+        self.init(2, s1, nil, (1.3,1.0), (1.3,1.0), inv, 100, 1, 0, 0)
+    }
+    
     convenience init(sprite s1: SKSpriteNode, target piece: TruckPiece) {
         self.init(2, s1, piece, (1.0,1.0), (1.0,1.0), Inventory(), piece.speed * 0.95, 1, 0, piece.boostSpeed)
         piece.followingPiece = self
@@ -160,8 +164,8 @@ class TruckPiece: SpaceObject {
             }
         } else{
             // deltaMod adjusts the delta to 'accelerate' and 'decelerate' to maintain follow distance of trucks
-            let gapMax = CGFloat(130) // max encouraged follow distance
-            let gapMin = CGFloat(125) // min encouraged follow
+            let gapMax = CGFloat(210) // max encouraged follow distance
+            let gapMin = CGFloat(200) // min encouraged follow
             let speedupMod = CGFloat(1.1)// increase by this when behind
             let releashingMod = CGFloat(1.5)
             let slowdownMod = CGFloat(0.9) // decrease by this when ahead
