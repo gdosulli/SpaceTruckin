@@ -85,7 +85,7 @@ class MusicPlayer {
     var currentSong: Song?
     var currentPlaylist: [Song] = []
     var globalVolume: Float = 2.0
-    var muted = false
+    var muted = true
 
     
     
@@ -177,9 +177,10 @@ class MusicPlayer {
                       try AVAudioSession.sharedInstance().setActive(true)
 
                       /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
-                      song = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.m4a.rawValue)
-                    song?.setVolume(0, fadeDuration: 0) 
+                    song?.setVolume(0, fadeDuration: 0)
                     if !muted {
+                        song = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.m4a.rawValue)
+
                             song?.setVolume(globalVolume * currentSong!.relativeVolume, fadeDuration: 3)
                     }
                           /* iOS 10 and earlier require the following line:
@@ -207,10 +208,10 @@ class MusicPlayer {
     func update() {
         // if the current playlist exists
         if currentPlaylist != [] {
-            if !song!.isPlaying {
-                currentSong = currentSong?.getNext()
-                playSong()
-            }
+//            if !song!.isPlaying {
+//                currentSong = currentSong?.getNext()
+//                playSong()
+//            }
             
         }
     }
