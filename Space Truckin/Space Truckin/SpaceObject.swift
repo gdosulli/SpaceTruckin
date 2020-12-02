@@ -125,7 +125,7 @@ class SpaceObject : Movable, Copyable {
     
     
     func dropItem(at point: CGPoint) {
-    let s = sprite.parent as? AreaScene
+        let s = sprite.parent as? AreaScene
         if let scene = s {
 
             for k in inventory.items.keys {
@@ -142,7 +142,6 @@ class SpaceObject : Movable, Copyable {
             }
         }
     }
-        
 }
 
 

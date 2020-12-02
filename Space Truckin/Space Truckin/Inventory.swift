@@ -126,6 +126,7 @@ class Inventory {
 }
 
 struct SelectedInventory {
+    var piece: TruckPiece
     var inventory: Inventory
     var capsule: SKSpriteNode
     var invTypes: [ItemType:SKSpriteNode]
@@ -135,6 +136,7 @@ struct SelectedInventory {
     var fadeTime: TimeInterval
     var frameWidth: CGFloat
     var frameHeight: CGFloat
+    var durability: SKLabelNode
     
     var lastFade: TimeInterval = 0
     var capsuleClicked = false
@@ -142,6 +144,7 @@ struct SelectedInventory {
     
     mutating func update(_ currentTime: TimeInterval) {
         refreshBars()
+        updateDurability()
         
         if capsuleClicked {
             capsuleClicked = false
@@ -156,6 +159,9 @@ struct SelectedInventory {
         var pos = position
         
         capsule.position = position
+        durability.position = position
+        capsule.position.x = position.x + frameWidth / 7
+        durability.position.y -= durability.fontSize/5
         pos.y = pos.y - frameHeight / 8
         for type in ItemType.allCases {
             if inventory.getMaxCapacity(for: type) > 0 {
@@ -185,9 +191,18 @@ struct SelectedInventory {
         }
     }
     
+    func updateDurability() {
+        if piece.durability >= 0 {
+            durability.text = String(describing: "HP: \(piece.durability)")
+        } else {
+            durability.text = "HP: 0"
+        }
+    }
+    
     mutating func fadeOpacity() {
         let fadeAction = SKAction.fadeAlpha(to: baseOpacity, duration: fadeTime)
         capsule.run(fadeAction)
+        durability.run(fadeAction)
         for type in ItemType.allCases {
             invTypes[type]?.run(fadeAction)
             for child in invBars[type]!.getChildren() {
@@ -199,6 +214,7 @@ struct SelectedInventory {
     
     mutating func resetOpacity() {
         capsule.alpha = 1
+        durability.alpha = 1
         for type in ItemType.allCases {
             invTypes[type]?.alpha = 1
             for child in invBars[type]!.getChildren() {
