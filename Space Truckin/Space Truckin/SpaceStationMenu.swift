@@ -1,22 +1,15 @@
-//
-//  InfoScreen.swift
-//  Space Truckin
-//
-//  Created by Gavin  O'Sullivan on 11/27/20.
-//  Copyright © 2020 SpaceTruckin. All rights reserved.
-//
-
 import Foundation
 import SpriteKit
 
 class SpaceStationScreen {
     let background: SKSpriteNode
     var truckHead: TruckPiece!
-    var invTypes: [ItemType:SKSpriteNode]
+    var trucks: [TruckPiece:SKSpriteNode]
     var invLabels: [ItemType:SKLabelNode]
+    var frameSize: CGSize = CGSize(width: 1, height: 1)
     
-    init(frameSize: CGSize) {
-        invTypes = [ItemType:SKSpriteNode]()
+    init() {
+        trucks = [TruckPiece:SKSpriteNode]()
         invLabels = [ItemType:SKLabelNode]()
         background = SKSpriteNode(imageNamed: "ComputerFrameXL")
         background.position = CGPoint(x: 0, y: 0)
@@ -25,8 +18,6 @@ class SpaceStationScreen {
         background.isUserInteractionEnabled = false
         background.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         background.isHidden = true
-        background.size = CGSize(width: frameSize.width, height: frameSize.height)
-        
         let screen = SKSpriteNode(color: UIColor(displayP3Red: 0.3373, green: 0, blue: 0.0039, alpha: 1), size: CGSize(width: frameSize.width/1.1, height: frameSize.height/1.2))
         screen.position = CGPoint(x: 0, y: 0)
         screen.zPosition = 99
@@ -35,6 +26,8 @@ class SpaceStationScreen {
         screen.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         background.addChild(screen)
+        
+        
         
         var offsetX = background.size.width/3
         var offsetY = background.size.height/5.5
@@ -67,7 +60,7 @@ class SpaceStationScreen {
             label.position = CGPoint(x: 0 - offsetX, y: (0 - offsetY) - slot.size.height/1.8)
             label.name = background.name
             
-            invTypes[type] = item
+            trucks[type] = item
             invLabels[type] = label
             
             offsetX -= background.size.width/3
@@ -82,6 +75,10 @@ class SpaceStationScreen {
         }
     }
     
+    func resizeEverything() {
+        
+    }
+    
     func update(_ truck: TruckPiece) {
         self.truckHead = truck
         refreshLabels()
@@ -89,9 +86,12 @@ class SpaceStationScreen {
     
     
     func refreshLabels() {
-//        for type in ItemType.allCases {
-//            invLabels[type]?.text = "\(String(describing: inventory.items[type]!)) / \(String(describing: inventory.maxCapacities[type]!))"
-//        }
+        var piece = truckHead
+        while piece != nil {
+            // stuff
+            
+            piece = piece?.followingPiece
+        }
     }
     
     func show() {
