@@ -50,7 +50,8 @@ class SpaceStation: SpaceObject {
         hullSprite.name = "station"
         sprite.position = spawnPoint
         hullSprite.position = spawnPoint
-        // setup asteroid to rotate randomly
+        
+        // setup arm to rotate at random speed
         let spinSpeed = Double.random(in: 2...5) * Double(dimension / 25)
         var action  = [SKAction]()
         let rotateAction = SKAction.repeatForever(SKAction.rotate(byAngle: rotation, duration: spinSpeed))

@@ -293,13 +293,20 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         var invTypes = [ItemType:SKSpriteNode]()
         var invBars = [ItemType:InterfaceBar]()
         
+        let selectedPiece = player.head.getFirstPiece()
         let capsule = SKSpriteNode(imageNamed: "space_truck_cab")
-        capsule.setScale(0.75)
+        //capsule.setScale(0.95)
         capsule.zPosition = 100
         capsule.isUserInteractionEnabled = false
         capsule.anchorPoint = CGPoint(x: 1, y: 1)
         //capsule.size = CGSize(width: frameWidth/5, height: frameHeight/5)
         self.addChild(capsule)
+        let durLabel = SKLabelNode(fontNamed: "Futura-CondensedMedium")
+        durLabel.fontSize = frameWidth/18
+        durLabel.zPosition = 100
+        durLabel.fontColor = UIColor.white
+        durLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.top
+        self.addChild(durLabel)
         for type in ItemType.allCases {
             let item = SKSpriteNode(imageNamed: DroppedItem.filenames[type.rawValue])
             item.zPosition = 100
@@ -319,7 +326,8 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
             invBars[type] = bar
         }
         
-        selectedInventory = SelectedInventory(inventory: player.head.inventory,
+        selectedInventory = SelectedInventory(piece: selectedPiece,
+                                              inventory: player.head.inventory,
                                               capsule: capsule,
                                               invTypes: invTypes,
                                               invBars: invBars,
@@ -327,7 +335,8 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
                                               fadeInterval: 3,
                                               fadeTime: 1.5,
                                               frameWidth: frameWidth,
-                                              frameHeight: frameHeight)
+                                              frameHeight: frameHeight,
+                                              durability: durLabel)
         // sets the map
         let testMap = Map(sizeOf: (4, 4), threat: 3, maxObjects: 3, named: "test Area", frame: CGSize(width: frameWidth, height: frameHeight))
         testMap.printMap()
@@ -409,6 +418,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
                 if let selectedPiece = currentArea.player.getClickedPiece(from: touchedNode as! SKSpriteNode) {
                     selectedInventory.inventory = selectedPiece.inventory
                     selectedInventory.capsule.texture = selectedPiece.sprite.texture
+                    selectedInventory.piece = selectedPiece
                     selectedInventory.resetOpacity()
                 }
             case "sector page":

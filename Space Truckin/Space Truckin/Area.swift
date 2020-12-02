@@ -314,7 +314,7 @@ class Area {
                     object.OBJECT_ID == o.value!.OBJECT_ID
                 }) {
                     print("unique item far")
-                }else {
+                } else {
                     o.value?.onDestroy()
                     objectsInArea.removeValue(forKey: o.key)
                 }
@@ -339,13 +339,15 @@ class Area {
         let playerX = player.head.sprite.position.x
         let playerY = player.head.sprite.position.y
         for a in objectsInArea {
-            let position = a.value?.sprite.position
-            if position!.x > (playerX + 3 * scene!.frameWidth) || position!.x < (playerX - 3 * scene!.frameWidth) {
-                a.value?.sprite.removeFromParent()
-                objectsInArea.removeValue(forKey: a.key)
-            } else if position!.y > (playerY + 3 * scene!.frameHeight) || position!.y < (playerY - 3 * scene!.frameHeight){
-                a.value?.sprite.removeFromParent()
-                objectsInArea.removeValue(forKey: a.key)
+            if !uniqueItems.contains((a.value)!) {
+                let position = a.value?.sprite.position
+                if position!.x > (playerX + 3 * scene!.frameWidth) || position!.x < (playerX - 3 * scene!.frameWidth) {
+                    a.value?.sprite.removeFromParent()
+                    objectsInArea.removeValue(forKey: a.key)
+                } else if position!.y > (playerY + 3 * scene!.frameHeight) || position!.y < (playerY - 3 * scene!.frameHeight){
+                    a.value?.sprite.removeFromParent()
+                    objectsInArea.removeValue(forKey: a.key)
+                }
             }
         }
        
