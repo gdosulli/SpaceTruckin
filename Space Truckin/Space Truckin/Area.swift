@@ -225,6 +225,7 @@ class Area {
         var nextPieceOpt: TruckPiece?
         var head: TruckPiece?
         for p in truckList {
+            p.docked = false
             if !p.isHead && p.targetPiece == nil && p.sprite.parent == nil {
                 nextPieceOpt = p
                 break

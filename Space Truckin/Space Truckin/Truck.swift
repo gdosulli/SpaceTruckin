@@ -13,6 +13,9 @@ import CoreGraphics
 //Note: add wayward planets that need to be corrected with thermo-stellar device
 
 class TruckPiece: SpaceObject {
+    
+    static let drillAnimation = [SKTexture(imageNamed: "drill1"), SKTexture(imageNamed: "drill2"), SKTexture(imageNamed: "drill3"), SKTexture(imageNamed: "drill4"), SKTexture(imageNamed: "drill5"), SKTexture(imageNamed: "drill6"), SKTexture(imageNamed: "drill7")]
+    
     let thruster: SKEmitterNode = SKEmitterNode(fileNamed: "sparkEmitter")!
     var distanceToHead: CGFloat = 0.0
     var targetPiece: TruckPiece?
@@ -401,7 +404,6 @@ class TruckPiece: SpaceObject {
 //
 //        }
     }
-    
     func getGapSize(nextPiece: TruckPiece) -> CGFloat{
         let distancex = sprite.position.x - nextPiece.sprite.position.x
         let distancey = sprite.position.y - nextPiece.sprite.position.y

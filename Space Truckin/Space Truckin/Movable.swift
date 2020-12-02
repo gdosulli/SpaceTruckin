@@ -153,7 +153,6 @@ extension CGVector {
         let dotProd = self.dotted(with: v)
         let n = CGVector(dx: v.dx * -2 * dotProd, dy: v.dy * -2 * dotProd)
         return CGVector(dx: self.dx + n.dx, dy: self.dy + n.dy)
-        
     }
     
     func mult(by scalar: CGFloat) -> CGVector {
