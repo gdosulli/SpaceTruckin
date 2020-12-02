@@ -74,7 +74,7 @@ class Area {
         let enemyChain: [TruckPiece] = RivalTruckPiece.generateChain(with: 5, holding: [.Nuclear])
         print("ENEMY NAMES")
         for p in enemyChain {
-            print("\(p.sprite.name)")
+            print("\(String(describing: p.sprite.name))")
         }
         
         warp(truckList: enemyChain, at: CGPoint(x: 400, y: -500))
@@ -191,7 +191,7 @@ class Area {
     //Warps the given list of truckpieces in at the given point, with a slight delay between each piece appearing.
     func warp(truckList: [TruckPiece], at point: CGPoint) {
         
-        print("WARPING \(truckList[0].sprite.name)")
+        print("WARPING \(String(describing: truckList[0].sprite.name))")
         var head: TruckPiece?
         for piece in truckList {
             print("\(String(describing: piece.sprite.name))")
