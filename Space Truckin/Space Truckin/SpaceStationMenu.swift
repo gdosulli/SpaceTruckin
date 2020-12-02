@@ -4,12 +4,10 @@ import SpriteKit
 class SpaceStationScreen {
     let background: SKSpriteNode
     var truckHead: TruckPiece!
-    var trucks: [TruckPiece:SKSpriteNode]
     var invLabels: [ItemType:SKLabelNode]
     var frameSize: CGSize = CGSize(width: 1, height: 1)
     
     init() {
-        trucks = [TruckPiece:SKSpriteNode]()
         invLabels = [ItemType:SKLabelNode]()
         background = SKSpriteNode(imageNamed: "ComputerFrameXL")
         background.position = CGPoint(x: 0, y: 0)
@@ -60,7 +58,7 @@ class SpaceStationScreen {
             label.position = CGPoint(x: 0 - offsetX, y: (0 - offsetY) - slot.size.height/1.8)
             label.name = background.name
             
-            trucks[type] = item
+            //trucks[type] = item
             invLabels[type] = label
             
             offsetX -= background.size.width/3

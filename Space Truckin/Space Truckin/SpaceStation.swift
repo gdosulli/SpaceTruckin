@@ -65,6 +65,7 @@ class SpaceStation: SpaceObject {
     
     func dock(){
         sprite.isPaused = true
+        stationMenu.frameSize = (sprite.parent as? AreaScene)!.frame.size
         //set head
         //show screen
         print("DOCKED")
