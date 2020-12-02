@@ -186,6 +186,7 @@ class TruckPiece: SpaceObject {
                 turn(by: delta * turnMod)
             }
             
+            thruster.particleBirthRate = speed * 8
             super.moveForward(by: deltaMod)
         }
     }
