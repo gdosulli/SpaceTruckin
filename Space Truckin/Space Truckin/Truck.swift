@@ -393,7 +393,7 @@ class TruckPiece: SpaceObject {
     func dockPiece(){
         print("DockingChain")
         sprite.isHidden = true
-        thruster.particleBirthRate = 0
+        thruster.particleBirthRate = 0 //TODO: MAKE THIS SPEED RELATED
         docked = true
 //        var piece: TruckPiece = getFirstPiece()
 //        while let p = piece{

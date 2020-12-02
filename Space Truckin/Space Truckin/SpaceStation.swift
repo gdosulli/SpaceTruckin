@@ -14,6 +14,7 @@ class SpaceStation: SpaceObject {
     var hullSprite: SKSpriteNode
     var armAngle: CGFloat = 0
     var dimension: CGFloat
+    var stationMenu: SpaceStationScreen
     
     convenience init() {
         self.init(-1, SKSpriteNode(imageNamed: "space_station_arm_1"), (2000, 2000), (500, 500), Inventory(), 0, 30, 0, 100)
@@ -25,6 +26,7 @@ class SpaceStation: SpaceObject {
         hullSprite.size = CGSize(width: dimension, height: dimension)
         sprite.size = CGSize(width: dimension, height: 1.2 * dimension)
         sprite.zRotation = armAngle
+        
         let margin: CGFloat = 0.8
         sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: sprite.size.width * 0.2, height: margin * sprite.size.height))
         hullSprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: hullSprite.size.width * margin, height: margin * hullSprite.size.height))
@@ -35,6 +37,8 @@ class SpaceStation: SpaceObject {
         hullSprite.physicsBody?.categoryBitMask = CollisionCategories.SPACEOBJECT
         hullSprite.physicsBody?.contactTestBitMask = CollisionCategories.SPACEOBJECT
         hullSprite.physicsBody?.collisionBitMask = 0
+        
+        stationMenu = SpaceStationScreen()
         
         super.init(durability, sprite, xRange, yRange, inventory, 0, rotation, targetAngle, boostSpeed)
         sprite.physicsBody?.isDynamic = false
