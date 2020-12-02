@@ -15,6 +15,7 @@ class SpaceStation: SpaceObject {
     var armAngle: CGFloat = 0
     var dimension: CGFloat
     var stationMenu: SpaceStationScreen
+    var area: Area!
     
     convenience init() {
         self.init(-1, SKSpriteNode(imageNamed: "space_station_arm_1"), (2000, 2000), (500, 500), Inventory(), 0, 30, 0, 100)
