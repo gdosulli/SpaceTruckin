@@ -34,6 +34,8 @@ class Area {
     var objectsInArea: [SKSpriteNode? : SpaceObject?] = [:]
     
     var destroyedNodes = [SKSpriteNode]()
+    
+    var enemies = [TruckPiece]()
 
         
     // player object
@@ -43,6 +45,9 @@ class Area {
     // array for randomaly choosing an asteroid to load
     var asteroids = ["asteroid_normal", "asteroid_precious", "asteroid_radioactive"]
     var debris = ["satellite", "cell_tower"]
+    
+    // default max enemy capsule count
+    let MAX_ENEMIES = 5
     
     init(scene gameScene: AreaScene) {
         scene = gameScene
@@ -60,7 +65,8 @@ class Area {
                       asteroids[1]: remAst,
                       asteroids[2]: radAst,
                       debris[0]: sat,
-                      debris[1]: cell]
+                      debris[1]: cell,
+                      "enemy": RivalTruckPiece.generateChain(with: 0, holding: [.Nuclear])[0]]
         
         let background = SKEmitterNode(fileNamed: "StarryBackground")
         background?.advanceSimulationTime(30)
@@ -70,14 +76,6 @@ class Area {
         let ss = SpaceStation()
         //ss.spawn(at: CGPoint(x: CGFloat(Int.random(in: -300...300)), y: CGFloat(Int.random(in: 1000...1500))))//TODO change random ranges
         ss.spawn(at: CGPoint(x: 0, y: 1200))//Spawns such that player appears from the arm
-        
-        let enemyChain: [TruckPiece] = RivalTruckPiece.generateChain(with: 5, holding: [.Nuclear])
-        print("ENEMY NAMES")
-        for p in enemyChain {
-            print("\(String(describing: p.sprite.name))")
-        }
-        
-        warp(truckList: enemyChain, at: CGPoint(x: 400, y: -500))
         
         uniqueItems = [ss]
         initialItems = uniqueItems
@@ -145,6 +143,11 @@ class Area {
             let invSize = possInv.randomElement()!
             obj?.inventory = Inventory(max: invSize, starting: invSize, possibleTypes: [.Oxygen, .Water, .Scrap])
             addObject(obj: obj!)
+        } else if (context["obj"]?.sprite.name == "rival_capsule") {
+            
+            if enemies.count < MAX_ENEMIES && Bool.random() {
+                spawnEnemy(at: spawnPoint)
+            }
         }
     }
     
@@ -164,11 +167,12 @@ class Area {
             let context = ["obj": rate.obj]
             let name = rate.obj.sprite.name
             spawnTimers[name ?? "test"] = Timer.scheduledTimer(timeInterval: rate.rate,
-            target: self,
-            selector: #selector(spawnObject(timer:)),
-            userInfo: context,
-            repeats: true)
+                                                               target: self,
+                                                               selector: #selector(spawnObject(timer:)),
+                                                               userInfo: context,
+                                                               repeats: true)
         }
+        
         
         
 //        destroyTimer = Timer.scheduledTimer(timeInterval: 1.0,
@@ -190,11 +194,8 @@ class Area {
     
     //Warps the given list of truckpieces in at the given point, with a slight delay between each piece appearing.
     func warp(truckList: [TruckPiece], at point: CGPoint) {
-        
-        print("WARPING \(String(describing: truckList[0].sprite.name))")
         var head: TruckPiece?
         for piece in truckList {
-            print("\(String(describing: piece.sprite.name))")
             if piece.isHead {
                 head = piece
             }
@@ -291,6 +292,17 @@ class Area {
     //                destroyedNodes.inse
     //            }
             }
+            
+            // track enemies to player
+            for enemy in enemies {
+                if enemy.destroyed {
+                    if let i = enemies.firstIndex(of: enemy) {
+                        enemies.remove(at: i)
+                    }
+                } else {
+                    enemy.changeAngleTo(point: player.head.sprite.position)
+                }
+            }
         }
     }
     
@@ -304,7 +316,7 @@ class Area {
             var remove = false
             if position!.x > (playerX + 3 * scene!.frameWidth) || position!.x < (playerX - 3 * scene!.frameWidth) {
                 remove = true
-            } else if position!.y > (playerY + 3 * scene!.frameHeight) || position!.y < (playerY - 3 * scene!.frameHeight){
+            } else if position!.y > (playerY + 3 * scene!.frameHeight) || position!.y < (playerY - 3 * scene!.frameHeight) {
                 remove = true
             }
             
@@ -336,7 +348,7 @@ class Area {
             objectsInArea.removeValue(forKey: objectsInArea[i]??.sprite)
         }
         
-        // remove asteroids and deris that are too far from player
+        // remove asteroids and debris that are too far from player
         let playerX = player.head.sprite.position.x
         let playerY = player.head.sprite.position.y
         for a in objectsInArea {
@@ -345,7 +357,7 @@ class Area {
                 if position!.x > (playerX + 3 * scene!.frameWidth) || position!.x < (playerX - 3 * scene!.frameWidth) {
                     a.value?.sprite.removeFromParent()
                     objectsInArea.removeValue(forKey: a.key)
-                } else if position!.y > (playerY + 3 * scene!.frameHeight) || position!.y < (playerY - 3 * scene!.frameHeight){
+                } else if position!.y > (playerY + 3 * scene!.frameHeight) || position!.y < (playerY - 3 * scene!.frameHeight) {
                     a.value?.sprite.removeFromParent()
                     objectsInArea.removeValue(forKey: a.key)
                 }
@@ -361,11 +373,10 @@ class Area {
         
         for obj in objectsInArea {
             switch obj.key?.name {
-            case "asteroid", "debris", "item":
+            case "asteroid", "debris", "item", "rival_capsule", "lost_capsule":
                 obj.value?.sprite.removeFromParent()
                 objectsInArea.removeValue(forKey: obj.key)
             default:
-                print(obj.key?.name)
                 continue
             }
         }
@@ -375,65 +386,27 @@ class Area {
         for spawn in spawns.keys {
             spawnRates.append(SpawnRate(obj: spawnTypes[spawn]!, rate: TimeInterval(spawns[spawn]!)))
         }
+        spawnRates.append(SpawnRate(obj: spawnTypes["enemy"]!, rate: 15))
         
         setTimer()
         
         var x: CGFloat = 0
         // after setting spawns reset player
         for capsule in player.head.getAllPieces() {
+            capsule.targetAngle = 0
             capsule.sprite.position = CGPoint(x: x, y: 0)
             x -= capsule.sprite.size.height/2.0
         }
         
+        enemies = []
     }
     
-}
-
-
-func generateTestArea(withScene scene: AreaScene) -> Area {
-    let a = Area(scene: scene)
-    
-    
-    let stoneInv = Inventory([.Stone: 15], [.Stone: 15])
-    let radInv = Inventory([.Nuclear: 50], [.Nuclear: 10])
-    let remInv = Inventory([.Precious: 5], [.Precious: 5])
-    
-    let stoneAst = Asteroid(1, SKSpriteNode(imageNamed: "asteroid_normal"), (150, 350), (150, 350), stoneInv)
-    let radAst = Asteroid(1, SKSpriteNode(imageNamed: "asteroid_radioactive"), (150, 350), (150, 350), radInv)
-    let remAst = Asteroid(1, SKSpriteNode(imageNamed: "asteroid_precious"), (100, 275), (100, 275), remInv)
-    
-    let stoneRate = SpawnRate(obj: stoneAst, rate: 1)
-    let radRate = SpawnRate(obj: radAst, rate: 3)
-    let remRate = SpawnRate(obj: remAst, rate: 6)
-    
-    let spawnRate = [stoneRate, radRate, remRate]
-    
-    a.spawnRates = spawnRate
-    
-    let ss = SpaceStation()
-    //ss.spawn(at: CGPoint(x: CGFloat(Int.random(in: -300...300)), y: CGFloat(Int.random(in: 1000...1500))))//TODO change random ranges
-    ss.spawn(at: CGPoint(x: 0, y: 1200))//Spawns such that player appears from the arm
-
-    ss.area = a
-    
-    let enemyChain: [TruckPiece] = RivalTruckPiece.generateChain(with: 5, holding: [.Nuclear])
-    print("ENEMY NAMES")
-    for p in enemyChain {
-        print("\(p.sprite.name)")
+    func spawnEnemy(at point: CGPoint) {
+        let enemyChain: [TruckPiece] = RivalTruckPiece.generateChain(with: Int.random(in: 2...6),
+                                                                     holding: [.Nuclear, .Scrap, .Stone, .Precious])
+        warp(truckList: enemyChain, at: point)
+        
+        enemies.append(enemyChain[0])
     }
-    
-    a.warp(truckList: enemyChain, at: CGPoint(x: 400, y: -500))
-    
-    a.uniqueItems = [ss]
-    a.initialItems = a.uniqueItems
-    
-    let background = SKEmitterNode(fileNamed: "StarryBackground")
-    background?.advanceSimulationTime(30)
-    background?.zPosition = -100
-    a.backgroundItems.append(background!)
-    
-    return a
 }
-
-
 

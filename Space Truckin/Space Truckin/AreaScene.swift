@@ -255,14 +255,16 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
                                        speed: 250,
                                        boostedSpeed: 500,
                                        inventory: Inventory(for: .Oxygen, max: 100, starting: 100)))
-        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
-        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2")))
-        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
-//        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
-//        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
-//        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2")))
-//        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
-//        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1")))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"),
+                                                  inventory: Inventory(for: .Water, max: 100, starting: 100)))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule2"),
+                                                  inventory: Inventory(for: .Precious, max: 100, starting: 0)))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"),
+                                                  inventory: Inventory(for: .Stone, max: 100, starting: 0)))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"),
+                                                  inventory: Inventory(for: .Scrap, max: 100, starting: 0)))
+        player.head.addToChain(adding: TruckPiece(sprite: SKSpriteNode(imageNamed: "space_truck_capsule1"),
+                                                  inventory: Inventory(for: .Nuclear, max: 100, starting: 0)))
     
         currentArea = Area(scene: self)
         currentArea.player = player
