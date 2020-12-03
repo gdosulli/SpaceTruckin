@@ -189,6 +189,7 @@ class Area {
         }
         
         spawnRates = rates
+        setTimer()
 
     }
     
@@ -355,16 +356,21 @@ class Area {
             if !uniqueItems.contains((a.value)!) && !a.value!.isImportant{ //TODO: fix this, not the right use of isImportant and uniqueItems
                 let position = a.value?.sprite.position
                 if position!.x > (playerX + 3 * scene!.frameWidth) || position!.x < (playerX - 3 * scene!.frameWidth) {
-                    a.value?.onDestroy()
-                    
-                    a.value?.sprite.removeFromParent()
-                    
+                       let children: [SKNode?] = a.value!.getChildren()
+                                 for child in children {
+                                     if let _ = child?.parent {
+                                         child!.removeFromParent()
+                                     }
+                                 }
                     objectsInArea.removeValue(forKey: a.key)
                 } else if position!.y > (playerY + 3 * scene!.frameHeight) || position!.y < (playerY - 3 * scene!.frameHeight) {
                     
-                    a.value?.onDestroy()
-
-                    a.value?.sprite.removeFromParent()
+                       let children: [SKNode?] = a.value!.getChildren()
+                                 for child in children {
+                                     if let _ = child?.parent {
+                                         child!.removeFromParent()
+                                     }
+                                 }
                     objectsInArea.removeValue(forKey: a.key)
                 }
             }
