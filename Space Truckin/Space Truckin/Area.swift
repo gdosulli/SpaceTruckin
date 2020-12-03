@@ -355,9 +355,15 @@ class Area {
             if !uniqueItems.contains((a.value)!) && !a.value!.isImportant{ //TODO: fix this, not the right use of isImportant and uniqueItems
                 let position = a.value?.sprite.position
                 if position!.x > (playerX + 3 * scene!.frameWidth) || position!.x < (playerX - 3 * scene!.frameWidth) {
+                    a.value?.onDestroy()
+                    
                     a.value?.sprite.removeFromParent()
+                    
                     objectsInArea.removeValue(forKey: a.key)
                 } else if position!.y > (playerY + 3 * scene!.frameHeight) || position!.y < (playerY - 3 * scene!.frameHeight) {
+                    
+                    a.value?.onDestroy()
+
                     a.value?.sprite.removeFromParent()
                     objectsInArea.removeValue(forKey: a.key)
                 }
@@ -374,6 +380,13 @@ class Area {
         for obj in objectsInArea {
             switch obj.key?.name {
             case "asteroid", "debris", "item", "rival_capsule", "lost_capsule":
+                
+                if let truck = obj.value as? TruckPiece {
+                    truck.deleteSelf()
+                } else if let rival = obj.value as? RivalTruckPiece {
+                    rival.deleteSelf()
+                }
+                obj.value?.onDestroy()
                 obj.value?.sprite.removeFromParent()
                 objectsInArea.removeValue(forKey: obj.key)
             default:

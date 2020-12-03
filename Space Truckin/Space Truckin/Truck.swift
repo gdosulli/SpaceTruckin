@@ -337,6 +337,12 @@ class TruckPiece: SpaceObject {
             destroyed = true
             thruster.removeAllActions()
             thruster.removeFromParent()
+            
+            if let _ = thruster.parent {
+                thruster.particleBirthRate = 0
+                thruster.removeFromParent()
+            }
+            
             explode()
             
             let duration = Double.random(in: 0.7...1.0)
@@ -351,6 +357,11 @@ class TruckPiece: SpaceObject {
         dropItem(at: self.sprite.position)
         for child in self.getChildren() {
             child?.removeFromParent()
+        }
+        
+        if let _ = thruster.parent {
+            thruster.particleBirthRate = 0
+            thruster.removeFromParent()
         }
     }
     
