@@ -54,6 +54,7 @@
 		E392DF4C25719DD500D3CA4A /* boostEmitter3.sks in Resources */ = {isa = PBXBuildFile; fileRef = E392DF4B25719DD500D3CA4A /* boostEmitter3.sks */; };
 		E392DF4E2571B67000D3CA4A /* radioactiveDecay.sks in Resources */ = {isa = PBXBuildFile; fileRef = E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */; };
 		E392DF5025773DCB00D3CA4A /* SpaceStationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */; };
+		E392DF5425789C0500D3CA4A /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E392DF5325789C0500D3CA4A /* TitleScreen.swift */; };
 		E3C95F76256071740009E84E /* InterfaceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C95F75256071740009E84E /* InterfaceBar.swift */; };
 		E3C9603C256469DE0009E84E /* EffectBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C9603B256469DE0009E84E /* EffectBubbles.swift */; };
 		E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */; };
@@ -131,6 +132,7 @@
 		E392DF4B25719DD500D3CA4A /* boostEmitter3.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = boostEmitter3.sks; sourceTree = "<group>"; };
 		E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = radioactiveDecay.sks; sourceTree = "<group>"; };
 		E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceStationMenu.swift; sourceTree = "<group>"; };
+		E392DF5325789C0500D3CA4A /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
 		E3C95F75256071740009E84E /* InterfaceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceBar.swift; sourceTree = "<group>"; };
 		E3C9603B256469DE0009E84E /* EffectBubbles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectBubbles.swift; sourceTree = "<group>"; };
 		E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxyEmitter.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				E34AB9C7252BAE70007AF254 /* LaunchScreen.storyboard */,
 				E34AB9F6252BBDC9007AF254 /* magicEmitter.sks */,
 				E34AB9C2252BAE6D007AF254 /* Main.storyboard */,
+				E392DF5325789C0500D3CA4A /* TitleScreen.swift */,
 				7F5C0936255323C00028F808 /* Menu.storyboard */,
 				7F5C093B255324B80028F808 /* MenuViewController.swift */,
 				E33F614825422EC4005BAB37 /* Movable.swift */,
@@ -435,6 +438,7 @@
 				E373A3B92554B44B00D04135 /* Truck.swift in Sources */,
 				E33F614925422EC4005BAB37 /* Movable.swift in Sources */,
 				E34AB9C1252BAE6D007AF254 /* GameViewController.swift in Sources */,
+				E392DF5425789C0500D3CA4A /* TitleScreen.swift in Sources */,
 				E3C95F76256071740009E84E /* InterfaceBar.swift in Sources */,
 				E3248BE2256E314100974CF6 /* EffectField.swift in Sources */,
 				82723AE825422E5B002A1E53 /* Asteroid.swift in Sources */,

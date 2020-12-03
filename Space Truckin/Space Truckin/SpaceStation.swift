@@ -68,17 +68,6 @@ class SpaceStation: SpaceObject {
     
     func dock(_ piece: TruckPiece){
         sprite.isPaused = true
-        let scene = (sprite.parent as! AreaScene)
-        let cam = scene.cam
-        stationMenu.frameSize = CGSize(width: scene.frame.width * scene.camScale, height: scene.frame.height * scene.camScale)
-        stationMenu.reinit()
-        stationMenu.background.position = cam.position
-        sprite.parent?.addChild(stationMenu.background)
-    
-        
-        
-        stationMenu.truckHead = piece
-        stationMenu.show()
         //set head
         //show screen
         print("DOCKED")
