@@ -454,10 +454,13 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
     @objc func handleDoubleTap(gesture: UITapGestureRecognizer) {
         if !touchedButton {
             print("double touch")
-            currentArea.player.head.sprite.run(SKAction.animate(with: drillAnim,
-                                                                timePerFrame: 0.1,
-                                                                resize: false,
-                                                                restore: false))
+            currentArea.player.head.sprite.run(SKAction.sequence([SKAction.animate(with: drillAnim,
+                                                                                   timePerFrame: 0.1,
+                                                                                   resize: false,
+                                                                                   restore: false),SKAction.repeatForever(SKAction.animate(with: TruckPiece.drillAnimation,
+                                                                                                                     timePerFrame: 0.1,
+                                                                                                                     resize: false,
+                                                                                                                     restore: false))]))
             currentArea.player.setBoost(b: true)
             boostLocked = true
             let duration = 0.05
@@ -490,6 +493,9 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         if currentArea.player.head.boosted {
             if !boostLocked {
                 currentArea.player.setBoost(b: false)
+                currentArea.player.head
+                    .sprite
+                    .removeAllActions()
                 currentArea.player.head.sprite.run(SKAction.animate(with: drillAnim.reversed(),
                                                                     timePerFrame: 0.1,
                                                                     resize: false,

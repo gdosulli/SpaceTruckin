@@ -43,6 +43,8 @@ class SpaceStation: SpaceObject {
         
         super.init(durability, sprite, xRange, yRange, inventory, 0, rotation, targetAngle, boostSpeed)
         sprite.physicsBody?.isDynamic = false
+        
+        isImportant = true
     }
     
     required init(instance: SpaceObject) {
