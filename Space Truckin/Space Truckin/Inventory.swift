@@ -226,4 +226,4 @@ struct SelectedInventory {
     }
 }
 
-let NO_INVENTORY = Inventory()
+let NO_INVENTORY = Inventory(max: 0, starting: 0)
