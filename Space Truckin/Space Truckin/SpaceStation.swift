@@ -68,18 +68,18 @@ class SpaceStation: SpaceObject {
     
     func dock(_ piece: TruckPiece){
         sprite.isPaused = true
+        piece.dockPiece()
         //set head
         //show screen
         print("DOCKED")
     }
     
-    func undock(_ piece: TruckPiece){
+    func undock(){
         sprite.isPaused = false
         //remove head reference?
         //hide screen
         print("UNDOCKED")
-        
-        piece.undockPiece()
+
     }
     
     override func move(by delta: CGFloat) {
@@ -103,7 +103,7 @@ class SpaceStation: SpaceObject {
                 
         } else if obj.sprite.name == "capsule"{
             let piece = obj as! TruckPiece
-            if !piece.docked {
+            if !piece.docked{
                 if piece.isHead{
                     dock(piece)
                 }
@@ -111,6 +111,7 @@ class SpaceStation: SpaceObject {
                     piece.dockPiece()
                     if piece.followingPiece == nil {
                         print("MENU OPEN NOW PLS")
+                        undock()
                     }
                 }
             }

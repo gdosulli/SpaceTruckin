@@ -374,6 +374,12 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
     
 
     func touchDown(atPoint pos : CGPoint) {
+        print("TOUCHED")
+        if currentArea.player.head.docked { //TODO: MOVE THIS
+            print("DOCKEDTOUCHED")
+            currentArea.player.head.undockPiece()
+        }
+        
         let touchedNode = self.atPoint(pos)
         // checks which node was touched and preforms that action
         if let name = touchedNode.name {
