@@ -381,13 +381,12 @@ class Area {
             switch obj.key?.name {
             case "asteroid", "debris", "item", "rival_capsule", "lost_capsule":
                 
-                if let truck = obj.value as? TruckPiece {
-                    truck.deleteSelf()
-                } else if let rival = obj.value as? RivalTruckPiece {
-                    rival.deleteSelf()
+                let children: [SKNode?] = obj.value!.getChildren()
+                for child in children {
+                    if let _ = child?.parent {
+                        child!.removeFromParent()
+                    }
                 }
-                obj.value?.onDestroy()
-                obj.value?.sprite.removeFromParent()
                 objectsInArea.removeValue(forKey: obj.key)
             default:
                 continue
