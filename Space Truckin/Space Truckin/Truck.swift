@@ -384,12 +384,7 @@ class TruckPiece: SpaceObject {
         let pos = self.targetPiece?.sprite.position
         self.targetPiece?.followingPiece = nil
         self.targetPiece = nil
-        
-        let snap = EffectBubble(type: .SNAP, duration: 0.5)
-        self.sprite.parent?.addChild(snap.getChildren()[0]!)
-        if let p = pos {
-            snap.spawn(at: p)
-        }
+
         
         var followPiece: TruckPiece? = self
         while let p = followPiece {

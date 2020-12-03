@@ -428,10 +428,6 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
             case "jump":
                 // TODO change area code
                 currentArea.setArea(with: menu.travel())
-//                musicPlayer.muted = false
-//                musicPlayer.unmute()
-                musicPlayer.playSong(MySongs.JUMP)
-                musicPlayer.getPlaylist()
                 
                 menu.map.animateTravel(on: self, with: self.frame.size)
             case "return" :
