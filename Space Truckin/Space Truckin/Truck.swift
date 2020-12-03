@@ -402,13 +402,20 @@ class TruckPiece: SpaceObject {
     func dockPiece(){
         print("DockingChain")
         sprite.isHidden = true
-        thruster.particleBirthRate = 0 //TODO: MAKE THIS SPEED RELATED
+        speed = 0
         docked = true
 //        var piece: TruckPiece = getFirstPiece()
 //        while let p = piece{
 //            //p.
 //
 //        }
+    }
+    
+    func undockPiece(){
+        print("undockingChain")
+        sprite.isHidden = false
+        speed = normalSpeed
+        docked = false
     }
     func getGapSize(nextPiece: TruckPiece) -> CGFloat{
         let distancex = sprite.position.x - nextPiece.sprite.position.x

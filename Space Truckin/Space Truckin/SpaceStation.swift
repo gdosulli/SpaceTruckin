@@ -84,11 +84,13 @@ class SpaceStation: SpaceObject {
         print("DOCKED")
     }
     
-    func undock(){
+    func undock(_ piece: TruckPiece){
         sprite.isPaused = false
         //remove head reference?
         //hide screen
         print("UNDOCKED")
+        
+        piece.undockPiece()
     }
     
     override func move(by delta: CGFloat) {
