@@ -85,7 +85,7 @@ class MusicPlayer {
     var currentSong: Song?
     var currentPlaylist: [Song] = []
     var globalVolume: Float = 2.0
-    var muted = true
+    var muted = false
 
     
     
@@ -178,8 +178,9 @@ class MusicPlayer {
 
                       /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
                     song?.setVolume(0, fadeDuration: 0)
+                    song = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.m4a.rawValue)
+
                     if !muted {
-                        song = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.m4a.rawValue)
 
                             song?.setVolume(globalVolume * currentSong!.relativeVolume, fadeDuration: 3)
                     }
