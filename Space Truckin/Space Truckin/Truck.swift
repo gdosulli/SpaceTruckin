@@ -392,16 +392,18 @@ class TruckPiece: SpaceObject {
     
     //Seperates from targetPiece, creates snap sprite, turns all pieces in chain into lost_capsules
     func breakChain(){
-        let pos = self.targetPiece?.sprite.position
-        self.targetPiece?.followingPiece = nil
-        self.targetPiece = nil
+        if !isHead{
+            let pos = self.targetPiece?.sprite.position
+            self.targetPiece?.followingPiece = nil
+            self.targetPiece = nil
 
-        
-        var followPiece: TruckPiece? = self
-        while let p = followPiece {
-            p.sprite.name = "lost_capsule"
-            followPiece = p.followingPiece
-            p.setBoost(b: false)
+            
+            var followPiece: TruckPiece? = self
+            while let p = followPiece {
+                p.sprite.name = "lost_capsule"
+                followPiece = p.followingPiece
+                p.setBoost(b: false)
+            }
         }
     }
     
