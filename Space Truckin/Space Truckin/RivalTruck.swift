@@ -83,7 +83,7 @@ class RivalTruckPiece: TruckPiece {
         head.isHead = true
         var truckList: [TruckPiece] = [head]
         for i in 0..<numFollowers{
-            let piece = TruckPiece(2, SKSpriteNode(imageNamed: "rival_truck_capsule1"), nil,(1.4,1.0), (1.4,1.0), Inventory(for: itemList.randomElement()!, max: 100, starting: 100), rival_speed, 0, 0, rival_speed)
+            let piece = TruckPiece(2, SKSpriteNode(imageNamed: "rival_truck_capsule1"), nil,(1.4,1.0), (1.4,1.0), Inventory(for: itemList.randomElement()!, max: 30, starting: Int.random(in: 5...30)), rival_speed, 0, 0, rival_speed)
             piece.addToChain(adding: truckList[i])//M
             
             truckList.append(piece)
@@ -98,7 +98,14 @@ class RivalTruckPiece: TruckPiece {
         super.update(by: delta)
     }
     
- override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
+    override func move(by delta: CGFloat) {
+        super.move(by: delta)
+        
+        // track to player
+        
+    }
+    
+    override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
             
             var collisionVector = contact.contactNormal
     //        if self.sprite === contact.bodyB.node{

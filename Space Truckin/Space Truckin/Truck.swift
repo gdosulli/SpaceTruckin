@@ -24,7 +24,7 @@ class TruckPiece: SpaceObject {
     var isHead = false
     var circle = false
     var invincible = false
-    var maxLeashLength = CGFloat(250)
+    var maxLeashLength = CGFloat(300)
     
     var wallet = 0
     
@@ -332,6 +332,8 @@ class TruckPiece: SpaceObject {
             self.followingPiece?.breakChain()
             dropItem(at: sprite.position)
             destroyed = true
+            thruster.removeAllActions()
+            thruster.removeFromParent()
             explode()
             
             let duration = Double.random(in: 0.7...1.0)

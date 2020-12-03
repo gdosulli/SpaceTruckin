@@ -40,7 +40,7 @@ class Map {
     let travelScreen = SKSpriteNode(imageNamed: "travel0")
     let cockPit: SKSpriteNode! = SKSpriteNode(imageNamed: "cockpit")
     
-    let allObjects = [0: "A", 1: "D", 2:"T"] //TODO: T is place holder remove from here and full name dictionary below
+    let allObjects = [0: "A", 1: "D", 2:"T"]
     let allObjectsFullNames = ["AN": ("asteroid_normal", 0), "AP": ("asteroid_precious", 1), "AR": ("asteroid_radioactive", 1),
                                "SL": ("satellite", 0), "CT": ("cell_tower", 0)]
     var possibleObjects: Array<String> = []
