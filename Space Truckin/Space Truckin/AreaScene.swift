@@ -39,14 +39,6 @@ struct Player {
         }
     }
     
-//
-//    //func update(by delta: CGFloat) {
-////        head.move(by: delta)
-////        chain.movePieces(by: delta)
-//        chain.updateFollowers()
-//        chain.checkForDestroyed()
-//    }
-//
     func getInventory() -> Inventory {
         var maxCapacities = [ItemType:Int]()
         var items = [ItemType:Int]()
@@ -109,7 +101,7 @@ struct DropDownMenu {
         button.size = controller.size
         buttons.append(button)
     }
-
+    
     mutating func clicked(){
         menuIsOpen = !menuIsOpen
         if menuIsOpen{
@@ -169,7 +161,6 @@ struct DropDownMenu {
             infoScreen.show()
         }
     }
-    
     
     mutating func viewSector(named name: String) {
         viewingSector = name
@@ -383,6 +374,12 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
     
 
     func touchDown(atPoint pos : CGPoint) {
+        print("TOUCHED")
+        if currentArea.player.head.docked { //TODO: MOVE THIS
+            print("DOCKEDTOUCHED")
+            currentArea.player.head.undockPiece()
+        }
+        
         let touchedNode = self.atPoint(pos)
         // checks which node was touched and preforms that action
         if let name = touchedNode.name {

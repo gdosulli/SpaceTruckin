@@ -392,29 +392,42 @@ class TruckPiece: SpaceObject {
     
     //Seperates from targetPiece, creates snap sprite, turns all pieces in chain into lost_capsules
     func breakChain(){
-        let pos = self.targetPiece?.sprite.position
-        self.targetPiece?.followingPiece = nil
-        self.targetPiece = nil
+        if !isHead{
+            let pos = self.targetPiece?.sprite.position
+            self.targetPiece?.followingPiece = nil
+            self.targetPiece = nil
 
-        
-        var followPiece: TruckPiece? = self
-        while let p = followPiece {
-            p.sprite.name = "lost_capsule"
-            followPiece = p.followingPiece
-            p.setBoost(b: false)
+            
+            var followPiece: TruckPiece? = self
+            while let p = followPiece {
+                p.sprite.name = "lost_capsule"
+                followPiece = p.followingPiece
+                p.setBoost(b: false)
+            }
         }
     }
     
     func dockPiece(){
         print("DockingChain")
         sprite.isHidden = true
-        thruster.particleBirthRate = 0 //TODO: MAKE THIS SPEED RELATED
+        speed = 0
         docked = true
 //        var piece: TruckPiece = getFirstPiece()
 //        while let p = piece{
 //            //p.
 //
 //        }
+    }
+    
+    func undockPiece(){
+        for piece in getAllPieces(){
+            piece.sprite.isHidden = false
+            piece.thruster.isHidden = false
+            piece.speed = normalSpeed
+            piece.docked = false
+            piece.releashingFrames = 60
+        }
+
     }
     func getGapSize(nextPiece: TruckPiece) -> CGFloat{
         let distancex = sprite.position.x - nextPiece.sprite.position.x
