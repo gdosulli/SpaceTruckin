@@ -276,8 +276,12 @@ class TruckPiece: SpaceObject {
         //Capsule vs Asteroid and Debris collision
         if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
             self.addForce(vec: newNormal)
-            durability -= obj.impactDamage
-            print("OOF ouch! \(durability) hull remaining.")
+          
+            if !(isHead && boosted) {
+                durability -= obj.impactDamage
+                print("OOF ouch! \(durability) hull remaining.")
+            }
+            
             if !invincible && durability <= 0 {
                 onDestroy()
             }
@@ -304,8 +308,11 @@ class TruckPiece: SpaceObject {
             //Capsule vs Rival Capsule Collision
             if obj.sprite.name == "rival_capsule" {
                 self.addForce(vec: newNormal)
-                durability -= obj.impactDamage
-                print("OOF ouch! \(durability) hull remaining.")
+                if !(isHead && boosted) {
+                    durability -= obj.impactDamage
+                    print("OOF ouch! \(durability) hull remaining.")
+                }
+                          
                 if durability <= 0 {
                     onDestroy()
                 }
@@ -317,8 +324,11 @@ class TruckPiece: SpaceObject {
             //Rival Capsule vs Capsule Collision
             if obj.sprite.name == "capsule" {
                 self.addForce(vec: newNormal)
-                durability -= obj.impactDamage
-                print("OOF ouch! \(durability) hull remaining.")
+                if !(isHead && boosted) {
+                    durability -= obj.impactDamage
+                    print("OOF ouch! \(durability) hull remaining.")
+                }
+
                 if durability <= 0 {
                     onDestroy()
                 }

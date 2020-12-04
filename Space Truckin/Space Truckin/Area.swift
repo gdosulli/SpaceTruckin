@@ -107,7 +107,7 @@ class Area {
         repeats: true)
         
         // reintroduce player
-        warp(truckList: player.head.getAllPieces(), at: CGPoint(x: 0,y: 0))
+        warp(truckList: player.head.getAllPieces(), at: CGPoint(x: 1075,y: 1175))
         player.head.invincible = true
     }
     
