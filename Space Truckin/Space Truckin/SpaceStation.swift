@@ -75,8 +75,10 @@ class SpaceStation: SpaceObject {
     
     func dock(_ piece: TruckPiece){
         sprite.isPaused = true
+        piece.setBoost(b: false)
         piece.dockedStation = self
         piece.dockPiece()
+        piece.inventory.items[ItemType.Oxygen] = piece.inventory.getMaxCapacity(for: ItemType.Oxygen)
         //set head
         //show screen
         print("DOCKED")

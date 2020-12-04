@@ -166,7 +166,7 @@ class TruckPiece: SpaceObject {
     
     //TODO: Is this ever called? Yes. It's called by handleDoubleTap in AreaScene.
     func setBoost(b: Bool) {
-        if !docked {
+        if !getFirstPiece().docked {
             boosted = b
             if b {
                 speed = boostSpeed
