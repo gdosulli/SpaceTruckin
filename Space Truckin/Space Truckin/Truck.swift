@@ -323,7 +323,7 @@ class TruckPiece: SpaceObject {
 //        let newNormal = reboundVector(from: obj.sprite.position).mult(by: coeff)
         
         //ignore all if docked
-        if docked {
+        if docked || obj.sprite.isHidden{
         //Capsule vs Asteroid and Debris collision
         } else if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
             self.addForce(vec: newNormal)
