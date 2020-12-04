@@ -162,7 +162,7 @@ class TruckPiece: SpaceObject {
                 deltaMod = deltaMod * 0.75
                 turnMod = 300
                 turn(by: delta * turnMod)
-                thruster.particleBirthRate = speed * 4
+                //thruster.particleBirthRate = speed * 4
                 super.moveForward(by: deltaMod)
             }
         } else{
@@ -410,6 +410,8 @@ class TruckPiece: SpaceObject {
     func dockPiece(){
         print("DockingChain")
         sprite.isHidden = true
+        thruster.isHidden = true
+        thruster.particleBirthRate = 0
         speed = 0
         docked = true
 //        var piece: TruckPiece = getFirstPiece()

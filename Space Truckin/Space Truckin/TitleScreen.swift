@@ -9,18 +9,14 @@ import UIKit
 
 class TitleScreenViewController: UIViewController {
     
-      
+    @IBAction func startGame(_ sender: Any) {
+    }
+    
       override func viewDidLoad() {
           super.viewDidLoad()
 
-        var buttonNum = 0
+    }
         
-        for i in self.view.subviews {
-
-        }
-          
-      }
-      
       override func viewWillAppear(_ animated: Bool) {
           super.viewWillAppear(animated)
 
