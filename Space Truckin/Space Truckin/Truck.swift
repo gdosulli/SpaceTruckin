@@ -29,6 +29,12 @@ class TruckPiece: SpaceObject {
     var invincible = false
     var maxLeashLength = CGFloat(300)
     
+    var fuelingCounter:CGFloat = 0
+
+    static var boostCost = 5
+    
+    static var drillAnim = [SKTexture]()
+    
     var wallet = 0
     
     convenience init(sprite s1: SKSpriteNode) {
@@ -119,6 +125,24 @@ class TruckPiece: SpaceObject {
             lost = true
         }
         
+        if isHead && boosted {
+            if let fuel = inventory.getAll()[.Oxygen] {
+                if fuel <= 0 {
+                    for piece in self.getAllPieces() {
+                        piece.setBoost(b: false)
+                    }
+                } else {
+                    fuelingCounter += CGFloat(TruckPiece.boostCost) * delta
+                    if fuelingCounter >= 1 {
+                        inventory.items[.Oxygen] = fuel -  1
+                        fuelingCounter = 0
+                    }
+                }
+            }
+             
+            
+        }
+        
         
         thruster.targetNode = sprite.parent
         thruster.position = sprite.position
@@ -136,15 +160,33 @@ class TruckPiece: SpaceObject {
         super.moveForward(by: delta * 0.9)
     }
     
-    //TODO: Is this ever called?
+    //TODO: Is this ever called? Yes. It's called by handleDoubleTap in AreaScene.
     func setBoost(b: Bool) {
         boosted = b
         if b {
             speed = boostSpeed
             thruster.particleScaleSpeed = -0.2
+            
+            if isHead {
+                sprite.run(SKAction.sequence([SKAction.animate(with: TruckPiece.drillAnim,
+                        timePerFrame: 0.1,
+                        resize: false,
+                        restore: false),SKAction.repeatForever(SKAction.animate(with: TruckPiece.drillAnimation,
+                        timePerFrame: 0.1,
+                        resize: false,
+                        restore: false))]))
+                
+            }
+            
+
         } else {
             speed = normalSpeed
             thruster.particleScaleSpeed = -0.4
+            
+            if isHead {
+                sprite.removeAllActions()
+                sprite.run(SKAction.animate(with: TruckPiece.drillAnim.reversed(),timePerFrame: 0.1, resize: false,restore: false))
+            }
         }
     }
     

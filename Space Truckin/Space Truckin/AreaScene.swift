@@ -307,9 +307,12 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
             item.anchorPoint = CGPoint(x: 1, y: 1)
             item.size = CGSize(width: frameWidth/8, height: frameWidth/8)
             self.addChild(item)
-            
-            let bar = createStorageBar(size: CGSize(width: frameWidth * 0.2,
-                                                    height: frameHeight * 0.05))
+            var bar: InterfaceBar
+            if type == .Oxygen {
+                bar = createFuelBar(size:  CGSize(width: frameWidth * 0.2, height: frameHeight * 0.05))
+            } else {
+                bar = createStorageBar(size: CGSize(width: frameWidth * 0.2, height: frameHeight * 0.05))
+            }
             for child in bar.getChildren() {
                 child.zPosition = 100
                 self.addChild(child)
@@ -347,6 +350,8 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
             drillAnim.append(SKTexture(imageNamed: drill))
             print(i)
         }
+        
+        TruckPiece.drillAnim = drillAnim
 
 //        let galaxy = SKEmitterNode(fileNamed: "GalaxyBackground")!
 //        self.addChild(galaxy)
@@ -486,13 +491,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         if currentArea.player.head.boosted {
             if !boostLocked {
                 currentArea.player.setBoost(b: false)
-                currentArea.player.head
-                    .sprite
-                    .removeAllActions()
-                currentArea.player.head.sprite.run(SKAction.animate(with: drillAnim.reversed(),
-                                                                    timePerFrame: 0.1,
-                                                                    resize: false,
-                                                                    restore: false))
+                  
             }
         }
         
