@@ -29,11 +29,12 @@ class SpaceStation: SpaceObject {
         sprite.zRotation = armAngle
         
         let margin: CGFloat = 0.8
-        sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: sprite.size.width * 0.2, height: margin * sprite.size.height))
+        //sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: sprite.size.width * 0.2, height: margin * sprite.size.height))
+        let physicsBodyPosition = CGPoint(x: sprite.position.x, y: sprite.position.y - sprite.size.height * 0.4)
+        sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.height * 0.05, center: physicsBodyPosition)
         hullSprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: hullSprite.size.width * margin, height: margin * hullSprite.size.height))
         sprite.zPosition = 10
         hullSprite.zPosition = sprite.zPosition - 1
-        
         hullSprite.physicsBody?.isDynamic = false
         hullSprite.physicsBody?.categoryBitMask = CollisionCategories.SPACEOBJECT
         hullSprite.physicsBody?.contactTestBitMask = CollisionCategories.SPACEOBJECT
@@ -74,6 +75,7 @@ class SpaceStation: SpaceObject {
     
     func dock(_ piece: TruckPiece){
         sprite.isPaused = true
+        piece.dockedStation = self
         piece.dockPiece()
         //set head
         //show screen
@@ -109,16 +111,12 @@ class SpaceStation: SpaceObject {
                 
         } else if obj.sprite.name == "capsule"{
             let piece = obj as! TruckPiece
-            if !piece.docked{
-                if piece.isHead{
+            if !piece.docked {
+                if piece.isHead && piece.releashingFrames == 0{
                     dock(piece)
                 }
-                if sprite.isPaused {
+                if sprite.isPaused && piece.getFirstPiece().docked{
                     piece.dockPiece()
-                    if piece.followingPiece == nil {
-                        print("MENU OPEN NOW PLS")
-                        undock()
-                    }
                 }
             }
         }

@@ -204,7 +204,7 @@ class Area {
             piece.followingPiece = nil
             piece.sprite.position = point
         }
-        
+        head!.releashingFrames = 60
         head!.spawn(at: point)
         addObject(obj: head!)
         

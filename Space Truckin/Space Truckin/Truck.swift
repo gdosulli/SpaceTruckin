@@ -29,6 +29,8 @@ class TruckPiece: SpaceObject {
     var invincible = false
     var maxLeashLength = CGFloat(300)
     
+    var dockedStation : SpaceStation?
+    
     var fuelingCounter:CGFloat = 0
 
     static var boostCost = 5
@@ -113,16 +115,18 @@ class TruckPiece: SpaceObject {
     override func update(by delta: CGFloat) {
         if let piece = targetPiece {
             changeAngleTo(point: piece.sprite.position)
-            if releashingFrames == 0 {
+            if releashingFrames <= 0 {
                 if getGapSize(nextPiece: piece) > maxLeashLength {
                     //print("SNAP")
                     breakChain()
                 }
-            } else {
-                releashingFrames -= 1
             }
         } else if !isHead {
             lost = true
+        }
+        
+        if releashingFrames > 0 {
+            releashingFrames -= 1
         }
         
         if isHead && boosted {
@@ -317,9 +321,11 @@ class TruckPiece: SpaceObject {
 //        let collisionVector = obj.lastVector.reflected(over: contact.contactNormal)
         let newNormal = reboundVector(from: contact.contactPoint).mult(by: coeff)
 //        let newNormal = reboundVector(from: obj.sprite.position).mult(by: coeff)
-
+        
+        //ignore all if docked
+        if docked {
         //Capsule vs Asteroid and Debris collision
-        if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
+        } else if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
             self.addForce(vec: newNormal)
           
             if !(isHead && boosted) {
@@ -477,7 +483,11 @@ class TruckPiece: SpaceObject {
 //        }
     }
     
-    func undockPiece(){
+    func undockChain(){
+        if dockedStation != nil {
+            dockedStation?.sprite.isPaused = false
+            dockedStation = nil
+        }
         for piece in getAllPieces(){
             piece.sprite.isHidden = false
             piece.thruster.isHidden = false

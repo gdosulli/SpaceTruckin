@@ -382,7 +382,7 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
         print("TOUCHED")
         if currentArea.player.head.docked { //TODO: MOVE THIS
             print("DOCKEDTOUCHED")
-            currentArea.player.head.undockPiece()
+            currentArea.player.head.undockChain()
         }
         
         let touchedNode = self.atPoint(pos)
