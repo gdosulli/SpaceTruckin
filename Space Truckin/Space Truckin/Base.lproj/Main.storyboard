@@ -15,28 +15,39 @@
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="TitleTap" translatesAutoresizingMaskIntoConstraints="NO" id="e5r-5z-m7L">
-                                <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="TitleTap" translatesAutoresizingMaskIntoConstraints="NO" id="e5r-5z-m7L">
+                                <rect key="frame" x="8" y="-15" width="896" height="414"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TAP TO START" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fa4-gN-EYQ">
-                                <rect key="frame" x="44" y="275" width="329.66666666666669" height="43"/>
-                                <color key="tintColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="HoeflerText-Black" family="Hoefler Text" pointSize="41"/>
-                                <color key="textColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="highlightedColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="shadowColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <size key="shadowOffset" width="0.0" height="2"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mc4-eu-F5Q">
+                                <rect key="frame" x="90" y="174" width="290" height="95"/>
+                                <color key="tintColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Mc4-eu-F5Q" secondAttribute="height" multiplier="7:1" id="Tm5-hn-zRY"/>
+                                </constraints>
+                                <attributedString key="attributedText">
+                                    <fragment content="Tap to Start">
+                                        <attributes>
+                                            <color key="NSBackgroundColor" red="1" green="0.33385021134829551" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <color key="NSColor" red="1" green="0.0" blue="0.53045744294455233" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" size="43" name="Copperplate"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <color key="highlightedColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="shadowColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <size key="shadowOffset" width="2" height="-1"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="e5r-5z-m7L" firstAttribute="top" secondItem="aVG-Pr-nML" secondAttribute="top" id="LrK-Tg-kLW"/>
+                            <constraint firstItem="Mc4-eu-F5Q" firstAttribute="leading" secondItem="aVG-Pr-nML" secondAttribute="leading" constant="100" id="Vge-Nb-nfx"/>
                             <constraint firstAttribute="bottom" secondItem="e5r-5z-m7L" secondAttribute="bottom" id="f6C-Of-se4"/>
-                            <constraint firstItem="fa4-gN-EYQ" firstAttribute="leading" secondItem="aVG-Pr-nML" secondAttribute="leading" id="hjK-BI-CTe"/>
+                            <constraint firstItem="Mc4-eu-F5Q" firstAttribute="centerY" secondItem="HIZ-sX-kwg" secondAttribute="centerY" constant="45" id="mXz-ec-j1W"/>
                             <constraint firstItem="e5r-5z-m7L" firstAttribute="leading" secondItem="HIZ-sX-kwg" secondAttribute="leading" id="pNI-h8-lSn"/>
                             <constraint firstAttribute="trailing" secondItem="e5r-5z-m7L" secondAttribute="trailing" id="wSc-NV-pOH"/>
-                            <constraint firstItem="aVG-Pr-nML" firstAttribute="bottom" secondItem="fa4-gN-EYQ" secondAttribute="bottom" constant="75" id="yua-5G-SvR"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="aVG-Pr-nML"/>
                         <connections>
@@ -48,7 +59,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hKF-gw-g5X" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="gPD-Y7-lPJ">
                     <connections>
-                        <action selector="startGame:" destination="TZs-ib-e1u" id="UJt-Mx-73K"/>
                         <segue destination="BV1-FR-VrT" kind="show" id="xmd-5o-yW8"/>
                     </connections>
                 </tapGestureRecognizer>

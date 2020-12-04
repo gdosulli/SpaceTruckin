@@ -9,17 +9,21 @@ import UIKit
 
 class TitleScreenViewController: UIViewController {
     
-    @IBAction func startGame(_ sender: Any) {
-    }
     
-      override func viewDidLoad() {
-          super.viewDidLoad()
+    
+    
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        
 
     }
         
-      override func viewWillAppear(_ animated: Bool) {
-          super.viewWillAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
+        
       }
       
       
