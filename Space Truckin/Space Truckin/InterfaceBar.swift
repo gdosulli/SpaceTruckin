@@ -107,5 +107,15 @@ func createStorageBar(size: CGSize) -> InterfaceBar {
     return InterfaceBar(emptyBar: sprite1, fullBar: sprite2, colors: (color1, color2), maxWidth: size.width, height: size.height)
 }
 
+func createFuelBar(size: CGSize) -> InterfaceBar {
+    let color2 = UIColor.green
+    let color1 = UIColor.red.toColor(color: color2, percentage: -0.2)
+
+    let sprite1 = SKSpriteNode(color: UIColor.white, size: size)
+    let sprite2 = SKSpriteNode(color: color1, size: size)
+    
+    return InterfaceBar(emptyBar: sprite1, fullBar: sprite2, colors: (color1, color2), maxWidth: size.width, height: size.height)
+}
+
 
 

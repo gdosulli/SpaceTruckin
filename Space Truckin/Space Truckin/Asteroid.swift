@@ -96,6 +96,12 @@ class Asteroid : SpaceObject {
     override func onDestroy() {
         destroyed = true
         explode()
+        
+        let rnum: Int = Int.random(in: 0...3)
+        for _ in 0...rnum {
+            dropItem(at: self.sprite.position)
+        }
+        
         let duration = Double.random(in: 0.4...0.7)
         let removeDate = Date().addingTimeInterval(duration)
         let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
@@ -104,10 +110,7 @@ class Asteroid : SpaceObject {
     
     
     @objc func deleteSelf () {
-        let rnum: Int = Int.random(in: 0...3)
-        for _ in 0...rnum {
-            dropItem(at: self.sprite.position)
-        }
+
         self.sprite.removeFromParent()
     }
 }

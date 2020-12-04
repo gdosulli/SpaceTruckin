@@ -57,10 +57,16 @@ class SpaceStation: SpaceObject {
         sprite.position = spawnPoint
         hullSprite.position = spawnPoint
         
+        
+        // so the arm is facing to the right at spawn
+        sprite.zRotation = 1.57
+        
         // setup arm to rotate at random speed
         let spinSpeed = Double.random(in: 2...5) * Double(dimension / 25)
         var action  = [SKAction]()
         let rotateAction = SKAction.repeatForever(SKAction.rotate(byAngle: rotation, duration: spinSpeed))
+        let delay = SKAction.wait(forDuration: 4)
+        action.append(delay)
         action.append(rotateAction)
         // run rotation
         sprite.run(SKAction.sequence(action))

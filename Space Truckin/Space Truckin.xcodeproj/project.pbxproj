@@ -78,7 +78,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7F5C0936255323C00028F808 /* Menu.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Menu.storyboard; sourceTree = "<group>"; };
 		7F5C093B255324B80028F808 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		7F75732E2566A9AB00C36CA5 /* MapBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapBuilder.swift; sourceTree = "<group>"; };
 		8270C0B7254B73F700424235 /* StarryBackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StarryBackground.sks; sourceTree = "<group>"; };
@@ -203,7 +202,6 @@
 				E34AB9F6252BBDC9007AF254 /* magicEmitter.sks */,
 				E34AB9C2252BAE6D007AF254 /* Main.storyboard */,
 				E392DF5325789C0500D3CA4A /* TitleScreen.swift */,
-				7F5C0936255323C00028F808 /* Menu.storyboard */,
 				7F5C093B255324B80028F808 /* MenuViewController.swift */,
 				E33F614825422EC4005BAB37 /* Movable.swift */,
 				E34AB9F8252BBE31007AF254 /* smokeEmitter.sks */,

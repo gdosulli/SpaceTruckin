@@ -107,7 +107,7 @@ class Area {
         repeats: true)
         
         // reintroduce player
-        warp(truckList: player.head.getAllPieces(), at: CGPoint(x: 0,y: 0))
+        warp(truckList: player.head.getAllPieces(), at: CGPoint(x: 1075,y: 1175))
         player.head.invincible = true
     }
     
@@ -189,6 +189,7 @@ class Area {
         }
         
         spawnRates = rates
+        setTimer()
 
     }
     
@@ -355,16 +356,21 @@ class Area {
             if !uniqueItems.contains((a.value)!) && !a.value!.isImportant{ //TODO: fix this, not the right use of isImportant and uniqueItems
                 let position = a.value?.sprite.position
                 if position!.x > (playerX + 3 * scene!.frameWidth) || position!.x < (playerX - 3 * scene!.frameWidth) {
-                    a.value?.onDestroy()
-                    
-                    a.value?.sprite.removeFromParent()
-                    
+                       let children: [SKNode?] = a.value!.getChildren()
+                                 for child in children {
+                                     if let _ = child?.parent {
+                                         child!.removeFromParent()
+                                     }
+                                 }
                     objectsInArea.removeValue(forKey: a.key)
                 } else if position!.y > (playerY + 3 * scene!.frameHeight) || position!.y < (playerY - 3 * scene!.frameHeight) {
                     
-                    a.value?.onDestroy()
-
-                    a.value?.sprite.removeFromParent()
+                       let children: [SKNode?] = a.value!.getChildren()
+                                 for child in children {
+                                     if let _ = child?.parent {
+                                         child!.removeFromParent()
+                                     }
+                                 }
                     objectsInArea.removeValue(forKey: a.key)
                 }
             }
@@ -381,13 +387,12 @@ class Area {
             switch obj.key?.name {
             case "asteroid", "debris", "item", "rival_capsule", "lost_capsule":
                 
-                if let truck = obj.value as? TruckPiece {
-                    truck.deleteSelf()
-                } else if let rival = obj.value as? RivalTruckPiece {
-                    rival.deleteSelf()
+                let children: [SKNode?] = obj.value!.getChildren()
+                for child in children {
+                    if let _ = child?.parent {
+                        child!.removeFromParent()
+                    }
                 }
-                obj.value?.onDestroy()
-                obj.value?.sprite.removeFromParent()
                 objectsInArea.removeValue(forKey: obj.key)
             default:
                 continue

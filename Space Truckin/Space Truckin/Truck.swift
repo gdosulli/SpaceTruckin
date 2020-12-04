@@ -29,6 +29,12 @@ class TruckPiece: SpaceObject {
     var invincible = false
     var maxLeashLength = CGFloat(300)
     
+    var fuelingCounter:CGFloat = 0
+
+    static var boostCost = 5
+    
+    static var drillAnim = [SKTexture]()
+    
     var wallet = 0
     
     convenience init(sprite s1: SKSpriteNode) {
@@ -119,6 +125,24 @@ class TruckPiece: SpaceObject {
             lost = true
         }
         
+        if isHead && boosted {
+            if let fuel = inventory.getAll()[.Oxygen] {
+                if fuel <= 0 {
+                    for piece in self.getAllPieces() {
+                        piece.setBoost(b: false)
+                    }
+                } else {
+                    fuelingCounter += CGFloat(TruckPiece.boostCost) * delta
+                    if fuelingCounter >= 1 {
+                        inventory.items[.Oxygen] = fuel -  1
+                        fuelingCounter = 0
+                    }
+                }
+            }
+             
+            
+        }
+        
         
         thruster.targetNode = sprite.parent
         thruster.position = sprite.position
@@ -136,16 +160,34 @@ class TruckPiece: SpaceObject {
         super.moveForward(by: delta * 0.9)
     }
     
-    //TODO: Is this ever called?
+    //TODO: Is this ever called? Yes. It's called by handleDoubleTap in AreaScene.
     func setBoost(b: Bool) {
         if !docked {
             boosted = b
             if b {
                 speed = boostSpeed
                 thruster.particleScaleSpeed = -0.2
+                
+                if isHead {
+                    sprite.run(SKAction.sequence([SKAction.animate(with: TruckPiece.drillAnim,
+                            timePerFrame: 0.1,
+                            resize: false,
+                            restore: false),SKAction.repeatForever(SKAction.animate(with: TruckPiece.drillAnimation,
+                            timePerFrame: 0.1,
+                            resize: false,
+                            restore: false))]))
+                    
+                }
+                
+
             } else {
                 speed = normalSpeed
                 thruster.particleScaleSpeed = -0.4
+                
+                if isHead {
+                    sprite.removeAllActions()
+                    sprite.run(SKAction.animate(with: TruckPiece.drillAnim.reversed(),timePerFrame: 0.1, resize: false,restore: false))
+                }
             }
         }
     }
@@ -165,7 +207,7 @@ class TruckPiece: SpaceObject {
                 deltaMod = deltaMod * 0.75
                 turnMod = 300
                 turn(by: delta * turnMod)
-                thruster.particleBirthRate = speed * 4
+                //thruster.particleBirthRate = speed * 4
                 super.moveForward(by: deltaMod)
             }
         } else{
@@ -279,8 +321,12 @@ class TruckPiece: SpaceObject {
         //Capsule vs Asteroid and Debris collision
         if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
             self.addForce(vec: newNormal)
-            durability -= obj.impactDamage
-            print("OOF ouch! \(durability) hull remaining.")
+          
+            if !(isHead && boosted) {
+                durability -= obj.impactDamage
+                print("OOF ouch! \(durability) hull remaining.")
+            }
+            
             if !invincible && durability <= 0 {
                 onDestroy()
             }
@@ -307,8 +353,11 @@ class TruckPiece: SpaceObject {
             //Capsule vs Rival Capsule Collision
             if obj.sprite.name == "rival_capsule" {
                 self.addForce(vec: newNormal)
-                durability -= obj.impactDamage
-                print("OOF ouch! \(durability) hull remaining.")
+                if !(isHead && boosted) {
+                    durability -= obj.impactDamage
+                    print("OOF ouch! \(durability) hull remaining.")
+                }
+                          
                 if durability <= 0 {
                     onDestroy()
                 }
@@ -320,8 +369,11 @@ class TruckPiece: SpaceObject {
             //Rival Capsule vs Capsule Collision
             if obj.sprite.name == "capsule" {
                 self.addForce(vec: newNormal)
-                durability -= obj.impactDamage
-                print("OOF ouch! \(durability) hull remaining.")
+                if !(isHead && boosted) {
+                    durability -= obj.impactDamage
+                    print("OOF ouch! \(durability) hull remaining.")
+                }
+
                 if durability <= 0 {
                     onDestroy()
                 }
@@ -414,6 +466,8 @@ class TruckPiece: SpaceObject {
     func dockPiece(){
         print("DockingChain")
         sprite.isHidden = true
+        thruster.isHidden = true
+        thruster.particleBirthRate = 0
         speed = 0
         docked = true
 //        var piece: TruckPiece = getFirstPiece()

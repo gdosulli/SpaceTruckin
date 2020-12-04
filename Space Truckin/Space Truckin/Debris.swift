@@ -71,6 +71,12 @@ class Debris : SpaceObject {
             destroyed = true
             explode()
         
+            let rnum: Int = Int.random(in: 0...3)
+            for _ in 0...rnum {
+                dropItem(at: self.sprite.position)
+            }
+            
+            
             let duration = Double.random(in: 0.7...1.3)
             expand(amount: 0.2, duration: duration/3)
             let removeDate = Date().addingTimeInterval(duration)
@@ -96,7 +102,6 @@ class Debris : SpaceObject {
 //    }
     
     @objc func deleteSelf() {
-        dropItem(at: sprite.position)
         self.sprite.removeFromParent()
     }
 }
