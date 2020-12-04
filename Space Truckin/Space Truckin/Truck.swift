@@ -138,13 +138,15 @@ class TruckPiece: SpaceObject {
     
     //TODO: Is this ever called?
     func setBoost(b: Bool) {
-        boosted = b
-        if b {
-            speed = boostSpeed
-            thruster.particleScaleSpeed = -0.2
-        } else {
-            speed = normalSpeed
-            thruster.particleScaleSpeed = -0.4
+        if !docked {
+            boosted = b
+            if b {
+                speed = boostSpeed
+                thruster.particleScaleSpeed = -0.2
+            } else {
+                speed = normalSpeed
+                thruster.particleScaleSpeed = -0.4
+            }
         }
     }
     
@@ -154,10 +156,11 @@ class TruckPiece: SpaceObject {
         var turnMod = CGFloat(60)
 
         if docked {
-            
+            thruster.particleBirthRate = 0
+
         } else if lost {
             moveLost(by: delta)
-        } else if getFirstPiece().docked {
+        } else if getFirstPiece().docked { //Movement while 
             if !sprite.isHidden {
                 deltaMod = deltaMod * 0.75
                 turnMod = 300
@@ -331,6 +334,7 @@ class TruckPiece: SpaceObject {
         //print("pop")
         //change name to destroyed_capsule?
         if !invincible && !destroyed{
+            isImportant = false
             breakChain()
             self.followingPiece?.breakChain()
             dropItem(at: sprite.position)
