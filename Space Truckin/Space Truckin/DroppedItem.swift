@@ -73,7 +73,9 @@ class DroppedItem: SpaceObject {
         //possibly make func to pull into inventory
         
         // I want every piece to be able to collect items, but have them
-        if obj.sprite.name == "capsule" || obj.sprite.name == "rival_capsule" {
+        if obj.sprite.isHidden {
+            print("skipped hidden collision")
+        } else if obj.sprite.name == "capsule" || obj.sprite.name == "rival_capsule" {
             if !collected, let truckPiece = obj as? TruckPiece {
                 
                 var nextPiece: TruckPiece? = truckPiece.getFirstPiece()
