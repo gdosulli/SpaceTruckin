@@ -73,7 +73,7 @@ class Area {
         background?.zPosition = -100
         backgroundItems.append(background!)
         
-        let ss = SpaceStation()
+        let ss = TruckStop()
         //ss.spawn(at: CGPoint(x: CGFloat(Int.random(in: -300...300)), y: CGFloat(Int.random(in: 1000...1500))))//TODO change random ranges
         ss.spawn(at: CGPoint(x: 0, y: 1200))//Spawns such that player appears from the arm
         

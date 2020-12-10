@@ -29,7 +29,7 @@ class TruckPiece: SpaceObject {
     var invincible = false
     var maxLeashLength = CGFloat(300)
     
-    var dockedStation : SpaceStation?
+    var dockedStation : SpaceObject?
     
     var fuelingCounter:CGFloat = 0
 
@@ -482,8 +482,11 @@ class TruckPiece: SpaceObject {
     }
     
     func undockChain(){
-        if dockedStation != nil {
-            dockedStation?.sprite.isPaused = false
+        if let station = dockedStation as? SpaceStation  {
+            station.undock()
+            dockedStation = nil
+        } else if let truckStop = dockedStation as? TruckStop {
+            truckStop.undock()
             dockedStation = nil
         }
         for piece in getAllPieces(){

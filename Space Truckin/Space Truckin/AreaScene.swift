@@ -262,14 +262,14 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
     
         
         // need better way to delegate position on screen
-        let menuConroller: SKSpriteNode = SKSpriteNode(imageNamed: "Open_arrow")
-        menuConroller.position = CGPoint(x: cam.position.x + frameWidth, y: cam.position.y + frameHeight)
-        menuConroller.zPosition = 100
-        menuConroller.name = "action menu"
-        menuConroller.isUserInteractionEnabled = false
-        menuConroller.anchorPoint = CGPoint(x: 1, y: 1)
-        menuConroller.size = CGSize(width: frameWidth/5, height: frameHeight/5)
-        menu = DropDownMenu(controller: menuConroller, buttons: [], offset: 0)
+        let menuController: SKSpriteNode = SKSpriteNode(imageNamed: "Open_arrow")
+        menuController.position = CGPoint(x: cam.position.x + frameWidth, y: cam.position.y + frameHeight)
+        menuController.zPosition = 100
+        menuController.name = "action menu"
+        menuController.isUserInteractionEnabled = false
+        menuController.anchorPoint = CGPoint(x: 1, y: 1)
+        menuController.size = CGSize(width: frameWidth/5, height: frameHeight/5)
+        menu = DropDownMenu(controller: menuController, buttons: [], offset: 0)
         
         menu.add(SKSpriteNode(imageNamed: "Map_button"), called: "map")
         menu.add(SKSpriteNode(imageNamed: "Cargo_button"), called: "cargo")
