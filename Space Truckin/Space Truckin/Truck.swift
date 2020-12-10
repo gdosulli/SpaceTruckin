@@ -89,7 +89,7 @@ class TruckPiece: SpaceObject {
         thruster.zPosition = sprite.zPosition - 2
         thruster.position = sprite.position
     
-        isImportant = true
+        isImportant = true //TODO: Make sure this isnt causing a problem with despawning enemies
         sprite.name = "capsule"
     }
     
@@ -143,11 +143,7 @@ class TruckPiece: SpaceObject {
                     }
                 }
             }
-             
-            
         }
-        
-        
         thruster.targetNode = sprite.parent
         thruster.position = sprite.position
         
