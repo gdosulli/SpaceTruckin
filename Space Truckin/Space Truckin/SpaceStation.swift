@@ -32,7 +32,7 @@ class SpaceStation: SpaceObject {
         let physicsBodyPosition = CGPoint(x: sprite.position.x, y: sprite.position.y - sprite.size.height * 0.39)
         sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.height * 0.03, center: physicsBodyPosition)
         hullSprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: hullSprite.size.width * margin, height: margin * hullSprite.size.height))
-        sprite.zPosition = -10
+        sprite.zPosition = 10
         hullSprite.zPosition = sprite.zPosition + 1
         hullSprite.physicsBody?.isDynamic = false
         hullSprite.physicsBody?.categoryBitMask = CollisionCategories.SPACEOBJECT
