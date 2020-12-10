@@ -39,6 +39,8 @@ class TruckPiece: SpaceObject {
     
     var wallet = 0
     
+    var maxDurability = 3
+    
     convenience init(sprite s1: SKSpriteNode) {
         self.init(2, s1, nil, (1.3,1.0), (1.3,1.0), Inventory(max: 100, starting: 0), 100, 1, 0, 0)
     }

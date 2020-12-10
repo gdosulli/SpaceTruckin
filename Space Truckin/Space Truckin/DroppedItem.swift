@@ -17,7 +17,7 @@ class DroppedItem: SpaceObject {
     var lifeSpan: TimeInterval = 300.0
     var collected = false
     
-    static let filenames = ["Inventory_ScrapMetal", "Inventory_radioactiveMaterial",  "Inventory_PreciousMetal", "Inventory_water","Inventory_Oxygen", "Inventory_Stone" ]
+    static let filenames =  ["Inventory_ScrapMetal", "Inventory_radioactiveMaterial",  "Inventory_PreciousMetal", "Inventory_water","Inventory_Oxygen", "Inventory_Stone" ]
     
     init(sprite s1: SKSpriteNode, item i1: Item, speed: CGFloat, direction: CGFloat) {
         self.item = i1

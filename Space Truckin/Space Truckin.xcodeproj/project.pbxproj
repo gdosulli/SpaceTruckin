@@ -56,6 +56,7 @@
 		E392DF5025773DCB00D3CA4A /* SpaceStationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */; };
 		E392DF5425789C0500D3CA4A /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E392DF5325789C0500D3CA4A /* TitleScreen.swift */; };
 		E3BA2E8E2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA2E8D2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift */; };
+		E3BA2E932581ECF500AA16E6 /* CollectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA2E922581ECF500AA16E6 /* CollectionViews.swift */; };
 		E3C95F76256071740009E84E /* InterfaceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C95F75256071740009E84E /* InterfaceBar.swift */; };
 		E3C9603C256469DE0009E84E /* EffectBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C9603B256469DE0009E84E /* EffectBubbles.swift */; };
 		E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */; };
@@ -134,6 +135,7 @@
 		E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceStationMenu.swift; sourceTree = "<group>"; };
 		E392DF5325789C0500D3CA4A /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
 		E3BA2E8D2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceStationMenuViewController.swift; sourceTree = "<group>"; };
+		E3BA2E922581ECF500AA16E6 /* CollectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViews.swift; sourceTree = "<group>"; };
 		E3C95F75256071740009E84E /* InterfaceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceBar.swift; sourceTree = "<group>"; };
 		E3C9603B256469DE0009E84E /* EffectBubbles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectBubbles.swift; sourceTree = "<group>"; };
 		E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxyEmitter.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				82F81B252571866F00D5A160 /* InfoScreen.swift */,
 				E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */,
 				E3BA2E8D2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift */,
+				E3BA2E922581ECF500AA16E6 /* CollectionViews.swift */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -445,6 +448,7 @@
 				E3248BE2256E314100974CF6 /* EffectField.swift in Sources */,
 				82723AE825422E5B002A1E53 /* Asteroid.swift in Sources */,
 				E3C9603C256469DE0009E84E /* EffectBubbles.swift in Sources */,
+				E3BA2E932581ECF500AA16E6 /* CollectionViews.swift in Sources */,
 				E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */,
 				7F5C093C255324B80028F808 /* MenuViewController.swift in Sources */,
 				E35AE45F25659891003DCE34 /* SpaceStation.swift in Sources */,

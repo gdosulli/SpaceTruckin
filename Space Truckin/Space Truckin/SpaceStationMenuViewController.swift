@@ -12,7 +12,7 @@ import UIKit
 class SpaceStationMenuView: UIViewController {
     
     @IBOutlet var topView: UICollectionView!
-    @IBOutlet var middleView: UICollectionView!
+    @IBOutlet var middleView: TruckCollectionView!
     @IBOutlet var bottomView: UICollectionView!
     
     
@@ -24,5 +24,9 @@ class SpaceStationMenuView: UIViewController {
     var playerGarage = [TruckPiece]()
     
     var playerTruckHead: TruckPiece!
+    
+    override func viewDidLoad() {
+        middleView.truckHead = playerTruckHead
+    }
     
 }
