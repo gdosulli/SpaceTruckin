@@ -27,7 +27,7 @@ class TruckPiece: SpaceObject {
     var isHead = false
     var circle = false
     var invincible = false
-    var maxLeashLength = CGFloat(300)
+    var maxLeashLength = CGFloat(350)
     
     var dockedStation : SpaceObject?
     
