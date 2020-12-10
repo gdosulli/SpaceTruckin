@@ -75,6 +75,7 @@ struct DropDownMenu {
     var infoScreen: InfoScreen!
     var viewingSector: String!
     
+    
     func move(menu position: CGPoint, map center: CGPoint, on scene: SKScene){
         controller.position = position
         
@@ -224,6 +225,8 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
     var boostLocked = false
     
     var drillAnim:[SKTexture] = []
+
+    var viewController: UIViewController!
 
 
     override func didMove(to view: SKView) {

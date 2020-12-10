@@ -147,6 +147,7 @@ class TruckStop : SpaceObject {
                 if piece.isHead && piece.releashingFrames == 0{
                     dock(piece)
                     shortOpen()
+//                    showMenu(with: piece)
                 }
                 if sprite.isPaused && piece.getFirstPiece().docked{
                     piece.dockPiece()
@@ -159,4 +160,17 @@ class TruckStop : SpaceObject {
     override func getChildren() -> [SKNode?] {
         return super.getChildren() + [signSprite]
     }
+    
+    
+    
+    func showMenu(with head: TruckPiece) {
+        let menuView = SpaceStationMenuView()
+        menuView.playerTruckHead = head
+        let scene = sprite.parent as! AreaScene
+        let vc = scene.viewController!
+        
+        vc.present(menuView, animated: true, completion: nil)
+    }
+    
+    
 }

@@ -44,12 +44,9 @@ class TruckPieceCollectionCell: UICollectionViewCell {
         inventoryItemImage.image = iconImage
     }
     
-    @IBAction func toggleInfo(_ sender: Any) {
-        infoView.isHidden = !infoView.isHidden
-    }
 }
 
-class TruckCollectionView: UICollectionView, UICollectionViewDataSource {
+class TruckCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var truckHead: TruckPiece!
 
@@ -70,6 +67,12 @@ class TruckCollectionView: UICollectionView, UICollectionViewDataSource {
         return cell
         
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = (collectionView.cellForItem(at: indexPath) as! TruckPieceCollectionCell)
+        cell.infoView.isHidden = !cell.infoView.isHidden
+    }
+    
     
 }
 

@@ -194,9 +194,6 @@
                                                         </view>
                                                     </subviews>
                                                     <gestureRecognizers/>
-                                                    <connections>
-                                                        <outletCollection property="gestureRecognizers" destination="HdM-d5-a4B" appends="YES" id="dlC-UV-NnV"/>
-                                                    </connections>
                                                 </collectionViewCellContentView>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
@@ -296,11 +293,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a5P-sH-678" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="HdM-d5-a4B">
-                    <connections>
-                        <action selector="toggleInfo:" destination="0Wj-rm-MgP" id="MOy-Ta-HVm"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1575.6696428571429" y="-788.40579710144937"/>
         </scene>
