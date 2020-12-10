@@ -33,6 +33,8 @@ class TruckPieceCollectionCell: UICollectionViewCell {
         healthLabel.text = "\(piece.durability)/\(piece.maxDurability) HP"
     }
     
+    
+    // todo: the truck sprite gets set to the wrong one after drill animation finishes
     func setImages() {
         let image: UIImage = UIImage(cgImage: (piece.sprite.texture?.cgImage())!, scale: 1.0, orientation: UIImage.Orientation.right)
         pieceImage.image = image
