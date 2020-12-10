@@ -27,6 +27,8 @@ class SpaceStationMenuView: UIViewController {
     
     override func viewDidLoad() {
         middleView.truckHead = playerTruckHead
+        middleView.delegate = middleView
+        middleView.dataSource = middleView
     }
     
 }

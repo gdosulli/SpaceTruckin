@@ -52,7 +52,7 @@ class Debris : SpaceObject {
         let newNormal = reboundVector(from: contact.contactPoint).mult(by: coeff)
 
         if obj.sprite.isHidden {
-            print("skipped hidden collision")
+            //print("skipped hidden collision")
         } else if obj.sprite.name == "item" {
             
         } else if obj.sprite.name == "asteroid" {

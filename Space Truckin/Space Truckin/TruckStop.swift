@@ -134,7 +134,7 @@ class TruckStop : SpaceObject {
         let newNormal = reboundVector(from: contact.contactPoint).mult(by: coeff)
         
         if obj.sprite.isHidden {
-            print("skipped hidden collision")
+            //print("skipped hidden collision")
         } else if obj.sprite.name == "item" {
             
         } else if obj.sprite.name == "asteroid" {
@@ -147,11 +147,14 @@ class TruckStop : SpaceObject {
                 if piece.isHead && piece.releashingFrames == 0{
                     dock(piece)
                     shortOpen()
-//                    showMenu(with: piece)
                 }
                 if sprite.isPaused && piece.getFirstPiece().docked{
                     piece.dockPiece()
                     shortOpen()
+                    
+                    if piece.getLastPiece() === piece {
+                        showMenu(with: piece.getFirstPiece())
+                    }
                 }
             }
         }
@@ -164,7 +167,10 @@ class TruckStop : SpaceObject {
     
     
     func showMenu(with head: TruckPiece) {
-        let menuView = SpaceStationMenuView()
+        
+        // TODO: get this from the storyboard
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let menuView = storyboard.instantiateViewController(withIdentifier: "stationMenu") as! SpaceStationMenuView
         menuView.playerTruckHead = head
         let scene = sprite.parent as! AreaScene
         let vc = scene.viewController!
