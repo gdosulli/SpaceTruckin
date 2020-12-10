@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		754B957C2581DFAE00F814A4 /* TruckStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754B957B2581DFAE00F814A4 /* TruckStop.swift */; };
 		7F5C093C255324B80028F808 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5C093B255324B80028F808 /* MenuViewController.swift */; };
 		7F75732F2566A9AB00C36CA5 /* MapBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F75732E2566A9AB00C36CA5 /* MapBuilder.swift */; };
 		8270C0B8254B73F700424235 /* StarryBackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8270C0B7254B73F700424235 /* StarryBackground.sks */; };
@@ -79,6 +80,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		754B957B2581DFAE00F814A4 /* TruckStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruckStop.swift; sourceTree = "<group>"; };
 		7F5C093B255324B80028F808 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		7F75732E2566A9AB00C36CA5 /* MapBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapBuilder.swift; sourceTree = "<group>"; };
 		8270C0B7254B73F700424235 /* StarryBackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StarryBackground.sks; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				E373A3B72554B44B00D04135 /* Truck.swift */,
 				E35AE46C256BA082003DCE34 /* RivalTruck.swift */,
 				E35AE45E25659891003DCE34 /* SpaceStation.swift */,
+				754B957B2581DFAE00F814A4 /* TruckStop.swift */,
 				E373A3B12554AB5C00D04135 /* sounds */,
 				E34AB9B8252BAE6D007AF254 /* AppDelegate.swift */,
 				E34AB9C5252BAE70007AF254 /* Assets.xcassets */,
@@ -428,6 +431,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E35AE46325685AF1003DCE34 /* Area.swift in Sources */,
+				754B957C2581DFAE00F814A4 /* TruckStop.swift in Sources */,
 				E3248BE0256DB43500974CF6 /* Shield.swift in Sources */,
 				E35AE46B256A577A003DCE34 /* AreaScene.swift in Sources */,
 				E3BA2E8E2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift in Sources */,

@@ -1,47 +1,51 @@
 //
-//  SpaceStation.swift
+//  TruckStop.swift
 //  Space Truckin
 //
-//  Created by Ethan Nerney on 11/18/20.
+//  Created by Nathaniel Youngren on 12/9/20.
 //  Copyright © 2020 SpaceTruckin. All rights reserved.
 //
 
 import SpriteKit
 import GameplayKit
 
-class SpaceStation: SpaceObject {
-    var hullSprite: SKSpriteNode
-    var armAngle: CGFloat = 0
+class TruckStop : SpaceObject {
+    let signSprite: SKSpriteNode
+    var signAngle: CGFloat = 0
     var dimension: CGFloat
-    var stationMenu: SpaceStationScreen
     var area: Area!
+    var signOffset : CGFloat = 880
+    var open = false
+    var closeTimer = 0
+    
     
     convenience init() {
-        self.init(-1, SKSpriteNode(imageNamed: "space_station_arm_1"), (2000, 2000), (500, 500), Inventory(), 0, 30, 0, 100)
+        self.init(-1, SKSpriteNode(imageNamed: "truck_stop_closed"), (1800, 1800), (500, 500), Inventory(), 0, 30, 0, 100)
     }
     
     override init(_ durability: Int, _ sprite: SKSpriteNode, _ xRange: (CGFloat, CGFloat), _ yRange: (CGFloat, CGFloat), _ inventory: Inventory, _ speed: CGFloat, _ rotation: CGFloat, _ targetAngle: CGFloat, _ boostSpeed: CGFloat) {
-        hullSprite = SKSpriteNode(imageNamed: "space_station_hull_1")
         dimension = CGFloat.random(in: xRange.0...xRange.1)
-        hullSprite.size = CGSize(width: dimension, height: dimension)
-        sprite.size = CGSize(width: dimension, height: 1.2 * dimension)
-        sprite.zRotation = armAngle
+        signSprite = SKSpriteNode(imageNamed: "truck_stop_sign")
         
-        let margin: CGFloat = 0.8
-        //sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: sprite.size.width * 0.2, height: margin * sprite.size.height))
-        let physicsBodyPosition = CGPoint(x: sprite.position.x, y: sprite.position.y - sprite.size.height * 0.4)
-        sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.height * 0.05, center: physicsBodyPosition)
-        hullSprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: hullSprite.size.width * margin, height: margin * hullSprite.size.height))
-        sprite.zPosition = 10
-        hullSprite.zPosition = sprite.zPosition - 1
-        hullSprite.physicsBody?.isDynamic = false
-        hullSprite.physicsBody?.categoryBitMask = CollisionCategories.SPACEOBJECT
-        hullSprite.physicsBody?.contactTestBitMask = CollisionCategories.SPACEOBJECT
-        hullSprite.physicsBody?.collisionBitMask = 0
-        
-        stationMenu = SpaceStationScreen()
         
         super.init(durability, sprite, xRange, yRange, inventory, 0, rotation, targetAngle, boostSpeed)
+        
+        signSprite.size = CGSize(width: dimension * 0.2, height: dimension * 0.2)
+        sprite.size = CGSize(width: dimension, height: dimension)
+        sprite.zRotation = signAngle
+
+        let margin: CGFloat = 0.8
+        //sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: sprite.size.width * 0.2, height: margin * sprite.size.height))
+        sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.height * 0.06)
+        sprite.zPosition = -10
+        signSprite.zPosition = sprite.zPosition + 1
+        signSprite.physicsBody?.isDynamic = false
+        signSprite.physicsBody?.categoryBitMask = 0
+        signSprite.physicsBody?.contactTestBitMask = 0
+        signSprite.physicsBody?.collisionBitMask = 0
+        
+        //stationMenu = SpaceStationScreen()
+        
         sprite.physicsBody?.isDynamic = false
         
         isImportant = true
@@ -52,14 +56,10 @@ class SpaceStation: SpaceObject {
     }
     
     override func spawn(at spawnPoint: CGPoint) {
-        sprite.name = "station_arm"
-        hullSprite.name = "station"
+        sprite.name = "truck_stop"
+        signSprite.name = "truck_sign"
         sprite.position = spawnPoint
-        hullSprite.position = spawnPoint
-        
-        
-        // so the arm is facing to the right at spawn
-        sprite.zRotation = 1.57
+        signSprite.position = CGPoint(x: spawnPoint.x, y: spawnPoint.y)
         
         // setup arm to rotate at random speed
         let spinSpeed = Double.random(in: 2...5) * Double(dimension / 25)
@@ -69,7 +69,30 @@ class SpaceStation: SpaceObject {
         action.append(delay)
         action.append(rotateAction)
         // run rotation
-        sprite.run(SKAction.sequence(action))
+        signSprite.run(SKAction.sequence(action))
+    }
+    
+    func toggleDoor(){
+        if open {
+            closeDoor()
+        } else {
+            openDoor()
+        }
+    }
+    
+    func shortOpen(){
+        openDoor()
+        closeTimer = 10
+    }
+    
+    func openDoor(){
+        sprite.texture = SKTexture(imageNamed: "truck_stop_open")
+        open = true
+    }
+    
+    func closeDoor(){
+        sprite.texture = SKTexture(imageNamed: "truck_stop_closed")
+        open = false
     }
     
     func dock(_ piece: TruckPiece){
@@ -88,7 +111,6 @@ class SpaceStation: SpaceObject {
         //remove head reference?
         //hide screen
         print("UNDOCKED")
-
     }
     
     override func move(by delta: CGFloat) {
@@ -96,7 +118,14 @@ class SpaceStation: SpaceObject {
     }
     
     override func update(by delta: CGFloat) {
-        hullSprite.position = sprite.position
+        signAngle = signSprite.zRotation + CGFloat.pi/2
+        signSprite.position = CGPoint(x: sprite.position.x + signOffset*cos(signAngle), y: sprite.position.y+signOffset*sin(signAngle))
+        if closeTimer > 0 {
+            closeTimer -= 1
+            if closeTimer == 0 {
+                closeDoor()
+            }
+        }
     }
     
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
@@ -117,15 +146,17 @@ class SpaceStation: SpaceObject {
             if !piece.docked {
                 if piece.isHead && piece.releashingFrames == 0{
                     dock(piece)
+                    shortOpen()
                 }
                 if sprite.isPaused && piece.getFirstPiece().docked{
                     piece.dockPiece()
+                    shortOpen()
                 }
             }
         }
     }
     
     override func getChildren() -> [SKNode?] {
-        return super.getChildren() + [hullSprite]
+        return super.getChildren() + [signSprite]
     }
 }
