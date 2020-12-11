@@ -78,7 +78,7 @@ class Asteroid : SpaceObject {
 
         //print("asteroid on impact with \(obj.sprite.name!)")
         if obj.sprite.isHidden {
-            print("skipped hidden collision")
+            
         } else if obj.sprite.name == "item" {
             
         } else if obj.sprite.name == "asteroid" {

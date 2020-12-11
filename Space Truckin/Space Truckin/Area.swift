@@ -73,11 +73,14 @@ class Area {
         background?.zPosition = -100
         backgroundItems.append(background!)
         
-        let ss = TruckStop()
+        let ss = SpaceStation()
+        let ts = TruckStop()
+
         //ss.spawn(at: CGPoint(x: CGFloat(Int.random(in: -300...300)), y: CGFloat(Int.random(in: 1000...1500))))//TODO change random ranges
         ss.spawn(at: CGPoint(x: 0, y: 1200))//Spawns such that player appears from the arm
+        ts.spawn(at: CGPoint(x: 7000, y: 1200))
         
-        uniqueItems = [ss]
+        uniqueItems = [ss, ts]
         initialItems = uniqueItems
     }
     
