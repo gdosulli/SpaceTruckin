@@ -310,7 +310,9 @@ class Area {
                 print("rip")
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let deathScreen = storyboard.instantiateViewController(identifier: "deathScreen")
+                deathScreen.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
                 scene?.viewController.present(deathScreen, animated: true, completion: nil)
+
             }
         }
     }

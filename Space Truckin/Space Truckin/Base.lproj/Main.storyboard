@@ -270,7 +270,6 @@
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="M0W-vv-XKj"/>
-                        <color key="backgroundColor" systemColor="systemOrangeColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="n54-8C-som" secondAttribute="bottom" id="16H-FC-9WP"/>
                             <constraint firstItem="gtY-iq-g9Z" firstAttribute="leading" secondItem="CU7-2C-U6m" secondAttribute="leading" id="5Si-KI-zWl"/>
@@ -404,9 +403,6 @@
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
             <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
