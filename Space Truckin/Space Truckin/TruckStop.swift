@@ -59,17 +59,15 @@ class TruckStop : SpaceObject {
         sprite.name = "truck_stop"
         signSprite.name = "truck_sign"
         sprite.position = spawnPoint
+        sprite.zRotation = CGFloat.random(in: 0...CGFloat.pi*2)
         signSprite.position = CGPoint(x: spawnPoint.x, y: spawnPoint.y)
-        
+        signAngle = CGFloat.random(in: 0...CGFloat.pi*2)
+        signSprite.zRotation = signAngle
         // setup arm to rotate at random speed
         let spinSpeed = Double.random(in: 2...5) * Double(dimension / 25)
-        var action  = [SKAction]()
         let rotateAction = SKAction.repeatForever(SKAction.rotate(byAngle: rotation, duration: spinSpeed))
-        let delay = SKAction.wait(forDuration: 4)
-        action.append(delay)
-        action.append(rotateAction)
         // run rotation
-        signSprite.run(SKAction.sequence(action))
+        signSprite.run(rotateAction)
     }
     
     func toggleDoor(){

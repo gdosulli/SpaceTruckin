@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		754B957C2581DFAE00F814A4 /* TruckStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754B957B2581DFAE00F814A4 /* TruckStop.swift */; };
+		754B95842582E05E00F814A4 /* sparks.sks in Resources */ = {isa = PBXBuildFile; fileRef = 754B95832582E05E00F814A4 /* sparks.sks */; };
 		7F5C093C255324B80028F808 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5C093B255324B80028F808 /* MenuViewController.swift */; };
 		7F75732F2566A9AB00C36CA5 /* MapBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F75732E2566A9AB00C36CA5 /* MapBuilder.swift */; };
 		8270C0B8254B73F700424235 /* StarryBackground.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8270C0B7254B73F700424235 /* StarryBackground.sks */; };
@@ -82,6 +83,7 @@
 
 /* Begin PBXFileReference section */
 		754B957B2581DFAE00F814A4 /* TruckStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruckStop.swift; sourceTree = "<group>"; };
+		754B95832582E05E00F814A4 /* sparks.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = sparks.sks; sourceTree = "<group>"; };
 		7F5C093B255324B80028F808 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		7F75732E2566A9AB00C36CA5 /* MapBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapBuilder.swift; sourceTree = "<group>"; };
 		8270C0B7254B73F700424235 /* StarryBackground.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StarryBackground.sks; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				E392DF4925719D2800D3CA4A /* boostEmitter2.sks */,
 				E392DF4B25719DD500D3CA4A /* boostEmitter3.sks */,
 				E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */,
+				754B95832582E05E00F814A4 /* sparks.sks */,
 				82F81B252571866F00D5A160 /* InfoScreen.swift */,
 				E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */,
 				E3BA2E8D2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift */,
@@ -399,6 +402,7 @@
 				E373A3B22554AC7500D04135 /* dark_space.m4a in Resources */,
 				E392DF4A25719D2800D3CA4A /* boostEmitter2.sks in Resources */,
 				E34AB9F5252BBD3F007AF254 /* sparkEmitter.sks in Resources */,
+				754B95842582E05E00F814A4 /* sparks.sks in Resources */,
 				E392DF4E2571B67000D3CA4A /* radioactiveDecay.sks in Resources */,
 				E34AB9F7252BBDC9007AF254 /* magicEmitter.sks in Resources */,
 				E34AB9C4252BAE6D007AF254 /* Main.storyboard in Resources */,

@@ -27,7 +27,7 @@ class TruckPiece: SpaceObject {
     var isHead = false
     var circle = false
     var invincible = false
-    var maxLeashLength = CGFloat(300)
+    var maxLeashLength = CGFloat(350)
     
     var dockedStation : SpaceObject?
     
@@ -151,7 +151,6 @@ class TruckPiece: SpaceObject {
         
         currentAngle = sprite.zRotation - 3.14/2
         thruster.emissionAngle = currentAngle
-
     }
     
     //Behavior for lost pieces
@@ -178,10 +177,8 @@ class TruckPiece: SpaceObject {
                             timePerFrame: 0.1,
                             resize: false,
                             restore: false))]))
-                    
-                }
-                
 
+                }
             } else {
                 speed = normalSpeed
                 thruster.particleScaleSpeed = -0.4
@@ -206,7 +203,7 @@ class TruckPiece: SpaceObject {
             moveLost(by: delta)
         } else if getFirstPiece().docked { //Movement while 
             if !sprite.isHidden {
-                deltaMod = deltaMod * 0.75
+                deltaMod = deltaMod * 1.5
                 turnMod = 300
                 turn(by: delta * turnMod)
                 //thruster.particleBirthRate = speed * 4

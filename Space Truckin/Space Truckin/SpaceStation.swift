@@ -24,16 +24,16 @@ class SpaceStation: SpaceObject {
         hullSprite = SKSpriteNode(imageNamed: "space_station_hull_1")
         dimension = CGFloat.random(in: xRange.0...xRange.1)
         hullSprite.size = CGSize(width: dimension, height: dimension)
-        sprite.size = CGSize(width: dimension, height: 1.2 * dimension)
+        sprite.size = CGSize(width: dimension, height: 1.5 * dimension)
         sprite.zRotation = armAngle
         
         let margin: CGFloat = 0.8
         //sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: sprite.size.width * 0.2, height: margin * sprite.size.height))
-        let physicsBodyPosition = CGPoint(x: sprite.position.x, y: sprite.position.y - sprite.size.height * 0.4)
-        sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.height * 0.05, center: physicsBodyPosition)
+        let physicsBodyPosition = CGPoint(x: sprite.position.x, y: sprite.position.y - sprite.size.height * 0.39)
+        sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.height * 0.03, center: physicsBodyPosition)
         hullSprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: hullSprite.size.width * margin, height: margin * hullSprite.size.height))
         sprite.zPosition = 10
-        hullSprite.zPosition = sprite.zPosition - 1
+        hullSprite.zPosition = sprite.zPosition + 1
         hullSprite.physicsBody?.isDynamic = false
         hullSprite.physicsBody?.categoryBitMask = CollisionCategories.SPACEOBJECT
         hullSprite.physicsBody?.contactTestBitMask = CollisionCategories.SPACEOBJECT
@@ -72,16 +72,19 @@ class SpaceStation: SpaceObject {
         sprite.run(SKAction.sequence(action))
     }
     
-    func dock(_ piece: TruckPiece){
+    func dockHead(_ piece: TruckPiece){
         sprite.isPaused = true
         piece.setBoost(b: false)
-        piece.dockedStation = self
         piece.dockPiece()
-        piece.inventory.items[ItemType.Oxygen] = piece.inventory.getMaxCapacity(for: ItemType.Oxygen)
+        if piece.isHead{
+            piece.dockedStation = self
+            piece.inventory.items[ItemType.Oxygen] = piece.inventory.getMaxCapacity(for: ItemType.Oxygen)
+        }
         //set head
         //show screen
         print("DOCKED")
     }
+    
     
     func undock(){
         sprite.isPaused = false
@@ -116,7 +119,7 @@ class SpaceStation: SpaceObject {
             let piece = obj as! TruckPiece
             if !piece.docked {
                 if piece.isHead && piece.releashingFrames == 0{
-                    dock(piece)
+                    dockHead(piece)
                 }
                 if sprite.isPaused && piece.getFirstPiece().docked{
                     piece.dockPiece()
