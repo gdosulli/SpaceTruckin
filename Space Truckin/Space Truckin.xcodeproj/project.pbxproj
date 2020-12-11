@@ -59,6 +59,7 @@
 		E392DF5425789C0500D3CA4A /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E392DF5325789C0500D3CA4A /* TitleScreen.swift */; };
 		E3BA2E8E2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA2E8D2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift */; };
 		E3BA2E932581ECF500AA16E6 /* CollectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA2E922581ECF500AA16E6 /* CollectionViews.swift */; };
+		E3BA2EA42583F5A000AA16E6 /* TruckStopHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA2EA32583F5A000AA16E6 /* TruckStopHub.swift */; };
 		E3C95F76256071740009E84E /* InterfaceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C95F75256071740009E84E /* InterfaceBar.swift */; };
 		E3C9603C256469DE0009E84E /* EffectBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C9603B256469DE0009E84E /* EffectBubbles.swift */; };
 		E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */; };
@@ -140,6 +141,7 @@
 		E392DF5325789C0500D3CA4A /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
 		E3BA2E8D2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceStationMenuViewController.swift; sourceTree = "<group>"; };
 		E3BA2E922581ECF500AA16E6 /* CollectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViews.swift; sourceTree = "<group>"; };
+		E3BA2EA32583F5A000AA16E6 /* TruckStopHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruckStopHub.swift; sourceTree = "<group>"; };
 		E3C95F75256071740009E84E /* InterfaceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceBar.swift; sourceTree = "<group>"; };
 		E3C9603B256469DE0009E84E /* EffectBubbles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectBubbles.swift; sourceTree = "<group>"; };
 		E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxyEmitter.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 				E34AB9C7252BAE70007AF254 /* LaunchScreen.storyboard */,
 				E34AB9F6252BBDC9007AF254 /* magicEmitter.sks */,
 				E34AB9C2252BAE6D007AF254 /* Main.storyboard */,
+				E3BA2EA32583F5A000AA16E6 /* TruckStopHub.swift */,
 				E392DF5325789C0500D3CA4A /* TitleScreen.swift */,
 				7F5C093B255324B80028F808 /* MenuViewController.swift */,
 				E33F614825422EC4005BAB37 /* Movable.swift */,
@@ -446,6 +449,7 @@
 				E3248BDE256DB36300974CF6 /* Spawner.swift in Sources */,
 				E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */,
 				82F81B262571866F00D5A160 /* InfoScreen.swift in Sources */,
+				E3BA2EA42583F5A000AA16E6 /* TruckStopHub.swift in Sources */,
 				E3899076255CB6350037B507 /* DroppedItem.swift in Sources */,
 				E33F6147254221C9005BAB37 /* Inventory.swift in Sources */,
 				E373A3B92554B44B00D04135 /* Truck.swift in Sources */,

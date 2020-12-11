@@ -15,6 +15,11 @@ class SpaceStationMenuView: UIViewController {
     @IBOutlet var middleView: TruckCollectionView!
     @IBOutlet var bottomView: UICollectionView!
     
+    @IBAction func quitMenu(_ sender: Any) {
+        // save state
+        self.dismiss(animated: true, completion: nil)
+        
+    }
     
     // what the space station's selling, and at what price
     var spaceStationGoods = [(Item, Int)]()

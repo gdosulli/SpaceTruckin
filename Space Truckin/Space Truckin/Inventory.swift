@@ -30,6 +30,7 @@ extension Item {
 class Inventory {
     var maxCapacities : [ItemType:Int]
     var items : [ItemType:Int]
+    var itemType: ItemType?
     
     init() {
         maxCapacities = [ItemType:Int]()
@@ -49,6 +50,8 @@ class Inventory {
     init(for itemType: ItemType, max: Int, starting current: Int) {
         maxCapacities = [ItemType:Int]()
         items = [ItemType:Int]()
+        
+        self.itemType = itemType
         
         for type in ItemType.allCases {
             if type == itemType {

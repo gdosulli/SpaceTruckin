@@ -98,7 +98,10 @@ class TruckStop : SpaceObject {
         piece.setBoost(b: false)
         piece.dockedStation = self
         piece.dockPiece()
+        // entering a truck stop refuels you
         piece.inventory.items[ItemType.Oxygen] = piece.inventory.getMaxCapacity(for: ItemType.Oxygen)
+        // entering a truck stop heals you
+        piece.durability = piece.maxDurability
         //set head
         //show screen
         print("DOCKED")
@@ -168,12 +171,15 @@ class TruckStop : SpaceObject {
         
         // TODO: get this from the storyboard
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let menuView = storyboard.instantiateViewController(withIdentifier: "stationMenu") as! SpaceStationMenuView
-        menuView.playerTruckHead = head
+//        let menuView = storyboard.instantiateViewController(withIdentifier: "stationMenu") as! SpaceStationMenuView
+//        menuView.playerTruckHead = head
+        // not as simple as I had hoped with the new setup, I need to create a class for the nav controller that holds all the information that needs to get passed, with method for when the the view is preparing to disappear that sends that in right info
+        let nav = storyboard.instantiateViewController(identifier: "truckStopHome") as! TruckStopHubViewController
+        nav.head = head
         let scene = sprite.parent as! AreaScene
         let vc = scene.viewController!
         
-        vc.present(menuView, animated: true, completion: nil)
+        vc.present(nav, animated: true, completion: nil)
     }
     
     

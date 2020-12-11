@@ -402,8 +402,10 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
             case "map":
                 //TODO: switch to map view
                 menu.showMap()
+//                menu.clicked()
             case "cargo":
                 menu.showInfoScreen()
+//                menu.clicked()
             case "stop",
                  "start":
                 menu.stop()
@@ -418,8 +420,8 @@ class AreaScene: SKScene, SKPhysicsContactDelegate {
             case "pause":
                 //TODO: need to actually pause the game
                 currentArea.gameIsPaused = !currentArea.gameIsPaused
-                menu.clicked()
-                musicPlayer.skip()
+                //menu.clicked()
+                //musicPlayer.skip()
             case "capsule":
                 print("tap registered on capsule")
                 if let selectedPiece = currentArea.player.getClickedPiece(from: touchedNode as! SKSpriteNode) {

@@ -15,9 +15,10 @@ class TruckPieceCollectionCell: UICollectionViewCell {
     @IBOutlet var infoView: UIView!
     @IBOutlet var pieceNameLabel: UILabel!
     @IBOutlet var inventoryItemImage: UIImageView!
+    @IBOutlet var storageBar: UIView!
     
     @IBOutlet var healthLabel: UILabel!
-    @IBOutlet var healingPriceLabel: UILabel!
+ 
     
     
     static let itemFiles: [ItemType: String] = [ItemType.Scrap: "Inventory_ScrapMetal", .Nuclear: "Inventory_radioactiveMaterial",  .Precious: "Inventory_PreciousMetal", .Water:
@@ -36,15 +37,41 @@ class TruckPieceCollectionCell: UICollectionViewCell {
     
     // todo: the truck sprite gets set to the wrong one after drill animation finishes
     func setImages() {
-        let image: UIImage = UIImage(cgImage: (piece.sprite.texture?.cgImage())!, scale: 1.0, orientation: UIImage.Orientation.right)
-        pieceImage.image = image
         
-        let item = piece.inventory.getAll().max(by: {i1, i2 in
-            return i1.value > i2.value
-        })
+        if piece.isHead {
+            let image = UIImage(named: "space_truck_cab")
+    
+            pieceImage.image = UIImage(ciImage: CIImage(image: image!)!, scale: 1, orientation: UIImage.Orientation.right)
+        } else {
+            let image: UIImage = UIImage(cgImage: (piece.sprite.texture?.cgImage())!, scale: 1.0, orientation: UIImage.Orientation.right)
+            pieceImage.image = image
+        }
         
-        let iconImage = UIImage(named: TruckPieceCollectionCell.itemFiles[item!.key]!)
-        inventoryItemImage.image = iconImage
+        if let type = piece.inventory.itemType {
+            let iconImage = UIImage(named: TruckPieceCollectionCell.itemFiles[type]!)
+            inventoryItemImage.image = iconImage
+            let maxWidth = 75
+            let p = piece.inventory.items[type]! / piece.inventory.getMaxCapacity(for: type)
+            var color: UIColor
+            if type == .Oxygen {
+                color = UIColor.red.toColor(color: UIColor.green, percentage: CGFloat(p))
+            } else {
+                color = UIColor.green.toColor(color: UIColor.red, percentage: CGFloat(p))
+            }
+            storageBar.backgroundColor = color
+            storageBar.frame.size.width = CGFloat(maxWidth) * CGFloat(p)
+            
+        } else {
+            let item = piece.inventory.getAll().max(by: {i1, i2 in
+                return i1.value > i2.value
+            })
+            
+            let iconImage = UIImage(named: TruckPieceCollectionCell.itemFiles[item!.key]!)
+            inventoryItemImage.image = iconImage
+        }
+        
+        // i gotta set the inventory bar here too but I don't want to right now
+
         
         infoView.isHidden = true
     }
@@ -71,7 +98,7 @@ class TruckCollectionView: UICollectionView, UICollectionViewDataSource, UIColle
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         print("cellForItemAt")
-        let piece = truckHead.getAllPieces()[truckHead.getAllPieces().count - indexPath.row - 1]
+        let piece = truckHead.getAllPieces().reversed()[indexPath.row]
         
         let cell = dequeueReusableCell(withReuseIdentifier: "TruckCell", for: indexPath) as! TruckPieceCollectionCell
         

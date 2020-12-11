@@ -378,6 +378,10 @@ class TruckPiece: SpaceObject {
                 if durability <= 0 {
                     onDestroy()
                 }
+            } else if obj.sprite.name == "rival_capsule" && isHead {
+                if let _ = obj as? RivalTruckPiece {
+                    self.addForce(vec: newNormal)
+                }
             }
         }
     }
