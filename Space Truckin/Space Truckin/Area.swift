@@ -304,6 +304,14 @@ class Area {
                     enemy.changeAngleTo(point: player.head.sprite.position)
                 }
             }
+            
+            // check for death
+            if player.head.durability <= 0 {
+                print("rip")
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let deathScreen = storyboard.instantiateViewController(identifier: "deathScreen")
+                scene?.viewController.present(deathScreen, animated: true, completion: nil)
+            }
         }
     }
     

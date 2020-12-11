@@ -77,7 +77,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="n54-8C-som">
-                                <rect key="frame" x="0.0" y="0.0" width="891" height="402"/>
+                                <rect key="frame" x="50" y="0.0" width="891" height="402"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" springLoaded="YES" id="jQh-hh-8QS">
                                         <rect key="frame" x="0.0" y="0.0" width="891" height="127.33333333333333"/>
@@ -264,14 +264,20 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemPurpleColor"/>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gtY-iq-g9Z">
+                                <rect key="frame" x="0.0" y="0.0" width="22.333333333333332" height="22"/>
+                                <state key="normal" image="xmark.seal.fill" catalog="system"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="M0W-vv-XKj"/>
-                        <color key="backgroundColor" systemColor="linkColor"/>
+                        <color key="backgroundColor" systemColor="systemOrangeColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="n54-8C-som" secondAttribute="bottom" id="16H-FC-9WP"/>
+                            <constraint firstItem="gtY-iq-g9Z" firstAttribute="leading" secondItem="CU7-2C-U6m" secondAttribute="leading" id="5Si-KI-zWl"/>
                             <constraint firstItem="n54-8C-som" firstAttribute="centerX" secondItem="CU7-2C-U6m" secondAttribute="centerX" id="BvQ-K9-4qy"/>
-                            <constraint firstItem="n54-8C-som" firstAttribute="leading" secondItem="CU7-2C-U6m" secondAttribute="leading" id="IWM-vy-DFW"/>
-                            <constraint firstAttribute="trailing" secondItem="n54-8C-som" secondAttribute="trailing" id="XgO-AA-YAO"/>
+                            <constraint firstItem="n54-8C-som" firstAttribute="leading" secondItem="CU7-2C-U6m" secondAttribute="leading" constant="50" id="IWM-vy-DFW"/>
+                            <constraint firstAttribute="trailing" secondItem="n54-8C-som" secondAttribute="trailing" constant="50" id="XgO-AA-YAO"/>
+                            <constraint firstItem="gtY-iq-g9Z" firstAttribute="top" secondItem="M0W-vv-XKj" secondAttribute="top" id="a80-Ag-4S6"/>
                             <constraint firstItem="n54-8C-som" firstAttribute="centerY" secondItem="CU7-2C-U6m" secondAttribute="centerY" id="jza-7M-dlW"/>
                             <constraint firstItem="n54-8C-som" firstAttribute="top" secondItem="M0W-vv-XKj" secondAttribute="top" id="uTf-Q2-xSD"/>
                         </constraints>
@@ -305,7 +311,7 @@
         <!--View Controller-->
         <scene sceneID="8HK-bT-KJn">
             <objects>
-                <viewController id="4dO-T7-Qw1" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="deathScreen" id="4dO-T7-Qw1" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SWU-xT-KpT">
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -386,6 +392,7 @@
         <image name="TitleTap" width="1800" height="1200"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="space_truck_cab" width="170.66667175292969" height="170.66667175292969"/>
+        <image name="xmark.seal.fill" catalog="system" width="128" height="128"/>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
@@ -397,6 +404,9 @@
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
             <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
