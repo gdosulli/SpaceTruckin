@@ -289,7 +289,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a5P-sH-678" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="442.63392857142856" y="2518.840579710145"/>
+            <point key="canvasLocation" x="269" y="2162"/>
         </scene>
         <!--Truck Stop Hub View Controller-->
         <scene sceneID="reH-4k-mKm">
@@ -336,6 +336,9 @@
                                                     <color key="titleColor" red="0.68208677029999998" green="0.045938336099999998" blue="0.009025465723" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     <color key="titleShadowColor" systemColor="labelColor"/>
                                                 </state>
+                                                <connections>
+                                                    <segue destination="F76-RR-OBO" kind="show" id="MgN-wv-Bdj"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="erg-tf-1uC">
                                                 <rect key="frame" x="394.66666666666669" y="0.0" width="187.33333333333331" height="49"/>
@@ -401,18 +404,20 @@
             </objects>
             <point key="canvasLocation" x="995.75892857142856" y="1521.7391304347827"/>
         </scene>
-        <!--View Controller-->
+        <!--Upgrade Menu View Controller-->
         <scene sceneID="zxE-Bf-Aoi">
             <objects>
-                <viewController id="F76-RR-OBO" sceneMemberID="viewController">
+                <viewController id="F76-RR-OBO" customClass="UpgradeMenuViewController" customModule="Space_Truckin" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YW8-96-Fth">
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="GAs-nI-3RP">
-                                <rect key="frame" x="60" y="20" width="64" height="394"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="GAs-nI-3RP">
+                                <rect key="frame" x="54" y="10" width="64" height="394"/>
                                 <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="64" id="w91-p1-n1y"/>
+                                </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="w7j-r7-Hd2">
                                     <size key="itemSize" width="64" height="64"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -420,14 +425,14 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="grh-fv-oPv">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="pieceCell" reuseIdentifier="pieceCell" id="grh-fv-oPv">
                                         <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="mf9-2f-LBV">
                                             <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="space_truck_cab" translatesAutoresizingMaskIntoConstraints="NO" id="bGc-DG-egw">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="space_truck_cab" translatesAutoresizingMaskIntoConstraints="NO" id="bGc-DG-egw">
                                                     <rect key="frame" x="2" y="2" width="60" height="60"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
@@ -437,9 +442,8 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yd5-BU-R31">
-                                <rect key="frame" x="132" y="20" width="704" height="373"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yd5-BU-R31">
+                                <rect key="frame" x="126" y="21" width="711" height="372"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="space_truck_capsule2" translatesAutoresizingMaskIntoConstraints="NO" id="iJI-Ld-rju">
                                         <rect key="frame" x="283" y="116" width="139" height="140"/>
@@ -450,7 +454,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="65" id="KdW-UN-sLw">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="numericalUpgradeCell" rowHeight="65" id="KdW-UN-sLw">
                                                 <rect key="frame" x="0.0" y="28" width="248" height="65"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="KdW-UN-sLw" id="QEn-Qz-EI1">
@@ -506,17 +510,52 @@
                                             </tableViewCell>
                                         </prototypes>
                                     </tableView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Rf-Ht-lxG">
+                                        <rect key="frame" x="628" y="8" width="75" height="45"/>
+                                        <color key="backgroundColor" systemColor="systemGrayColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="45" id="bek-ig-XBd"/>
+                                            <constraint firstAttribute="width" constant="75" id="muv-vC-yLO"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GeezaPro-Bold" family="Geeza Pro" pointSize="21"/>
+                                        <size key="titleShadowOffset" width="-1" height="0.0"/>
+                                        <state key="normal" title="Close">
+                                            <color key="titleColor" red="0.55708677029999998" green="0.037519624190000003" blue="0.0073714485740000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <color key="titleShadowColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="closeMenu:" destination="F76-RR-OBO" eventType="touchUpInside" id="53B-5m-Dh6"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemGray2Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="5Rf-Ht-lxG" secondAttribute="trailing" constant="8" id="7Rg-bP-a5s"/>
+                                    <constraint firstItem="5Rf-Ht-lxG" firstAttribute="top" secondItem="Yd5-BU-R31" secondAttribute="top" constant="8" id="Hwd-pF-rOc"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="K8u-M1-5Lu"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Yd5-BU-R31" firstAttribute="leading" secondItem="GAs-nI-3RP" secondAttribute="trailing" constant="8" symbolic="YES" id="N7l-iD-8dj"/>
+                            <constraint firstItem="GAs-nI-3RP" firstAttribute="leading" secondItem="K8u-M1-5Lu" secondAttribute="leading" constant="10" id="sx3-WZ-vZB"/>
+                            <constraint firstItem="GAs-nI-3RP" firstAttribute="top" secondItem="K8u-M1-5Lu" secondAttribute="top" constant="10" id="wYg-Vm-IdK"/>
+                            <constraint firstItem="Yd5-BU-R31" firstAttribute="centerY" secondItem="YW8-96-Fth" secondAttribute="centerY" id="yI7-QI-QtF"/>
+                            <constraint firstItem="K8u-M1-5Lu" firstAttribute="trailing" secondItem="Yd5-BU-R31" secondAttribute="trailing" constant="15" id="ypp-mO-vBD"/>
+                            <constraint firstAttribute="bottom" secondItem="GAs-nI-3RP" secondAttribute="bottom" constant="10" id="zcj-xw-jOX"/>
+                            <constraint firstItem="Yd5-BU-R31" firstAttribute="bottom" secondItem="K8u-M1-5Lu" secondAttribute="bottom" id="zm1-S2-nAF"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="xgM-e4-Z4G"/>
+                    <connections>
+                        <outlet property="bigPiece" destination="iJI-Ld-rju" id="why-rf-0eq"/>
+                        <outlet property="numericalUpgradeTable" destination="aRH-Bf-LaJ" id="N9a-Yg-zu1"/>
+                        <outlet property="pieceCollection" destination="GAs-nI-3RP" id="rTU-QZ-Lbb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wmY-pD-kcn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="984.375" y="3466.666666666667"/>
+            <point key="canvasLocation" x="964" y="2522"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="tXr-a1-R10">
@@ -626,7 +665,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Ov-au-40D" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1011" y="593"/>
+            <point key="canvasLocation" x="126" y="357"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

@@ -12,6 +12,8 @@ import CoreGraphics
 //Note: add thermo-stellar truckpiece for destroying wayward planets (to be used sparingly)
 //Note: add wayward planets that need to be corrected with thermo-stellar device
 
+enum CapsuleType: Int {case Head, Storage, Shield, Missile}
+
 class TruckPiece: SpaceObject {
     
     static let drillAnimation = [SKTexture(imageNamed: "drill1"), SKTexture(imageNamed: "drill2"), SKTexture(imageNamed: "drill3"), SKTexture(imageNamed: "drill4"), SKTexture(imageNamed: "drill5"), SKTexture(imageNamed: "drill6"), SKTexture(imageNamed: "drill7")]
