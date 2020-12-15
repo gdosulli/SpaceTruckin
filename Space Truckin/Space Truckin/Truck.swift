@@ -348,27 +348,22 @@ class TruckPiece: SpaceObject {
             }
             
         //Capsule vs Rad Missile Collision
-        } else if obj.sprite.name == "radmissile" {
+        } else if obj.sprite.name == "rad_missile" {
             self.addForce(vec: newNormal)
-          
-            //loseDurability(obj.impactDamage)
-                print("OOF ouch! \(durability) hull remaining.")
-            
+                      
             if takeDamage(obj.impactDamage) {
                 onDestroy()
-                print(durability)
             }
-        //Capsule-Only Collisions
+        //Player-Only Collisions
         } else if sprite.name == "capsule" {
             
             //Capsule vs Rival Capsule Collision
             if obj.sprite.name == "rival_capsule" {
                 self.addForce(vec: newNormal)
-                print("WOW")
                 if takeDamage(obj.impactDamage) {
                     onDestroy()
-                    print(durability)
                 }
+                print("OW",durability)
             }
         
         //Rival-Only Collisions
@@ -379,7 +374,6 @@ class TruckPiece: SpaceObject {
                 self.addForce(vec: newNormal)
                 if takeDamage(obj.impactDamage) {
                     onDestroy()
-                    print(durability)
                 }
             } else if obj.sprite.name == "rival_capsule" && isHead {
                 if let _ = obj as? RivalTruckPiece {

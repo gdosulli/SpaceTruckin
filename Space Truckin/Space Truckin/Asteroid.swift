@@ -85,15 +85,20 @@ class Asteroid : SpaceObject {
         } else if obj.sprite.name == "asteroid" {
             
         } else if obj.sprite.name == "debris" {
-                
+            
+        //Capsule vs Rad Missile Collision
+        } else if obj.sprite.name == "rad_missile" {
+            self.addForce(vec: newNormal)
+                      
+            if takeDamage(obj.impactDamage) {
+                onDestroy()
+            }
         } else {
             self.addForce(vec: newNormal)
-            durability -= obj.impactDamage
-            if durability <= 0 {
-                self.onDestroy()
+            if takeDamage(obj.impactDamage) {
+                onDestroy()
             }
         }
-        //}
     }
     
     override func onDestroy() {
