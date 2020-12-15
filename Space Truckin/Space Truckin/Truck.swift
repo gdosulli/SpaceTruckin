@@ -132,6 +132,7 @@ class TruckPiece: SpaceObject {
             releashingFrames -= 1
         }
         
+        
         if isHead && boosted {
             if let fuel = inventory.getAll()[.Oxygen] {
                 if fuel <= 0 {
@@ -315,7 +316,7 @@ class TruckPiece: SpaceObject {
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
         //print("A",contact.bodyA.node?.name)
         //print("B",contact.bodyB.node?.name)
-        let coeff: CGFloat = 10
+        let coeff: CGFloat = obj.knockback
 //        let collisionVector = obj.lastVector.reflected(over: contact.contactNormal)
         let newNormal = reboundVector(from: contact.contactPoint).mult(by: coeff)
 //        let newNormal = reboundVector(from: obj.sprite.position).mult(by: coeff)
