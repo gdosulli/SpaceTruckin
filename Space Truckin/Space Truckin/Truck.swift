@@ -349,11 +349,16 @@ class TruckPiece: SpaceObject {
             }
             
         //Capsule vs Rad Missile Collision
-        } else if obj.sprite.name == "rad_missile" {
-            self.addForce(vec: newNormal)
-                      
-            if takeDamage(obj.impactDamage) {
-                onDestroy()
+        } else if obj.sprite.name == "rad_missile"{
+            if let m = obj as? Missile {
+                if m.firingObject != self {
+            
+                    self.addForce(vec: newNormal)
+                              
+                    if takeDamage(obj.impactDamage) {
+                        onDestroy()
+                    }
+                }
             }
         //Player-Only Collisions
         } else if sprite.name == "capsule" {
@@ -406,7 +411,7 @@ class TruckPiece: SpaceObject {
             
             let duration = Double.random(in: 0.7...1.0)
             let removeDate = Date().addingTimeInterval(duration)
-            let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
+            let timer = Timer(fireAt: removeDate, interval: duration, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
             RunLoop.main.add(timer, forMode: .common)
         }
 
