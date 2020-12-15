@@ -411,7 +411,7 @@ class TruckPiece: SpaceObject {
             
             let duration = Double.random(in: 0.7...1.0)
             let removeDate = Date().addingTimeInterval(duration)
-            let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
+            let timer = Timer(fireAt: removeDate, interval: duration, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
             RunLoop.main.add(timer, forMode: .common)
         }
 

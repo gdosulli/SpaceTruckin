@@ -285,7 +285,7 @@ class Area {
             
             missileFrames -= 1
             if missileFrames <= 0 {
-                addObject(obj: Missile.fire(from: player.head, direction: player.head.targetAngle))
+                addObject(obj: Missile.fire(from: player.head, direction: player.head.sprite.zRotation + CGFloat(Double.pi/2)))
                 missileFrames = 90
             }
             
