@@ -102,7 +102,7 @@ class SpaceStation: SpaceObject {
     }
     
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
-        let coeff: CGFloat = 4
+        let coeff: CGFloat = obj.knockback
 
         let newNormal = reboundVector(from: contact.contactPoint).mult(by: coeff)
         
