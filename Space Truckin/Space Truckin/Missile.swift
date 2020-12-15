@@ -15,12 +15,14 @@ struct StatusEffect  {
 class Missile: SpaceObject {
     var effects = [StatusEffect]()
     var target: SpaceObject?
+    var firingObject: SpaceObject
     
     init() {
         // idea: missile gets boosted after first impact, and explodes on the second
         super.init(1, SKSpriteNode(imageNamed: "rad_missile"), (1,1), (1,1), Inventory(), 450, 0, CGFloat(Double.pi / 2), 600)
         knockback = 20
         impactDamage = 10
+        sprite.name = "rad_missile"
     }
     
     required init(instance: SpaceObject) {
@@ -28,19 +30,29 @@ class Missile: SpaceObject {
     }
     
     
+    func fire(from: SpaceObject, direction: CGFloat) -> Missile {
+        firingObject = from
+        sprite.position = from.sprite.position
+        targetAngle = direction
+        return self
+    }
+    
+    
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
-        if !boosted {
-            boosted = true
-            knockback *= 1.5
-        } else {
-            onDestroy()
+        if obj != firingObject {
+            if !boosted {
+                boosted = true
+                knockback *= 1.5
+            } else {
+                onDestroy()
+            }
         }
     }
     
     
     func moveTo(_ target: SpaceObject, by delta: CGFloat) {
         changeAngleTo(point: target.sprite.position)
-        moveUnguided(by: <#T##CGFloat#>)
+        moveUnguided(by: delta)
     }
     
     func moveUnguided(by delta: CGFloat) {
@@ -53,7 +65,6 @@ class Missile: SpaceObject {
     }
     
     override func update(by delta: CGFloat) {
-        
         
         // move code
         if let missileTarget = target {
