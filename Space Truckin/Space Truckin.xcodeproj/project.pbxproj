@@ -57,6 +57,7 @@
 		E392DF4E2571B67000D3CA4A /* radioactiveDecay.sks in Resources */ = {isa = PBXBuildFile; fileRef = E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */; };
 		E392DF5025773DCB00D3CA4A /* SpaceStationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */; };
 		E392DF5425789C0500D3CA4A /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E392DF5325789C0500D3CA4A /* TitleScreen.swift */; };
+		E3B006A02588447500B06133 /* Missile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B0069F2588447500B06133 /* Missile.swift */; };
 		E3BA2E8E2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA2E8D2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift */; };
 		E3BA2E932581ECF500AA16E6 /* CollectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA2E922581ECF500AA16E6 /* CollectionViews.swift */; };
 		E3BA2EA42583F5A000AA16E6 /* TruckStopHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA2EA32583F5A000AA16E6 /* TruckStopHub.swift */; };
@@ -140,6 +141,7 @@
 		E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = radioactiveDecay.sks; sourceTree = "<group>"; };
 		E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceStationMenu.swift; sourceTree = "<group>"; };
 		E392DF5325789C0500D3CA4A /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
+		E3B0069F2588447500B06133 /* Missile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Missile.swift; sourceTree = "<group>"; };
 		E3BA2E8D2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceStationMenuViewController.swift; sourceTree = "<group>"; };
 		E3BA2E922581ECF500AA16E6 /* CollectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViews.swift; sourceTree = "<group>"; };
 		E3BA2EA32583F5A000AA16E6 /* TruckStopHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruckStopHub.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */,
 				E3BA2E8D2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift */,
 				E3BA2E922581ECF500AA16E6 /* CollectionViews.swift */,
+				E3B0069F2588447500B06133 /* Missile.swift */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -473,6 +476,7 @@
 				7F75732F2566A9AB00C36CA5 /* MapBuilder.swift in Sources */,
 				E34A4756254BDF8B00479EFB /* Debris.swift in Sources */,
 				E35AE46F256BD3F6003DCE34 /* SpaceMine.swift in Sources */,
+				E3B006A02588447500B06133 /* Missile.swift in Sources */,
 				82723AE3254228D5002A1E53 /* SpaceObject.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -150,6 +150,7 @@ class Area {
             
             if enemies.count < MAX_ENEMIES && Bool.random() {
                 spawnEnemy(at: spawnPoint)
+                print("enemy spawned")
             }
         }
     }
