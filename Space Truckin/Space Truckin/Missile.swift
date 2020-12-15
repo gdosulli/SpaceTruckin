@@ -21,7 +21,7 @@ class Missile: SpaceObject {
         // idea: missile gets boosted after first impact, and explodes on the second
         super.init(1, SKSpriteNode(imageNamed: "rad_missile"), (1,110), (1,110), Inventory(), 450, 0,0, 600)
         knockback = 20
-        impactDamage = 10
+        impactDamage = 0
         sprite.name = "rad_missile"
         
         let margin: CGFloat = 0.8
@@ -51,6 +51,7 @@ class Missile: SpaceObject {
     
     
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
+        if let _ = obj
         if obj != firingObject {
             if !boosted {
                 boosted = true
@@ -88,10 +89,8 @@ class Missile: SpaceObject {
     }
     
     override func onDestroy() {
-        let duration = Double.random(in: 0.4...0.7)
-        let removeDate = Date().addingTimeInterval(duration)
-        let timer = Timer(fireAt: removeDate, interval: 0, target: self, selector: #selector(deleteSelf), userInfo: nil, repeats: false)
-        RunLoop.main.add(timer, forMode: .common)
+        explode()
+        deleteSelf()
     }
 
     @objc func deleteSelf () {
