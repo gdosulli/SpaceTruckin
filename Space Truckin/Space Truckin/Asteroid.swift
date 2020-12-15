@@ -43,6 +43,7 @@ class Asteroid : SpaceObject {
     }
     
     override func spawn(at spawnPoint: CGPoint) {
+        knockback = 0
         sprite.name = "asteroid"
         
         // set random asteroid size

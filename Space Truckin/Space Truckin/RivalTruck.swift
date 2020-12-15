@@ -79,12 +79,12 @@ class RivalTruckPiece: TruckPiece {
         
         let rival_speed = CGFloat(200)
         
-        let head = RivalTruckPiece.init(sprite: SKSpriteNode(imageNamed: "rival_truck_cab"), xRange: (1.5,1.0), yRange: (1.5,1.0), speed: rival_speed, rotation: 0)//M
+        let head = RivalTruckPiece.init(sprite: SKSpriteNode(imageNamed: "rival_truck_cab"), xRange: (1.5,1.0), yRange: (1.5,1.0), speed: rival_speed, rotation: 0)
         head.isHead = true
         var truckList: [TruckPiece] = [head]
         for i in 0..<numFollowers{
             let piece = TruckPiece(2, SKSpriteNode(imageNamed: "rival_truck_capsule1"), nil,(1.4,1.0), (1.4,1.0), Inventory(for: itemList.randomElement()!, max: 30, starting: Int.random(in: 5...30)), rival_speed, 0, 0, rival_speed)
-            piece.addToChain(adding: truckList[i])//M
+            piece.addToChain(adding: truckList[i])
             
             truckList.append(piece)
         }
@@ -100,8 +100,6 @@ class RivalTruckPiece: TruckPiece {
     
     override func move(by delta: CGFloat) {
         super.move(by: delta)
-        
         // track to player
-        
     }
 }
