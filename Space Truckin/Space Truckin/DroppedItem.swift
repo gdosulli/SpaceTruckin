@@ -22,6 +22,7 @@ class DroppedItem: SpaceObject {
     init(sprite s1: SKSpriteNode, item i1: Item, speed: CGFloat, direction: CGFloat) {
         self.item = i1
         super.init(1, s1, (200,50), (200,50), Inventory(), speed, 3.14, direction, 0)
+        self.isObstacle = false
     }
     
     required init(instance: SpaceObject) {

@@ -27,6 +27,7 @@ class SpaceObject : Movable, Copyable {
     var testCategory = CollisionCategories.SPACEOBJECT
     var destroyed = false
     var impactDamage = 1
+    var isObstacle = true
     var knockback: CGFloat = 5
     var invincible = false
 
@@ -125,7 +126,7 @@ class SpaceObject : Movable, Copyable {
     }
     
     func explode(){
-        sprite.physicsBody = nil //The wonky impacts were becoming way too much.
+        //sprite.physicsBody = nil //The wonky impacts were becoming way too much.
         sprite.run(SKAction.animate(with: SpaceObject.explosionAnimation, timePerFrame: 0.1, resize: false, restore: false))
     }
     

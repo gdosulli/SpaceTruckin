@@ -94,6 +94,7 @@ class TruckPiece: SpaceObject {
     
         isImportant = true //TODO: Make sure this isnt causing a problem with despawning enemies
         sprite.name = "capsule"
+        self.isObstacle = false
     }
     
     required init(instance: SpaceObject) {

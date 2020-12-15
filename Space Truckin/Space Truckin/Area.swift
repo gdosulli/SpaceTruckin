@@ -8,6 +8,7 @@
 
 import SpriteKit
 import GameplayKit
+
 struct SpawnRate {
     var obj: SpaceObject
     var rate: TimeInterval
@@ -15,7 +16,10 @@ struct SpawnRate {
 }
 
 class Area {
+    let BUFFER: Float = 30
     var scene: AreaScene?
+    
+    var graph : GKObstacleGraph<GKGraphNode2D>
     
     var spawnRates: [SpawnRate]!
     var spawnTypes: [String:SpaceObject]
@@ -84,6 +88,9 @@ class Area {
         
         uniqueItems = [ss, ts]
         initialItems = uniqueItems
+        
+        // create graph
+        graph = GKObstacleGraph(obstacles: [], bufferRadius: BUFFER)
     }
     
     func loadArea() {
@@ -266,6 +273,9 @@ class Area {
             }
         }
         
+        // add object as obstacle
+        graph.addObstacles(SKNode.obstacles(fromNodePhysicsBodies: [obj.sprite]))
+        
         objectsInArea[obj.sprite] = obj
     }
     
@@ -285,7 +295,7 @@ class Area {
             
             missileFrames -= 1
             if missileFrames <= 0 {
-                addObject(obj: Missile.fire(from: player.head, direction: player.head.sprite.zRotation + CGFloat(Double.pi/2)))
+                //addObject(obj: Missile.fire(from: player.head, direction: player.head.sprite.zRotation + CGFloat(Double.pi/2)))
                 missileFrames = 90
             }
             
@@ -330,36 +340,6 @@ class Area {
     }
     
     
-    @objc func removeFarNodes() {
-        let playerX = player.head.sprite.position.x
-        let playerY = player.head.sprite.position.y
-        
-        for o in objectsInArea {
-            let position = o.value?.sprite.position
-            var remove = false
-            if position!.x > (playerX + 3 * scene!.frameWidth) || position!.x < (playerX - 3 * scene!.frameWidth) {
-                remove = true
-            } else if position!.y > (playerY + 3 * scene!.frameHeight) || position!.y < (playerY - 3 * scene!.frameHeight) {
-                remove = true
-            }
-            
-            if remove {
-                if o.value!.sprite.name == "capsule" {
-                    print("capsule far")
-                } else if uniqueItems.contains(where: {object in
-                    object.OBJECT_ID == o.value!.OBJECT_ID
-                }) {
-                    print("unique item far")
-                } else {
-                    o.value?.onDestroy()
-                    objectsInArea.removeValue(forKey: o.key)
-                }
-
-            }
-        }
-    }
-    
-    
     // TODO a lot of changes to this 
     @objc func removeFreeNodes() {
         let removedObjects = destroyedNodes
@@ -371,6 +351,8 @@ class Area {
             objectsInArea.removeValue(forKey: objectsInArea[i]??.sprite)
         }
         
+        var obstaclesToRemove = [SKSpriteNode]()
+        
         // remove asteroids and debris that are too far from player
         let playerX = player.head.sprite.position.x
         let playerY = player.head.sprite.position.y
@@ -378,6 +360,11 @@ class Area {
             if !uniqueItems.contains((a.value)!) && !a.value!.isImportant{ //TODO: fix this, not the right use of isImportant and uniqueItems
                 let position = a.value?.sprite.position
                 if position!.x > (playerX + 3 * scene!.frameWidth) || position!.x < (playerX - 3 * scene!.frameWidth) {
+                    if a.value!.isObstacle {
+                        //print(a.value!.OBJECT_ID)
+                        //print(a.value!.sprite.name)
+                       // graph.removeObstacles(SKNode.obstacles(fromNodePhysicsBodies: [a.value!.sprite]))
+                    }
                        let children: [SKNode?] = a.value!.getChildren()
                                  for child in children {
                                      if let _ = child?.parent {
@@ -386,18 +373,23 @@ class Area {
                                  }
                     objectsInArea.removeValue(forKey: a.key)
                 } else if position!.y > (playerY + 3 * scene!.frameHeight) || position!.y < (playerY - 3 * scene!.frameHeight) {
-                    
+                    if a.value!.isObstacle {
+                        //print(a.value!.OBJECT_ID)
+                        //print(a.value!.sprite)
+                        //graph.removeObstacles(SKNode.obstacles(fromNodePhysicsBodies: [a.value!.sprite]))
+                    }
                        let children: [SKNode?] = a.value!.getChildren()
                                  for child in children {
                                      if let _ = child?.parent {
                                          child!.removeFromParent()
                                      }
                                  }
+                    
                     objectsInArea.removeValue(forKey: a.key)
+                    
                 }
             }
         }
-       
     }
     
     func setArea(with spawns: [String : Double]) {

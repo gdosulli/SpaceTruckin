@@ -29,6 +29,8 @@ class Missile: SpaceObject {
         sprite.physicsBody?.isDynamic = false
         sprite.physicsBody?.categoryBitMask = self.collisionCategory
         sprite.physicsBody?.contactTestBitMask = self.testCategory
+        
+        self.isObstacle = false
     }
     
     required init(instance: SpaceObject) {
