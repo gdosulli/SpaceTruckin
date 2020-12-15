@@ -353,7 +353,7 @@ class TruckPiece: SpaceObject {
             if let m = obj as? Missile {
                 if m.firingObject != self {
             
-                    self.addForce(vec: newNormal)
+                    self.addForce(vec: obj.lastVector.normalized().mult(by: coeff))
                               
                     if takeDamage(obj.impactDamage) {
                         onDestroy()

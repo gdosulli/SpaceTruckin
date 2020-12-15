@@ -88,8 +88,8 @@ class Asteroid : SpaceObject {
             
         //Capsule vs Rad Missile Collision
         } else if obj.sprite.name == "rad_missile" {
-            self.addForce(vec: newNormal)
-                      
+            self.addForce(vec: obj.lastVector.normalized().mult(by: coeff))
+
             if takeDamage(obj.impactDamage) {
                 onDestroy()
             }

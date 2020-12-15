@@ -20,7 +20,7 @@ class Missile: SpaceObject {
     init() {
         // idea: missile gets boosted after first impact, and explodes on the second
         super.init(1, SKSpriteNode(imageNamed: "rad_missile"), (1,110), (1,110), Inventory(), 450, 0,0, 600)
-        knockback = 20
+        knockback = 55
         impactDamage = 0
         sprite.name = "rad_missile"
         

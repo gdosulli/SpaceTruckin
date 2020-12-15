@@ -19,7 +19,7 @@ class UpgradeMenuViewController: UIViewController, UICollectionViewDelegate, UIC
     
     var currentSelected = CapsuleType.Head
     
-    let spriteNames = ["space_truck_cab","space_truck_capsule1", "space_truck_capsule2", "space_truck_capsule3"]
+    let spriteNames = ["space_truck_cab", "space_truck_capsule1", "space_truck_capsule2", "space_truck_capsule3"]
     
     
     override func viewDidLoad() {
