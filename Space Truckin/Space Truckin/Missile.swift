@@ -15,6 +15,7 @@ struct StatusEffect  {
 class Missile: SpaceObject {
     var effects = [StatusEffect]()
     var target: SpaceObject?
+    var firingObject: SpaceObject
     
     init() {
         // idea: missile gets boosted after first impact, and explodes on the second
@@ -29,11 +30,13 @@ class Missile: SpaceObject {
     
     
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
-        if !boosted {
-            boosted = true
-            knockback *= 1.5
-        } else {
-            onDestroy()
+        if obj != firingObject {
+            if !boosted {
+                boosted = true
+                knockback *= 1.5
+            } else {
+                onDestroy()
+            }
         }
     }
     
@@ -53,7 +56,6 @@ class Missile: SpaceObject {
     }
     
     override func update(by delta: CGFloat) {
-        
         
         // move code
         if let missileTarget = target {
