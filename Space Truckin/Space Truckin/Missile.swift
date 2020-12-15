@@ -22,10 +22,19 @@ class Missile: SpaceObject {
         super.init(1, SKSpriteNode(imageNamed: "rad_missile"), (1,1), (1,1), Inventory(), 450, 0, CGFloat(Double.pi / 2), 600)
         knockback = 20
         impactDamage = 10
+        sprite.name = "rad_missile"
     }
     
     required init(instance: SpaceObject) {
         fatalError("init(instance:) has not been implemented")
+    }
+    
+    
+    func fire(from: SpaceObject, direction: CGFloat) -> Missile {
+        firingObject = from
+        sprite.position = from.sprite.position
+        targetAngle = direction
+        return self
     }
     
     
