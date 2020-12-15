@@ -51,14 +51,17 @@ class Missile: SpaceObject {
     
     
     override func onImpact(with obj: SpaceObject, _ contact: SKPhysicsContact) {
-        if let _ = obj
-        if obj != firingObject {
-            if !boosted {
-                boosted = true
-                knockback *= 1.5
-                speed = boostSpeed
-            } else {
-                onDestroy()
+        if let _ = obj as? DroppedItem {
+            
+        } else {
+            if obj != firingObject {
+                if !boosted {
+                    boosted = true
+                    knockback *= 1.5
+                    speed = boostSpeed
+                } else {
+                    onDestroy()
+                }
             }
         }
     }
