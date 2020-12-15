@@ -358,7 +358,7 @@ class TruckPiece: SpaceObject {
                 onDestroy()
                 print(durability)
             }
-        //Capsule-Only Collisions
+        //Player-Only Collisions
         } else if sprite.name == "capsule" {
             
             //Capsule vs Rival Capsule Collision
