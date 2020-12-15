@@ -15,7 +15,7 @@ struct StatusEffect  {
 class Missile: SpaceObject {
     var effects = [StatusEffect]()
     var target: SpaceObject?
-    var firingObject: SpaceObject
+    var firingObject: SpaceObject?
     
     init() {
         // idea: missile gets boosted after first impact, and explodes on the second
@@ -23,6 +23,12 @@ class Missile: SpaceObject {
         knockback = 20
         impactDamage = 10
         sprite.name = "rad_missile"
+        
+        let margin: CGFloat = 0.8
+        sprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: sprite.size.width * margin, height: margin * sprite.size.height))
+        sprite.physicsBody?.isDynamic = true
+        sprite.physicsBody?.categoryBitMask = self.collisionCategory
+        sprite.physicsBody?.contactTestBitMask = self.testCategory
     }
     
     required init(instance: SpaceObject) {
@@ -30,11 +36,15 @@ class Missile: SpaceObject {
     }
     
     
-    func fire(from: SpaceObject, direction: CGFloat) -> Missile {
-        firingObject = from
-        sprite.position = from.sprite.position
-        targetAngle = direction
-        return self
+    
+    
+    static func fire(from: SpaceObject, direction: CGFloat) -> Missile {
+        let m = Missile()
+        m.firingObject = from
+        m.sprite.position = from.sprite.position
+        m.targetAngle = direction
+        m.sprite.zRotation = direction
+        return m
     }
     
     
@@ -43,6 +53,7 @@ class Missile: SpaceObject {
             if !boosted {
                 boosted = true
                 knockback *= 1.5
+                speed = boostSpeed
             } else {
                 onDestroy()
             }

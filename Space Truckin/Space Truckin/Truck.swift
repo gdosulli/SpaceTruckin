@@ -348,11 +348,16 @@ class TruckPiece: SpaceObject {
             }
             
         //Capsule vs Rad Missile Collision
-        } else if obj.sprite.name == "rad_missile" {
-            self.addForce(vec: newNormal)
-                      
-            if takeDamage(obj.impactDamage) {
-                onDestroy()
+        } else if obj.sprite.name == "rad_missile"{
+            if let m = obj as? Missile {
+                if m.firingObject != self {
+            
+                    self.addForce(vec: newNormal)
+                              
+                    if takeDamage(obj.impactDamage) {
+                        onDestroy()
+                    }
+                }
             }
         //Player-Only Collisions
         } else if sprite.name == "capsule" {

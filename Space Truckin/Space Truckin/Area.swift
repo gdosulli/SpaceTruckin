@@ -36,6 +36,8 @@ class Area {
     var destroyedNodes = [SKSpriteNode]()
     
     var enemies = [TruckPiece]()
+    
+    var missileFrames = 90
 
         
     // player object
@@ -280,6 +282,12 @@ class Area {
 
     func update(by delta: CGFloat) {
         if !gameIsPaused{
+            
+            missileFrames -= 1
+            if missileFrames <= 0 {
+                addObject(obj: Missile.fire(from: player.head, direction: player.head.targetAngle))
+                missileFrames = 90
+            }
             
             // update background
             for n in backgroundItems {
