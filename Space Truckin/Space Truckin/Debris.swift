@@ -60,7 +60,7 @@ class Debris : SpaceObject {
         } else if obj.sprite.name == "debris" {
             
         //Capsule vs Rad Missile Collision
-        } else if obj.sprite.name == "radmissile" {
+        } else if obj.sprite.name == "rad_missile" {
             self.addForce(vec: newNormal)
                       
             if takeDamage(obj.impactDamage) {
