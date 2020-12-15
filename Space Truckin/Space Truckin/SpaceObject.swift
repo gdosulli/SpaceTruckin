@@ -28,7 +28,8 @@ class SpaceObject : Movable, Copyable {
     var destroyed = false
     var impactDamage = 1
     var knockback: CGFloat = 5
-    
+    var invincible = false
+
     var shield: Shield?
     
     var OBJECT_ID = 0
@@ -109,6 +110,18 @@ class SpaceObject : Movable, Copyable {
     
     func getImpactDamage() -> CGFloat {
         return CGFloat(impactDamage)
+    }
+    
+    func takeDamage(_ dmg: Int) -> Bool{
+        if !invincible {
+            durability -= dmg
+            print(durability)
+            if durability <= 0 {
+                durability = 0
+                return true
+            }
+        }
+        return false
     }
     
     func explode(){
