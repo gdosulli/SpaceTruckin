@@ -62,7 +62,7 @@ import SpriteKit
         reverse everything on screen, all controls etc
  */
 
-
+//TODO: The rival truckpieces converge onto points and then never depart fix that
 class RivalTruckPiece: TruckPiece {
     init(sprite: SKSpriteNode, xRange: (CGFloat, CGFloat), yRange: (CGFloat, CGFloat), speed: CGFloat, rotation: CGFloat) {
         

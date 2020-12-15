@@ -12,9 +12,14 @@ import UIKit
 class SpaceStationMenuView: UIViewController {
     
     @IBOutlet var topView: UICollectionView!
-    @IBOutlet var middleView: UICollectionView!
+    @IBOutlet var middleView: TruckCollectionView!
     @IBOutlet var bottomView: UICollectionView!
     
+    @IBAction func quitMenu(_ sender: Any) {
+        // save state
+        self.dismiss(animated: true, completion: nil)
+        
+    }
     
     // what the space station's selling, and at what price
     var spaceStationGoods = [(Item, Int)]()
@@ -24,5 +29,11 @@ class SpaceStationMenuView: UIViewController {
     var playerGarage = [TruckPiece]()
     
     var playerTruckHead: TruckPiece!
+    
+    override func viewDidLoad() {
+        middleView.truckHead = playerTruckHead
+        middleView.delegate = middleView
+        middleView.dataSource = middleView
+    }
     
 }

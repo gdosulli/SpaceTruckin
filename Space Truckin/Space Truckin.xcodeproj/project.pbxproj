@@ -57,7 +57,11 @@
 		E392DF4E2571B67000D3CA4A /* radioactiveDecay.sks in Resources */ = {isa = PBXBuildFile; fileRef = E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */; };
 		E392DF5025773DCB00D3CA4A /* SpaceStationMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */; };
 		E392DF5425789C0500D3CA4A /* TitleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E392DF5325789C0500D3CA4A /* TitleScreen.swift */; };
+		E3B006A02588447500B06133 /* Missile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B0069F2588447500B06133 /* Missile.swift */; };
 		E3BA2E8E2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA2E8D2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift */; };
+		E3BA2E932581ECF500AA16E6 /* CollectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA2E922581ECF500AA16E6 /* CollectionViews.swift */; };
+		E3BA2EA42583F5A000AA16E6 /* TruckStopHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA2EA32583F5A000AA16E6 /* TruckStopHub.swift */; };
+		E3BA2EA925841F2F00AA16E6 /* UpgradeMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BA2EA825841F2F00AA16E6 /* UpgradeMenu.swift */; };
 		E3C95F76256071740009E84E /* InterfaceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C95F75256071740009E84E /* InterfaceBar.swift */; };
 		E3C9603C256469DE0009E84E /* EffectBubbles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C9603B256469DE0009E84E /* EffectBubbles.swift */; };
 		E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */; };
@@ -137,7 +141,11 @@
 		E392DF4D2571B67000D3CA4A /* radioactiveDecay.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = radioactiveDecay.sks; sourceTree = "<group>"; };
 		E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceStationMenu.swift; sourceTree = "<group>"; };
 		E392DF5325789C0500D3CA4A /* TitleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScreen.swift; sourceTree = "<group>"; };
+		E3B0069F2588447500B06133 /* Missile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Missile.swift; sourceTree = "<group>"; };
 		E3BA2E8D2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceStationMenuViewController.swift; sourceTree = "<group>"; };
+		E3BA2E922581ECF500AA16E6 /* CollectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViews.swift; sourceTree = "<group>"; };
+		E3BA2EA32583F5A000AA16E6 /* TruckStopHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruckStopHub.swift; sourceTree = "<group>"; };
+		E3BA2EA825841F2F00AA16E6 /* UpgradeMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeMenu.swift; sourceTree = "<group>"; };
 		E3C95F75256071740009E84E /* InterfaceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceBar.swift; sourceTree = "<group>"; };
 		E3C9603B256469DE0009E84E /* EffectBubbles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectBubbles.swift; sourceTree = "<group>"; };
 		E3FF20F6253B97F9002EC9C0 /* GalaxyEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalaxyEmitter.swift; sourceTree = "<group>"; };
@@ -192,6 +200,7 @@
 		E34AB9B7252BAE6D007AF254 /* Space Truckin */ = {
 			isa = PBXGroup;
 			children = (
+				E3BA2EA825841F2F00AA16E6 /* UpgradeMenu.swift */,
 				E373A3B72554B44B00D04135 /* Truck.swift */,
 				E35AE46C256BA082003DCE34 /* RivalTruck.swift */,
 				E35AE45E25659891003DCE34 /* SpaceStation.swift */,
@@ -208,6 +217,7 @@
 				E34AB9C7252BAE70007AF254 /* LaunchScreen.storyboard */,
 				E34AB9F6252BBDC9007AF254 /* magicEmitter.sks */,
 				E34AB9C2252BAE6D007AF254 /* Main.storyboard */,
+				E3BA2EA32583F5A000AA16E6 /* TruckStopHub.swift */,
 				E392DF5325789C0500D3CA4A /* TitleScreen.swift */,
 				7F5C093B255324B80028F808 /* MenuViewController.swift */,
 				E33F614825422EC4005BAB37 /* Movable.swift */,
@@ -236,6 +246,8 @@
 				82F81B252571866F00D5A160 /* InfoScreen.swift */,
 				E392DF4F25773DCB00D3CA4A /* SpaceStationMenu.swift */,
 				E3BA2E8D2581D4BE00AA16E6 /* SpaceStationMenuViewController.swift */,
+				E3BA2E922581ECF500AA16E6 /* CollectionViews.swift */,
+				E3B0069F2588447500B06133 /* Missile.swift */,
 			);
 			path = "Space Truckin";
 			sourceTree = "<group>";
@@ -443,6 +455,7 @@
 				E3248BDE256DB36300974CF6 /* Spawner.swift in Sources */,
 				E3FF20F7253B97F9002EC9C0 /* GalaxyEmitter.swift in Sources */,
 				82F81B262571866F00D5A160 /* InfoScreen.swift in Sources */,
+				E3BA2EA42583F5A000AA16E6 /* TruckStopHub.swift in Sources */,
 				E3899076255CB6350037B507 /* DroppedItem.swift in Sources */,
 				E33F6147254221C9005BAB37 /* Inventory.swift in Sources */,
 				E373A3B92554B44B00D04135 /* Truck.swift in Sources */,
@@ -451,8 +464,10 @@
 				E392DF5425789C0500D3CA4A /* TitleScreen.swift in Sources */,
 				E3C95F76256071740009E84E /* InterfaceBar.swift in Sources */,
 				E3248BE2256E314100974CF6 /* EffectField.swift in Sources */,
+				E3BA2EA925841F2F00AA16E6 /* UpgradeMenu.swift in Sources */,
 				82723AE825422E5B002A1E53 /* Asteroid.swift in Sources */,
 				E3C9603C256469DE0009E84E /* EffectBubbles.swift in Sources */,
+				E3BA2E932581ECF500AA16E6 /* CollectionViews.swift in Sources */,
 				E34AB9B9252BAE6D007AF254 /* AppDelegate.swift in Sources */,
 				7F5C093C255324B80028F808 /* MenuViewController.swift in Sources */,
 				E35AE45F25659891003DCE34 /* SpaceStation.swift in Sources */,
@@ -461,6 +476,7 @@
 				7F75732F2566A9AB00C36CA5 /* MapBuilder.swift in Sources */,
 				E34A4756254BDF8B00479EFB /* Debris.swift in Sources */,
 				E35AE46F256BD3F6003DCE34 /* SpaceMine.swift in Sources */,
+				E3B006A02588447500B06133 /* Missile.swift in Sources */,
 				82723AE3254228D5002A1E53 /* SpaceObject.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -12,6 +12,8 @@ import CoreGraphics
 //Note: add thermo-stellar truckpiece for destroying wayward planets (to be used sparingly)
 //Note: add wayward planets that need to be corrected with thermo-stellar device
 
+enum CapsuleType: Int {case Head, Storage, Shield, Missile}
+
 class TruckPiece: SpaceObject {
     
     static let drillAnimation = [SKTexture(imageNamed: "drill1"), SKTexture(imageNamed: "drill2"), SKTexture(imageNamed: "drill3"), SKTexture(imageNamed: "drill4"), SKTexture(imageNamed: "drill5"), SKTexture(imageNamed: "drill6"), SKTexture(imageNamed: "drill7")]
@@ -38,6 +40,8 @@ class TruckPiece: SpaceObject {
     static var drillAnim = [SKTexture]()
     
     var wallet = 0
+    
+    var maxDurability = 3
     
     convenience init(sprite s1: SKSpriteNode) {
         self.init(2, s1, nil, (1.3,1.0), (1.3,1.0), Inventory(max: 100, starting: 0), 100, 1, 0, 0)
@@ -378,6 +382,10 @@ class TruckPiece: SpaceObject {
 
                 if durability <= 0 {
                     onDestroy()
+                }
+            } else if obj.sprite.name == "rival_capsule" && isHead {
+                if let _ = obj as? RivalTruckPiece {
+                    self.addForce(vec: newNormal)
                 }
             }
         }

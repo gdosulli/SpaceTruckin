@@ -150,6 +150,7 @@ class Area {
             
             if enemies.count < MAX_ENEMIES && Bool.random() {
                 spawnEnemy(at: spawnPoint)
+                print("enemy spawned")
             }
         }
     }
@@ -306,6 +307,16 @@ class Area {
                 } else {
                     enemy.changeAngleTo(point: player.head.sprite.position)
                 }
+            }
+            
+            // check for death
+            if player.head.durability <= 0 {
+                print("rip")
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let deathScreen = storyboard.instantiateViewController(identifier: "deathScreen")
+                deathScreen.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+                scene?.viewController.present(deathScreen, animated: true, completion: nil)
+
             }
         }
     }

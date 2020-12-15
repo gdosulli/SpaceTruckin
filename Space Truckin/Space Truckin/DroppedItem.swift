@@ -17,7 +17,7 @@ class DroppedItem: SpaceObject {
     var lifeSpan: TimeInterval = 300.0
     var collected = false
     
-    static let filenames = ["Inventory_ScrapMetal", "Inventory_radioactiveMaterial",  "Inventory_PreciousMetal", "Inventory_water","Inventory_Oxygen", "Inventory_Stone" ]
+    static let filenames =  ["Inventory_ScrapMetal", "Inventory_radioactiveMaterial",  "Inventory_PreciousMetal", "Inventory_water","Inventory_Oxygen", "Inventory_Stone" ]
     
     init(sprite s1: SKSpriteNode, item i1: Item, speed: CGFloat, direction: CGFloat) {
         self.item = i1
@@ -74,7 +74,7 @@ class DroppedItem: SpaceObject {
         
         // I want every piece to be able to collect items, but have them
         if obj.sprite.isHidden {
-            print("skipped hidden collision")
+            //print("skipped hidden collision")
         } else if obj.sprite.name == "capsule" || obj.sprite.name == "rival_capsule" {
             if !collected, let truckPiece = obj as? TruckPiece {
                 
