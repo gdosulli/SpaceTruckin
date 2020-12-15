@@ -111,7 +111,6 @@ class Area {
         
         // reintroduce player
         warp(truckList: player.head.getAllPieces(), at: CGPoint(x: 1075,y: 1175))
-        player.head.invincible = true
     }
     
     @objc func spawnObject(timer: Timer) {
@@ -316,6 +315,7 @@ class Area {
                 let deathScreen = storyboard.instantiateViewController(identifier: "deathScreen")
                 deathScreen.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
                 scene?.viewController.present(deathScreen, animated: true, completion: nil)
+                scene?.isPaused = true
 
             }
         }
