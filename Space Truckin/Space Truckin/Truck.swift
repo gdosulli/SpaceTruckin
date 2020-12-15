@@ -337,7 +337,7 @@ class TruckPiece: SpaceObject {
             }
             
         //Capsule vs SpaceStation Collision
-        } else if obj.sprite.name == "station_arm"{
+        } else if obj.sprite.name == "station_arm" {
             // contact w space station
             if obj.sprite.name == "station_arm" {
                 // trigger entry
@@ -345,6 +345,9 @@ class TruckPiece: SpaceObject {
                 // bump
                 print("bump")
             }
+            
+        //Capsule vs Rad Missile Collision
+        } else if obj.sprite.name == "radmissile" {
             
         //Capsule-Only Collisions
         } else if sprite.name == "capsule" {
