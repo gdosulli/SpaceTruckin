@@ -27,6 +27,7 @@ class SpaceObject : Movable, Copyable {
     var testCategory = CollisionCategories.SPACEOBJECT
     var destroyed = false
     var impactDamage = 1
+    var knockback: CGFloat = 5
     
     var shield: Shield?
     
