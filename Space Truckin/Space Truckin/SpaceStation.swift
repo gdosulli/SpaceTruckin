@@ -91,7 +91,6 @@ class SpaceStation: SpaceObject {
         //remove head reference?
         //hide screen
         print("UNDOCKED")
-
     }
     
     override func move(by delta: CGFloat) {

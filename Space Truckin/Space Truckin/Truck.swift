@@ -28,7 +28,6 @@ class TruckPiece: SpaceObject {
     var releashingFrames = 0
     var isHead = false
     var circle = false
-    var invincible = false
     var maxLeashLength = CGFloat(350)
     
     var dockedStation : SpaceObject?
@@ -171,7 +170,8 @@ class TruckPiece: SpaceObject {
                 speed = boostSpeed
                 thruster.particleScaleSpeed = -0.2
                 
-                if isHead {
+                if isHead { //TODO: Tie invincibility to an upgrade?
+                    invincible = true
                     sprite.run(SKAction.sequence([SKAction.animate(with: TruckPiece.drillAnim,
                             timePerFrame: 0.1,
                             resize: false,
@@ -186,6 +186,7 @@ class TruckPiece: SpaceObject {
                 thruster.particleScaleSpeed = -0.4
                 
                 if isHead {
+                    invincible = false
                     sprite.removeAllActions()
                     sprite.run(SKAction.animate(with: TruckPiece.drillAnim.reversed(),timePerFrame: 0.1, resize: false,restore: false))
                 }
@@ -211,7 +212,7 @@ class TruckPiece: SpaceObject {
                 //thruster.particleBirthRate = speed * 4
                 super.moveForward(by: deltaMod)
             }
-        } else{
+        } else {
             // deltaMod adjusts the delta to 'accelerate' and 'decelerate' to maintain follow distance of trucks
             let gapMax = CGFloat(210) // max encouraged follow distance
             let gapMin = CGFloat(200) // min encouraged follow
@@ -325,13 +326,9 @@ class TruckPiece: SpaceObject {
         } else if obj.sprite.name == "asteroid" || obj.sprite.name == "debris" {
             self.addForce(vec: newNormal)
           
-            if !(isHead && boosted) {
-                durability -= obj.impactDamage
-                print("OOF ouch! \(durability) hull remaining.")
-            }
-            
-            if !invincible && durability <= 0 {
+            if takeDamage(obj.impactDamage) {
                 onDestroy()
+                print(durability)
             }
             
         //Capsule vs Lost Capsule collision
@@ -341,7 +338,7 @@ class TruckPiece: SpaceObject {
             }
             
         //Capsule vs SpaceStation Collision
-        } else if obj.sprite.name == "station_arm"{
+        } else if obj.sprite.name == "station_arm" {
             // contact w space station
             if obj.sprite.name == "station_arm" {
                 // trigger entry
@@ -350,19 +347,27 @@ class TruckPiece: SpaceObject {
                 print("bump")
             }
             
+        //Capsule vs Rad Missile Collision
+        } else if obj.sprite.name == "radmissile" {
+            self.addForce(vec: newNormal)
+          
+            //loseDurability(obj.impactDamage)
+                print("OOF ouch! \(durability) hull remaining.")
+            
+            if takeDamage(obj.impactDamage) {
+                onDestroy()
+                print(durability)
+            }
         //Capsule-Only Collisions
         } else if sprite.name == "capsule" {
             
             //Capsule vs Rival Capsule Collision
             if obj.sprite.name == "rival_capsule" {
                 self.addForce(vec: newNormal)
-                if !(isHead && boosted) {
-                    durability -= obj.impactDamage
-                    print("OOF ouch! \(durability) hull remaining.")
-                }
-                          
-                if durability <= 0 {
+                print("WOW")
+                if takeDamage(obj.impactDamage) {
                     onDestroy()
+                    print(durability)
                 }
             }
         
@@ -372,13 +377,9 @@ class TruckPiece: SpaceObject {
             //Rival Capsule vs Capsule Collision
             if obj.sprite.name == "capsule" {
                 self.addForce(vec: newNormal)
-                if !(isHead && boosted) {
-                    durability -= obj.impactDamage
-                    print("OOF ouch! \(durability) hull remaining.")
-                }
-
-                if durability <= 0 {
+                if takeDamage(obj.impactDamage) {
                     onDestroy()
+                    print(durability)
                 }
             } else if obj.sprite.name == "rival_capsule" && isHead {
                 if let _ = obj as? RivalTruckPiece {
