@@ -52,7 +52,7 @@ class Missile: SpaceObject {
     
     func moveTo(_ target: SpaceObject, by delta: CGFloat) {
         changeAngleTo(point: target.sprite.position)
-        moveUnguided(by: <#T##CGFloat#>)
+        moveUnguided(by: delta)
     }
     
     func moveUnguided(by delta: CGFloat) {
